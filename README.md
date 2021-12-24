@@ -3,10 +3,7 @@
 ### Usage:
 
 ```python
-#url = "https://rezka.ag/cartoons/fiction/26246-gorod-geroev-2017.html"
-#url = "https://rezka.ag/animation/fantasy/41055-agent-vremeni-2021.html"
-#url = "https://rezka.ag/cartoons/fantasy/7924-udivitelnyy-mir-gambola-2008.html"
-#url = "https://rezka.ag/animation/adventures/42697-reinkarnaciya-bezrabotnogo-tv-2-2021.html"
+url = "https://rezka.ag/   __YOUR_URL__   .html"
 
 rezka = HdRezkaApi(url)
 print(rezka.name)
