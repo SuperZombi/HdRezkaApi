@@ -33,5 +33,5 @@ getSeasonStreams(
 
 #### `self.id` - `post_id`
 #### `self.name` - `post__title`
-#### `self.translators` - translators array (Available after using `getTranslations`)
-#### `self.seriesInfo` - seasons and episodes array (Available after using `getSeasons`)
+#### `self.translators` - translators array  (Available after using `getTranslations`)
+#### `self.seriesInfo` - seasons and episodes array  (Available after using `getSeasons`)
