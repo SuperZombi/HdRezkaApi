@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 class HdRezkaApi():
 	def __init__(self, url):
 		self.HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36'}
-		self.url = url
+		self.url = url.split(".html")[0] + ".html"
 		self.page = self.getPage()
 		self.soup = self.getSoup()
 		self.id = self.extractId()
@@ -59,7 +59,7 @@ class HdRezkaApi():
 			for i in parts.findAll(class_="b-post__partcontent_item"):
 				if 'current' in i.attrs['class']:
 					other.append({
-						i.find(class_="title").text: url
+						i.find(class_="title").text: self.url
 					})
 				else:
 					other.append({
@@ -230,7 +230,6 @@ def main():
 
 	print( rezka.getStream('1', '1', '720p') )
 	print( rezka.getSeasonStreams('1', '720p') )
-
 
 
 # DOCS:
