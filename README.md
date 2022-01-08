@@ -1,5 +1,10 @@
 # HDrezka-api
 
+## ❗NOT WORKING❗
+### ❗HdRezka blocked their API❗
+
+<hr></br>
+
 ### Usage:
 
 ```python
