@@ -1,5 +1,7 @@
 # HDrezka-api
 
+<img src="https://shields.io/badge/version-v2.0-blue">
+
 #### Works with the new API from 01.05.2022
 
 <hr></br>
