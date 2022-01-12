@@ -1,7 +1,6 @@
 # HDrezka-api
 
-## ❗NOT WORKING❗
-### ❗HdRezka blocked their API❗
+#### Works with the new API from 01.05.2022
 
 <hr></br>
 
