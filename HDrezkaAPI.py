@@ -1,5 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
+import base64
+from itertools import product
 
 class HdRezkaApi():
 	def __init__(self, url):
@@ -25,6 +27,27 @@ class HdRezkaApi():
 
 	def getName(self):
 		return self.soup.find(class_="b-post__title").get_text().strip()
+
+	@staticmethod
+	def clearTrash(data):
+		trashList = ["@","#","!","^","$"]
+		trashCodesSet = []
+		for i in range(2,4):
+			startchar = ''
+			for chars in product(trashList, repeat=i):
+				data_bytes = startchar.join(chars).encode("utf-8")
+				trashcombo = base64.b64encode(data_bytes)
+				trashCodesSet.append(trashcombo)
+
+		arr = data.replace("#h", "").split("//_//")
+		trashString = ''.join(arr)
+
+		for i in trashCodesSet:
+			temp = i.decode("utf-8")
+			trashString = trashString.replace(temp, '')
+
+		finalString = base64.b64decode(trashString+"==")
+		return finalString.decode("utf-8")
 
 	def getTranslations(self):
 		arr = {}
@@ -96,7 +119,7 @@ class HdRezkaApi():
 				"translator_id": self.translators[i],
 				"action": "get_episodes"
 			}
-			r = requests.post("https://rezka.ag/ajax/get_cdn_series/", data=js)
+			r = requests.post("https://rezka.ag/ajax/get_cdn_series/", data=js, headers=self.HEADERS)
 			response = r.json()
 			if response['success']:
 				seasons, episodes = HdRezkaApi.getEpisodes(response['seasons'], response['episodes'])
@@ -148,10 +171,10 @@ class HdRezkaApi():
 			"episode": episode,
 			"action": "get_stream"
 		}
-		r = requests.post("https://rezka.ag/ajax/get_cdn_series/", data=js)
+		r = requests.post("https://rezka.ag/ajax/get_cdn_series/", data=js, headers=self.HEADERS)
 		r = r.json()
 		if r['success']:
-			arr = r['url'].split(",")
+			arr = HdRezkaApi.clearTrash(r['url']).split(",")
 			for i in arr:
 				# 360p, 480p, 720p, 1080p, 1080p Ultra
 				res = i.split("[")[1].split("]")[0]
@@ -201,10 +224,10 @@ class HdRezkaApi():
 				"episode": episode_id,
 				"action": "get_stream"
 			}
-			r = requests.post("https://rezka.ag/ajax/get_cdn_series/", data=js)
+			r = requests.post("https://rezka.ag/ajax/get_cdn_series/", data=js, headers=self.HEADERS)
 			r = r.json()
 			if r['success']:
-				arr = r['url'].split(",")
+				arr = HdRezkaApi.clearTrash(r['url']).split(",")
 				for i in arr:
 					# 360p, 480p, 720p, 1080p, 1080p Ultra
 					res = i.split("[")[1].split("]")[0]
@@ -230,7 +253,6 @@ def main():
 
 	print( rezka.getStream('1', '1', '720p') )
 	print( rezka.getSeasonStreams('1', '720p') )
-
 
 # DOCS:
 
