@@ -22,7 +22,7 @@ print( rezka.getSeasonStreams('1') )
 ```
 
 #### `self.id` - `post_id`
-#### `self.name` - `post__title`
+#### `self.name` - Film name (`post__title`)
 #### `self.translators` - translators array
 #### `self.seriesInfo` - seasons and episodes array
 
