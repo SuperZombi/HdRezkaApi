@@ -21,10 +21,10 @@ print( rezka.getStream('1', '1')('720p') )
 print( rezka.getSeasonStreams('1') )
 ```
 
-#### `self.id` - `post_id`
+#### `self.id` - Film id (`post_id`)
 #### `self.name` - Film name (`post__title`)
-#### `self.translators` - translators array
-#### `self.seriesInfo` - seasons and episodes array
+#### `self.translators` - Translators array
+#### `self.seriesInfo` - Seasons and Episodes array
 
 <hr>
 
