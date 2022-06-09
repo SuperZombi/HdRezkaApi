@@ -63,10 +63,12 @@ print( rezka.getSeasonStreams(1, ignore=True, progress=progress) )
 ### Usage examples:
 
 ```python
-print( rezka.getStream('1', '1')('720p') )
-print( rezka.getStream('1', '1')('720') )
-print( rezka.getStream(1, 1)(1080) )
-print( rezka.getStream(1, 1)('Ultra') )
-print( rezka.getStream(1, 1)('1080p Ultra') )
-print( rezka.getStream(1, 1).videos )
+stream = rezka.getStream(1, 5)
+
+print( stream('720p') )
+print( stream('720') )
+print( stream(1080) )
+print( stream('Ultra') )
+print( stream('1080p Ultra') )
+print( stream.videos )
 ```
