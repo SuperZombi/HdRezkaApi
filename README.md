@@ -43,20 +43,15 @@ getSeasonStreams(
 )                                               ^ this is index in translators array
 ```
 
-#### Usage examples:
+#### `ignore` - ignore errors
+#### `progress` - callback function
 
-```python
-print( rezka.getSeasonStreams('1') )
-```
 ```python
 def progress(current, all):
 	print(str(current) + "/" + str(all))
 
 print( rezka.getSeasonStreams(1, ignore=True, progress=progress) )
 ```
-
-#### `ignore` - ignore errors
-#### `progress` - callback function
 
 <hr>
 <br>
