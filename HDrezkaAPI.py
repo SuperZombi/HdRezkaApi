@@ -3,8 +3,27 @@ from bs4 import BeautifulSoup
 import base64
 from itertools import product
 
+class HdRezkaStream():
+	def __init__(self, season, episode):
+		self.videos = {}
+		self.season = season
+		self.episode = episode
+	def append(self, resolution, link):
+		self.videos[resolution] = link
+	def __str__(self):
+		resolutions = list(self.videos.keys())
+		return "<HdRezkaStream> : " + str(resolutions)
+	def __repr__(self):
+		return f"<HdRezkaStream(season:{self.season}, episode:{self.episode})>"
+	def __call__(self, resolution):
+		coincidences = list(filter(lambda x: str(resolution) in x , self.videos))
+		if len(coincidences) > 0:
+			return self.videos[coincidences[0]]
+		raise ValueError(f'Resolution "{resolution}" is not defined')
+
+
 class HdRezkaApi():
-	__version__ = 2.0
+	__version__ = 3.0
 	def __init__(self, url):
 		self.HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36'}
 		self.url = url.split(".html")[0] + ".html"
@@ -132,10 +151,9 @@ class HdRezkaApi():
 		self.seriesInfo = arr
 		return arr
 
-	def getStream(self, season, episode, resolution, translation=None, index=0):
-		if not resolution in ["360p", "480p", "720p", "1080p", "1080p Ultra"]:
-			available_res = '"360p", "480p", "720p", "1080p", "1080p Ultra"'
-			raise ValueError(f'Resolution "{resolution}" is not defined\nUse one of these: {available_res}')
+	def getStream(self, season, episode, translation=None, index=0):
+		season = str(season)
+		episode = str(episode)
 
 		if not self.translators:
 			self.translators = self.getTranslations()
@@ -176,18 +194,16 @@ class HdRezkaApi():
 		r = r.json()
 		if r['success']:
 			arr = HdRezkaApi.clearTrash(r['url']).split(",")
+			stream = HdRezkaStream(season, episode)
 			for i in arr:
-				# 360p, 480p, 720p, 1080p, 1080p Ultra
 				res = i.split("[")[1].split("]")[0]
-				if res == resolution:
-					stream = i.split("[")[1].split("]")[1].split(" or ")[1]
-					return stream
+				video = i.split("[")[1].split("]")[1].split(" or ")[1]
+				stream.append(res, video)
+			return stream
 
 
-	def getSeasonStreams(self, season, resolution, translation=None, index=0):
-		if not resolution in ["360p", "480p", "720p", "1080p", "1080p Ultra"]:
-			available_res = '"360p", "480p", "720p", "1080p", "1080p Ultra"'
-			raise ValueError(f'Resolution "{resolution}" is not defined\nUse one of these: {available_res}')
+	def getSeasonStreams(self, season, translation=None, index=0, ignore=False, progress=None):
+		season = str(season)
 
 		if not self.translators:
 			self.translators = self.getTranslations()
@@ -217,53 +233,22 @@ class HdRezkaApi():
 		series = seasons[tr_str]['episodes'][season]
 		streams = {}
 
+		series_length = len(series)
+
 		for episode_id in series:
-			js = {
-				"id": self.id,
-				"translator_id": tr_id,
-				"season": season,
-				"episode": episode_id,
-				"action": "get_stream"
-			}
-			r = requests.post("https://rezka.ag/ajax/get_cdn_series/", data=js, headers=self.HEADERS)
-			r = r.json()
-			if r['success']:
-				arr = HdRezkaApi.clearTrash(r['url']).split(",")
-				for i in arr:
-					# 360p, 480p, 720p, 1080p, 1080p Ultra
-					res = i.split("[")[1].split("]")[0]
-					if res == resolution:
-						stream = i.split("[")[1].split("]")[1].split(" or ")[1]
-						streams[episode_id] = stream
-						print(f"> {episode_id}")
+			def make_call():
+				stream = self.getStream(season, episode_id, tr_str)
+				streams[episode_id] = stream
+				if progress:
+					progress(episode_id, series_length)
+				else:
+					print(f"> {episode_id}", end="\r")
+
+			if ignore:
+				try:
+					make_call()
+				except Exception as e:
+					print(e)
+			else:
+				make_call()
 		return streams
-
-
-
-def main():
-	#url = "https://rezka.ag/cartoons/fiction/26246-gorod-geroev-2017.html"
-	#url = "https://rezka.ag/animation/fantasy/41055-agent-vremeni-2021.html"
-	#url = "https://rezka.ag/cartoons/fantasy/7924-udivitelnyy-mir-gambola-2008.html"
-	#url = "https://rezka.ag/animation/adventures/42697-reinkarnaciya-bezrabotnogo-tv-2-2021.html"
-
-	rezka = HdRezkaApi(url)
-	print(rezka.name)
-	print( rezka.getTranslations() )
-	print( rezka.getOtherParts() )
-	print( rezka.getSeasons() )
-
-	print( rezka.getStream('1', '1', '720p') )
-	print( rezka.getSeasonStreams('1', '720p') )
-
-# DOCS:
-
-#print( rezka.getStream(season='1', episode='1', resolution='720p'))
-# getStream(
-# 	translation='Дубляж' or translation='56' or index=0
-# )                                             ^ this is index in translators array
-
-
-#print( rezka.getStream(season='1', resolution='720p'))
-# getSeasonStreams(
-# 	translation='Дубляж' or translation='56' or index=0
-# )                                             ^ this is index in translators array
