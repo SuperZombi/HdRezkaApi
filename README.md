@@ -1,6 +1,6 @@
 # HDrezka-api
 
-<img src="https://shields.io/badge/version-v2.0-blue">
+<img src="https://shields.io/badge/version-v3.0-blue">
 
 #### Works with the new API from 01.05.2022
 
@@ -21,6 +21,11 @@ print( rezka.getStream('1', '1')('720p') )
 print( rezka.getSeasonStreams('1') )
 ```
 
+#### `self.id` - `post_id`
+#### `self.name` - `post__title`
+#### `self.translators` - translators array
+#### `self.seriesInfo` - seasons and episodes array
+
 <hr>
 
 ### getStream(`season`, `episode`, `translation=None`, `index=0`)
@@ -29,23 +34,34 @@ getStream(
     translation='Дубляж' or translation='56' or index=0
 )                                               ^ this is index in translators array
 ```
-### getSeasonStreams(`season`, `translation=None`, `index=0`)
+<hr>
+
+### getSeasonStreams(`season`, `translation=None`, `index=0`, `ignore=False`, `progress=None`)
 ```
 getSeasonStreams(
     translation='Дубляж' or translation='56' or index=0
 )                                               ^ this is index in translators array
 ```
+
+#### Usage examples:
+
+```python
+print( rezka.getSeasonStreams('1') )
+```
+```python
+def progress(current, all):
+	print(str(current) + "/" + str(all))
+
+print( rezka.getSeasonStreams(1, ignore=True, progress=progress) )
+```
+
+#### `ignore` - ignore errors
+#### `progress` - callback function
+
 <hr>
-
-#### `self.id` - `post_id`
-#### `self.name` - `post__title`
-#### `self.translators` - translators array
-#### `self.seriesInfo` - seasons and episodes array
-
 <br>
-<hr>
 
-## HdRezkaStream:
+# HdRezkaStream:
 #### `self.videos` - dict of videos, where key is resolution and value is url
 #### `HdRezkaStream(resolutin)` - call object with argument to get url of video
 
