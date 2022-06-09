@@ -17,19 +17,19 @@ print( rezka.getTranslations() )
 print( rezka.getOtherParts() )
 print( rezka.getSeasons() )
 
-print( rezka.getStream('1', '1', '720p') )
-print( rezka.getSeasonStreams('1', '720p') )
+print( rezka.getStream('1', '1')('720p') )
+print( rezka.getSeasonStreams('1') )
 ```
 
 <hr>
 
-### getStream(`season`, `episode`, `resolution`, `translation=None`, `index=0`)
+### getStream(`season`, `episode`, `translation=None`, `index=0`)
 ```
 getStream(
     translation='Дубляж' or translation='56' or index=0
 )                                               ^ this is index in translators array
 ```
-### getSeasonStreams(`season`, `resolution`, `translation=None`, `index=0`)
+### getSeasonStreams(`season`, `translation=None`, `index=0`)
 ```
 getSeasonStreams(
     translation='Дубляж' or translation='56' or index=0
@@ -41,3 +41,21 @@ getSeasonStreams(
 #### `self.name` - `post__title`
 #### `self.translators` - translators array
 #### `self.seriesInfo` - seasons and episodes array
+
+<br>
+<hr>
+
+## HdRezkaStream:
+#### `self.videos` - dict of videos, where key is resolution and value is url
+#### `HdRezkaStream(resolutin)` - call object with argument to get url of video
+
+### Usage examples:
+
+```python
+print( rezka.getStream('1', '1')('720p') )
+print( rezka.getStream('1', '1')('720') )
+print( rezka.getStream(1, 1)(1080) )
+print( rezka.getStream(1, 1)('Ultra') )
+print( rezka.getStream(1, 1)('1080 Ultra') )
+print( rezka.getStream(1, 1).videos )
+```
