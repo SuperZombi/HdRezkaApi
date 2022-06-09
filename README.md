@@ -67,6 +67,6 @@ print( rezka.getStream('1', '1')('720p') )
 print( rezka.getStream('1', '1')('720') )
 print( rezka.getStream(1, 1)(1080) )
 print( rezka.getStream(1, 1)('Ultra') )
-print( rezka.getStream(1, 1)('1080 Ultra') )
+print( rezka.getStream(1, 1)('1080p Ultra') )
 print( rezka.getStream(1, 1).videos )
 ```
