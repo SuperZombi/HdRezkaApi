@@ -3,15 +3,46 @@ from bs4 import BeautifulSoup
 import base64
 from itertools import product
 
+class HdRezkaStreamSubtitles():
+	def __init__(self, data, codes):
+		self.subtitles = {}
+		if data:
+			arr = data.split(",")
+			for i in arr:
+				temp = i.split("[")[1].split("]")
+				lang = temp[0]
+				link = temp[1]
+				code = codes[lang]
+				self.subtitles[code] = {'title': lang, 'link': link}
+	def __str__(self):
+		return str(list(self.subtitles.keys()))
+	def __call__(self, id=None):
+		if self.subtitles:
+			if id:
+				if id in self.subtitles.keys():
+					return self.subtitles[id]['link']
+				for key, value in self.subtitles.items():
+					if value['title'] == id:
+						return self.subtitles[key]['link']
+				if str(id).isnumeric:
+					code = list(self.subtitles.keys())[id]
+					return self.subtitles[code]['link']
+				raise ValueError(f'Subtitles "{id}" is not defined')
+			else:
+				return None
+
 class HdRezkaStream():
-	def __init__(self, season, episode):
+	def __init__(self, season, episode, subtitles={}):
 		self.videos = {}
 		self.season = season
 		self.episode = episode
+		self.subtitles = HdRezkaStreamSubtitles(**subtitles)
 	def append(self, resolution, link):
 		self.videos[resolution] = link
 	def __str__(self):
 		resolutions = list(self.videos.keys())
+		if self.subtitles.subtitles:
+			return f"<HdRezkaStream> : {resolutions}, subtitles={self.subtitles}"
 		return "<HdRezkaStream> : " + str(resolutions)
 	def __repr__(self):
 		return f"<HdRezkaStream(season:{self.season}, episode:{self.episode})>"
@@ -23,7 +54,7 @@ class HdRezkaStream():
 
 
 class HdRezkaApi():
-	__version__ = 3.0
+	__version__ = 3.1
 	def __init__(self, url):
 		self.HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36'}
 		self.url = url.split(".html")[0] + ".html"
@@ -142,7 +173,7 @@ class HdRezkaApi():
 			r = requests.post("https://rezka.ag/ajax/get_cdn_series/", data=js, headers=self.HEADERS)
 			response = r.json()
 			if response['success']:
-				seasons, episodes = HdRezkaApi.getEpisodes(response['seasons'], response['episodes'])
+				seasons, episodes = self.getEpisodes(response['seasons'], response['episodes'])
 				arr[i] = {
 					"translator_id": self.translators[i],
 					"seasons": seasons, "episodes": episodes
@@ -163,6 +194,9 @@ class HdRezkaApi():
 			if translation.isnumeric():
 				if translation in trs.values():
 					tr_id = translation
+				else:
+					raise ValueError(f'Translation with code "{translation}" is not defined')
+
 			elif translation in trs:
 				tr_id = trs[translation]
 			else:
@@ -193,8 +227,11 @@ class HdRezkaApi():
 		r = requests.post("https://rezka.ag/ajax/get_cdn_series/", data=js, headers=self.HEADERS)
 		r = r.json()
 		if r['success']:
-			arr = HdRezkaApi.clearTrash(r['url']).split(",")
-			stream = HdRezkaStream(season, episode)
+			arr = self.clearTrash(r['url']).split(",")
+			stream = HdRezkaStream( season,
+									episode,
+									subtitles={'data':  r['subtitle'], 'codes': r['subtitle_lns']}
+								  )
 			for i in arr:
 				res = i.split("[")[1].split("]")[0]
 				video = i.split("[")[1].split("]")[1].split(" or ")[1]
@@ -213,6 +250,9 @@ class HdRezkaApi():
 			if translation.isnumeric():
 				if translation in trs.values():
 					tr_id = translation
+				else:
+					raise ValueError(f'Translation with code "{translation}" is not defined')
+
 			elif translation in trs:
 				tr_id = trs[translation]
 			else:
