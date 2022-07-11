@@ -1,6 +1,6 @@
 # HDrezka-api
 
-<img src="https://shields.io/badge/version-v3.0-blue">
+<img src="https://shields.io/badge/version-v3.1-blue">
 
 #### Works with the new API from 01.05.2022
 
@@ -71,4 +71,23 @@ print( stream(1080) )
 print( stream('Ultra') )
 print( stream('1080p Ultra') )
 print( stream.videos )
+```
+
+<br>
+
+# HdRezkaStreamSubtitles:
+#### `self.subtitles` - dict of subtitles
+#### `HdRezkaStreamSubtitles(id)` - call object with argument to get url of subtitles
+
+### Usage examples:
+
+```python
+stream = rezka.getStream(1, 5)
+
+print( stream.subtitles )             # ['en', 'ru']
+print( stream.subtitles.subtitles )   # { 'en': {'title': 'English', 'link': 'https:/'}, ...  }
+print( stream.subtitles('en') )       # 'https:/'
+print( stream.subtitles('English') )  # 'https:/'
+print( stream.subtitles(0) )          # 'https:/'
+#                       ^ index
 ```
