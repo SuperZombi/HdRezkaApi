@@ -4,7 +4,12 @@
 
 #### Works with the new API from 01.05.2022
 
-<hr></br>
+<hr>
+
+### Install:
+```
+pip install HDrezkaAPI
+```
 
 ### Usage:
 
