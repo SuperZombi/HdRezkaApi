@@ -77,6 +77,7 @@ print( stream.videos )
 
 # HdRezkaStreamSubtitles:
 #### `self.subtitles` - dict of subtitles
+#### `self.keys` - list of subtitles codes
 #### `HdRezkaStreamSubtitles(id)` - call object with argument to get url of subtitles
 
 ### Usage examples:
@@ -84,7 +85,7 @@ print( stream.videos )
 ```python
 stream = rezka.getStream(1, 5)
 
-print( stream.subtitles )             # ['en', 'ru']
+print( stream.subtitles.keys )        # ['en', 'ru']
 print( stream.subtitles.subtitles )   # { 'en': {'title': 'English', 'link': 'https:/'}, ...  }
 print( stream.subtitles('en') )       # 'https:/'
 print( stream.subtitles('English') )  # 'https:/'
