@@ -6,6 +6,7 @@ from itertools import product
 class HdRezkaStreamSubtitles():
 	def __init__(self, data, codes):
 		self.subtitles = {}
+		self.keys = []
 		if data:
 			arr = data.split(",")
 			for i in arr:
@@ -14,8 +15,9 @@ class HdRezkaStreamSubtitles():
 				link = temp[1]
 				code = codes[lang]
 				self.subtitles[code] = {'title': lang, 'link': link}
+			self.keys = list(self.subtitles.keys())
 	def __str__(self):
-		return str(list(self.subtitles.keys()))
+		return str(self.keys)
 	def __call__(self, id=None):
 		if self.subtitles:
 			if id:
