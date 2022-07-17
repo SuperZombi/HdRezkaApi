@@ -8,12 +8,14 @@
 
 ### Install:
 ```
-pip install HDrezkaAPI
+pip install HdRezkaApi
 ```
 
 ### Usage:
 
 ```python
+from HdRezkaApi import *
+
 url = "https://rezka.ag/   __YOUR_URL__   .html"
 
 rezka = HdRezkaApi(url)
@@ -22,12 +24,14 @@ print( rezka.getTranslations() )
 print( rezka.getOtherParts() )
 print( rezka.getSeasons() )
 
+print( rezka.getStream()('720p') ) # if movie
 print( rezka.getStream('1', '1')('720p') )
 print( rezka.getSeasonStreams('1') )
 ```
 
 #### `self.id` - Film id (`post_id`)
 #### `self.name` - Film name (`post__title`)
+#### `self.type` - `video.tv_series` or `video.movie`
 #### `self.translators` - Translators array
 #### `self.seriesInfo` - Seasons and Episodes array
 
@@ -38,6 +42,10 @@ print( rezka.getSeasonStreams('1') )
 getStream(
     translation='Дубляж' or translation='56' or index=0
 )                                               ^ this is index in translators array
+```
+If type == movie then there is no need to specify season and episode.
+```python
+stream = rezka.getStream() # if movie
 ```
 <hr>
 
