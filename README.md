@@ -1,4 +1,4 @@
-# HDrezka-api
+# HdRezkaApi
 
 <img src="https://shields.io/badge/version-v4.0-blue">
 
