@@ -16,7 +16,7 @@ pip install HdRezkaApi
 ```python
 from HdRezkaApi import *
 
-url = "https://rezka.ag/   __YOUR_URL__   .html"
+url = "https://hdrezka.ag/   __YOUR_URL__   .html"
 
 rezka = HdRezkaApi(url)
 print(rezka.name)
