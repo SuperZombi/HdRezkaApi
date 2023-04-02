@@ -1,6 +1,6 @@
 # HdRezkaApi
 
-<img src="https://shields.io/badge/version-v5.1-blue">
+<img src="https://shields.io/badge/version-v5.2-blue">
 
 #### Works with the new API from 01.05.2022
 
@@ -61,7 +61,8 @@ getSeasonStreams(
 
 ```python
 def progress(current, all):
-	print(str(current) + "/" + str(all))
+	percent = round(current * 100 / all)
+    print(f"{percent}%: {current}/{all}", end="\r")
 
 print( rezka.getSeasonStreams(1, ignore=True, progress=progress) )
 ```

@@ -58,7 +58,7 @@ class HdRezkaStream():
 
 
 class HdRezkaApi():
-	__version__ = 5.1
+	__version__ = 5.2
 	def __init__(self, url):
 		self.HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36'}
 		self.url = url.split(".html")[0] + ".html"
@@ -306,16 +306,18 @@ class HdRezkaApi():
 			raise ValueError(f'Season "{season}" is not defined')
 
 		series = seasons[tr_str]['episodes'][season]
-		streams = {}
-
 		series_length = len(series)
 
+		streams = {}
 		threads = []
+		progress(0, series_length)
+
 		for episode_id in series:
 			def make_call(ep_id, retry=True):
 				try:
 					stream = self.getStream(season, ep_id, tr_str)
 					streams[ep_id] = stream
+					progress(len(streams), series_length)
 				except Exception as e:
 					if retry:
 						time.sleep(1)
@@ -328,15 +330,14 @@ class HdRezkaApi():
 						ex_desc = e
 						print(f"{ex_name} > ep:{ep_id}: {ex_desc}")
 						streams[ep_id] = None
+						progress(len(streams), series_length)
 			
-			t = threading.Thread(target=make_call, args=(episode_id,))
+			t = threading.Thread(target=make_call, args=(episode_id,), daemon=True)
 			t.start()
 			threads.append(t)
 
-		progress(0, series_length)
-		for i in range(len(threads)):
-			threads[i].join()
-			progress(i+1, series_length)
+		for t in threads:
+			t.join()
 
 		sorted_streams = {k: streams[k] for k in sorted(streams, key=lambda x: int(x))}
 		return sorted_streams
