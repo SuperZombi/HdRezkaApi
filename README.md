@@ -61,7 +61,7 @@ getSeasonStreams(
 
 ```python
 def progress(current, all):
-	percent = round(current * 100 / all)
+    percent = round(current * 100 / all)
     print(f"{percent}%: {current}/{all}", end="\r")
 
 print( rezka.getSeasonStreams(1, ignore=True, progress=progress) )
