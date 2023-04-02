@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import base64
 from itertools import product
 import threading
+import time
 
 class HdRezkaStreamSubtitles():
 	def __init__(self, data, codes):
@@ -317,7 +318,8 @@ class HdRezkaApi():
 					streams[ep_id] = stream
 				except Exception as e:
 					if retry:
-						return make_call(ep_id, retry=False)
+						time.sleep(1)
+						return make_call(ep_id)
 					if not ignore:
 						ex_name = e.__class__.__name__
 						ex_desc = e
