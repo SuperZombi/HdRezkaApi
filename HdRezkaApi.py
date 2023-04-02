@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import base64
 from itertools import product
+import threading
 
 class HdRezkaStreamSubtitles():
 	def __init__(self, data, codes):
@@ -56,7 +57,7 @@ class HdRezkaStream():
 
 
 class HdRezkaApi():
-	__version__ = 4.0
+	__version__ = 5.0
 	def __init__(self, url):
 		self.HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36'}
 		self.url = url.split(".html")[0] + ".html"
@@ -272,6 +273,9 @@ class HdRezkaApi():
 	def getSeasonStreams(self, season, translation=None, index=0, ignore=False, progress=None):
 		season = str(season)
 
+		if not progress:
+			progress = lambda cur, all: print(f"{cur}/{all}", end="\r")
+
 		if not self.translators:
 			self.translators = self.getTranslations()
 		trs = self.translators
@@ -305,20 +309,29 @@ class HdRezkaApi():
 
 		series_length = len(series)
 
+		threads = []
 		for episode_id in series:
-			def make_call():
-				stream = self.getStream(season, episode_id, tr_str)
-				streams[episode_id] = stream
-				if progress:
-					progress(episode_id, series_length)
-				else:
-					print(f"> {episode_id}", end="\r")
-
-			if ignore:
+			def make_call(ep_id, retry=True):
 				try:
-					make_call()
+					stream = self.getStream(season, ep_id, tr_str)
+					streams[ep_id] = stream
 				except Exception as e:
-					print(e)
-			else:
-				make_call()
-		return streams
+					if retry:
+						return make_call(ep_id, retry=False)
+					if not ignore:
+						ex_name = e.__class__.__name__
+						ex_desc = e
+						print(f"{ex_name} > ep:{ep_id}: {ex_desc}")
+						streams[ep_id] = None
+			
+			t = threading.Thread(target=make_call, args=(episode_id,))
+			t.start()
+			threads.append(t)
+
+		progress(0, series_length)
+		for i in range(len(threads)):
+			threads[i].join()
+			progress(i+1, series_length)
+
+		sorted_streams = {k: streams[k] for k in sorted(streams, key=lambda x: int(x))}
+		return sorted_streams

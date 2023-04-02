@@ -1,6 +1,6 @@
 # HdRezkaApi
 
-<img src="https://shields.io/badge/version-v4.0-blue">
+<img src="https://shields.io/badge/version-v5.0-blue">
 
 #### Works with the new API from 01.05.2022
 
@@ -65,6 +65,14 @@ def progress(current, all):
 
 print( rezka.getSeasonStreams(1, ignore=True, progress=progress) )
 ```
+
+Output example:
+```
+{'1': <HdRezkaStream(season:1, episode:1)>, '2': <HdRezkaStream(season:1, episode:2)>, ...}
+```
+
+If an error occurs, an attempt will be made to repeat the request again.<br>
+But if the error occurs again, then `None` will be added to the final dict. In order not to add `None`, but simply to ignore, specify the `ignore=True` parameter.
 
 <hr>
 <br>
