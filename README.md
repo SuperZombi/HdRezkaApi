@@ -1,6 +1,6 @@
 # HdRezkaApi
 
-<img src="https://shields.io/badge/version-v5.0-blue">
+<img src="https://shields.io/badge/version-v5.1-blue">
 
 #### Works with the new API from 01.05.2022
 
@@ -72,7 +72,8 @@ Output example:
 ```
 
 If an error occurs, an attempt will be made to repeat the request again.<br>
-But if the error occurs again, then `None` will be added to the final dict. In order not to add `None`, but simply to ignore, specify the `ignore=True` parameter.
+But if the error occurs again, then `None` will be added to the final dict.<br>
+To ignore errors and retry requests until a response is received, specify the `ignore=True` option.
 
 <hr>
 <br>

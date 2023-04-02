@@ -58,7 +58,7 @@ class HdRezkaStream():
 
 
 class HdRezkaApi():
-	__version__ = 5.0
+	__version__ = 5.1
 	def __init__(self, url):
 		self.HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36'}
 		self.url = url.split(".html")[0] + ".html"
@@ -319,7 +319,10 @@ class HdRezkaApi():
 				except Exception as e:
 					if retry:
 						time.sleep(1)
-						return make_call(ep_id)
+						if ignore:
+							return make_call(ep_id)
+						else:
+							return make_call(ep_id, retry=False)
 					if not ignore:
 						ex_name = e.__class__.__name__
 						ex_desc = e
