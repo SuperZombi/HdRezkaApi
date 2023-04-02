@@ -160,14 +160,14 @@ class HdRezkaApi():
 		for season in seasons.findAll(class_="b-simple_season__item"):
 			seasons_[ season.attrs['data-tab_id'] ] = season.text
 
-		episods = {}
+		episodes_ = {}
 		for episode in episodes.findAll(class_="b-simple_episode__item"):
-			if episode.attrs['data-season_id'] in episods:
-				episods[episode.attrs['data-season_id']] [ episode.attrs['data-episode_id'] ] = episode.text
+			if episode.attrs['data-season_id'] in episodes_:
+				episodes_[episode.attrs['data-season_id']] [ episode.attrs['data-episode_id'] ] = episode.text
 			else:
-				episods[episode.attrs['data-season_id']] = {episode.attrs['data-episode_id']: episode.text}
+				episodes_[episode.attrs['data-season_id']] = {episode.attrs['data-episode_id']: episode.text}
 
-		return seasons_, episods
+		return seasons_, episodes_
 
 	def getSeasons(self):
 		if not self.translators:
