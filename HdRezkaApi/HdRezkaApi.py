@@ -6,8 +6,12 @@ from functools import cached_property
 import threading
 import time
 
-from utils.types import (HdRezkaTVSeries, HdRezkaMovie)
-from utils.stream import HdRezkaStream
+try:
+	from utils.types import (HdRezkaTVSeries, HdRezkaMovie)
+	from utils.stream import HdRezkaStream
+except ImportError:
+	from .utils.types import (HdRezkaTVSeries, HdRezkaMovie)
+	from .utils.stream import HdRezkaStream
 
 
 class HdRezkaApi():
