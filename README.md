@@ -1,10 +1,6 @@
 # HdRezkaApi
 
-<img src="https://shields.io/badge/version-v5.2-blue">
-
-#### Works with the new API from 01.05.2022
-
-<hr>
+<img src="https://shields.io/badge/version-v6.0-blue">
 
 ### Install:
 ```
@@ -20,9 +16,14 @@ url = "https://hdrezka.ag/   __YOUR_URL__   .html"
 
 rezka = HdRezkaApi(url)
 print(rezka.name)
-print( rezka.getTranslations() )
-print( rezka.getOtherParts() )
-print( rezka.getSeasons() )
+print(rezka.thumbnail)
+print( rezka.rating )
+print( rezka.translators )
+print( rezka.otherParts )
+print( rezka.seriesInfo )
+
+print(rezka.type)
+print(rezka.type == HdRezkaTVSeries == HdRezkaTVSeries() == "tv_series")
 
 print( rezka.getStream()('720p') ) # if movie
 print( rezka.getStream('1', '1')('720p') )
@@ -31,9 +32,12 @@ print( rezka.getSeasonStreams('1') )
 
 #### `self.id` - Film id (`post_id`)
 #### `self.name` - Film name (`post__title`)
-#### `self.type` - `video.tv_series` or `video.movie`
+#### `self.type` - `HdRezkaTVSeries` or `HdRezkaMovie`
+#### `self.thumbnail` - Film thumbnail
+#### `self.rating` - Film rating (float)
 #### `self.translators` - Translators array
 #### `self.seriesInfo` - Seasons and Episodes array
+#### `self.otherParts` - Other parts of this film
 
 <hr>
 
@@ -76,11 +80,21 @@ If an error occurs, an attempt will be made to repeat the request again.<br>
 But if the error occurs again, then `None` will be added to the final dict.<br>
 To ignore errors and retry requests until a response is received, specify the `ignore=True` option.
 
+```python
+for i, stream in rezka.getSeasonStreams('1').items():
+    print(stream)
+```
+
 <hr>
 <br>
 
 # HdRezkaStream:
 #### `self.videos` - dict of videos, where key is resolution and value is url
+#### `self.name`
+#### `self.translator_id`
+#### `self.season` - (`None` if film)
+#### `self.episode` - (`None` if film)
+#### `self.subtitles` - `HdRezkaStreamSubtitles`
 #### `HdRezkaStream(resolutin)` - call object with argument to get url of video
 
 ### Usage examples:
