@@ -2,90 +2,78 @@ import requests
 from bs4 import BeautifulSoup
 import base64
 from itertools import product
+from functools import cached_property
 import threading
 import time
 
-class HdRezkaStreamSubtitles():
-	def __init__(self, data, codes):
-		self.subtitles = {}
-		self.keys = []
-		if data:
-			arr = data.split(",")
-			for i in arr:
-				temp = i.split("[")[1].split("]")
-				lang = temp[0]
-				link = temp[1]
-				code = codes[lang]
-				self.subtitles[code] = {'title': lang, 'link': link}
-			self.keys = list(self.subtitles.keys())
-	def __str__(self):
-		return str(self.keys)
-	def __call__(self, id=None):
-		if self.subtitles:
-			if id:
-				if id in self.subtitles.keys():
-					return self.subtitles[id]['link']
-				for key, value in self.subtitles.items():
-					if value['title'] == id:
-						return self.subtitles[key]['link']
-				if str(id).isnumeric:
-					code = list(self.subtitles.keys())[id]
-					return self.subtitles[code]['link']
-				raise ValueError(f'Subtitles "{id}" is not defined')
-			else:
-				return None
-
-class HdRezkaStream():
-	def __init__(self, season, episode, subtitles={}):
-		self.videos = {}
-		self.season = season
-		self.episode = episode
-		self.subtitles = HdRezkaStreamSubtitles(**subtitles)
-	def append(self, resolution, link):
-		self.videos[resolution] = link
-	def __str__(self):
-		resolutions = list(self.videos.keys())
-		if self.subtitles.subtitles:
-			return f"<HdRezkaStream> : {resolutions}, subtitles={self.subtitles}"
-		return "<HdRezkaStream> : " + str(resolutions)
-	def __repr__(self):
-		return f"<HdRezkaStream(season:{self.season}, episode:{self.episode})>"
-	def __call__(self, resolution):
-		coincidences = list(filter(lambda x: str(resolution) in x , self.videos))
-		if len(coincidences) > 0:
-			return self.videos[coincidences[0]]
-		raise ValueError(f'Resolution "{resolution}" is not defined')
+from utils.types import (HdRezkaTVSeries, HdRezkaMovie)
+from utils.stream import HdRezkaStream
 
 
 class HdRezkaApi():
-	__version__ = 5.2
+	__version__ = 6.0
 	def __init__(self, url):
 		self.HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36'}
 		self.url = url.split(".html")[0] + ".html"
-		self.page = self.getPage()
-		self.soup = self.getSoup()
-		self.id = self.extractId()
-		self.name = self.getName()
-		self.type = self.getType()
 
-		#other
-		self.translators = None
-		self.seriesInfo = None
-
-	def getPage(self):
+	@cached_property
+	def page(self):
 		return requests.get(self.url, headers=self.HEADERS)
 
-	def getSoup(self):
+	@cached_property
+	def soup(self):
 		return BeautifulSoup(self.page.content, 'html.parser')
 
-	def extractId(self):
+	@cached_property
+	def id(self):
 		return self.soup.find(id="post_id").attrs['value']
 
-	def getName(self):
+	@cached_property
+	def name(self):
 		return self.soup.find(class_="b-post__title").get_text().strip()
 
-	def getType(self):
-		return self.soup.find('meta', property="og:type").attrs['content']
+	@cached_property
+	def thumbnail(self):
+		return self.soup.find(class_="b-sidecover").find('img').attrs['src']
+
+	@cached_property
+	def type(self):
+		type_str = self.soup.find('meta', property="og:type").attrs['content']
+		if type_str == "video.tv_series":
+			return HdRezkaTVSeries()
+		elif type_str == "video.movie":
+			return HdRezkaMovie()
+		return type_str
+
+	@cached_property
+	def rating(self):
+		return float(self.soup.find(class_='b-post__rating').find(class_='num').get_text())
+
+	@cached_property
+	def translators(self):
+		arr = {}
+		translators = self.soup.find(id="translators-list")
+		if translators:
+			children = translators.findChildren(recursive=False)
+			for child in children:
+				if child.text:
+					arr[child.text] = int(child.attrs['data-translator_id'])
+		if not arr:
+			#auto-detect
+			def getTranslationName(s):
+				table = s.find(class_="b-post__info")
+				for i in table.findAll("tr"):
+					tmp = i.get_text()
+					if tmp.find("переводе") > 0:
+						return tmp.split("В переводе:")[-1].strip()
+			def getTranslationID(s):
+				initCDNEvents = {'video.tv_series': 'initCDNSeriesEvents',
+								 'video.movie'    : 'initCDNMoviesEvents'}
+				tmp = s.text.split(f"sof.tv.{initCDNEvents[f'video.{self.type}']}")[-1].split("{")[0]
+				return int(tmp.split(",")[1].strip())
+
+			arr[getTranslationName(self.soup)] = getTranslationID(self.page)
+		return arr
 
 	@staticmethod
 	def clearTrash(data):
@@ -108,35 +96,8 @@ class HdRezkaApi():
 		finalString = base64.b64decode(trashString+"==")
 		return finalString.decode("utf-8")
 
-	def getTranslations(self):
-		arr = {}
-		translators = self.soup.find(id="translators-list")
-		if translators:
-			children = translators.findChildren(recursive=False)
-			for child in children:
-				if child.text:
-					arr[child.text] = child.attrs['data-translator_id']
-
-		if not arr:
-			#auto-detect
-			def getTranslationName(s):
-				table = s.find(class_="b-post__info")
-				for i in table.findAll("tr"):
-					tmp = i.get_text()
-					if tmp.find("переводе") > 0:
-						return tmp.split("В переводе:")[-1].strip()
-			def getTranslationID(s):
-				initCDNEvents = {'video.tv_series': 'initCDNSeriesEvents',
-								 'video.movie'    : 'initCDNMoviesEvents'}
-				tmp = s.text.split(f"sof.tv.{initCDNEvents[self.type]}")[-1].split("{")[0]
-				return tmp.split(",")[1].strip()
-
-			arr[getTranslationName(self.soup)] = getTranslationID(self.page)
-
-		self.translators = arr
-		return arr
-
-	def getOtherParts(self):
+	@cached_property
+	def otherParts(self):
 		parts = self.soup.find(class_="b-post__partcontent")
 		other = []
 		if parts:
@@ -169,10 +130,8 @@ class HdRezkaApi():
 
 		return seasons_, episodes_
 
-	def getSeasons(self):
-		if not self.translators:
-			self.translators = self.getTranslations()
-
+	@cached_property
+	def seriesInfo(self):
 		arr = {}
 		for i in self.translators:
 			js = {
@@ -188,8 +147,6 @@ class HdRezkaApi():
 					"translator_id": self.translators[i],
 					"seasons": seasons, "episodes": episodes
 				}
-
-		self.seriesInfo = arr
 		return arr
 
 	def getStream(self, season=None, episode=None, translation=None, index=0):
@@ -198,8 +155,8 @@ class HdRezkaApi():
 			r = r.json()
 			if r['success']:
 				arr = self.clearTrash(r['url']).split(",")
-				stream = HdRezkaStream( season,
-										episode,
+				stream = HdRezkaStream( season=season, episode=episode,
+										name=self.name, translator_id=data['translator_id'],
 										subtitles={'data':  r['subtitle'], 'codes': r['subtitle_lns']}
 									  )
 				for i in arr:
@@ -214,17 +171,12 @@ class HdRezkaApi():
 			
 			season = str(season)
 			episode = str(episode)
-
-			if not self.seriesInfo:
-				self.getSeasons()
-			seasons = self.seriesInfo
-
 			tr_str = list(self.translators.keys())[list(self.translators.values()).index(translation_id)]
 
-			if not season in list(seasons[tr_str]['episodes']):
+			if not season in list(self.seriesInfo[tr_str]['episodes']):
 				raise ValueError(f'Season "{season}" is not defined')
 
-			if not episode in list(seasons[tr_str]['episodes'][season]):
+			if not episode in list(self.seriesInfo[tr_str]['episodes'][season]):
 				raise ValueError(f'Episode "{episode}" is not defined')
 
 			return makeRequest({
@@ -241,16 +193,12 @@ class HdRezkaApi():
 				"id": self.id,
 				"translator_id": translation_id,
 				"action": "get_movie"
-			})			
-
-
-		if not self.translators:
-			self.translators = self.getTranslations()
+			})
 
 		if translation:
-			if translation.isnumeric():
-				if translation in self.translators.values():
-					tr_id = translation
+			if str(translation).isnumeric():
+				if int(translation) in self.translators.values():
+					tr_id = int(translation)
 				else:
 					raise ValueError(f'Translation with code "{translation}" is not defined')
 
@@ -263,9 +211,9 @@ class HdRezkaApi():
 			tr_id = list(self.translators.values())[index]
 
 
-		if self.type == "video.tv_series":
+		if self.type == HdRezkaTVSeries:
 			return getStreamSeries(self, season, episode, tr_id)
-		elif self.type == "video.movie":
+		elif self.type == HdRezkaMovie:
 			return getStreamMovie(self, tr_id)
 		else:
 			raise TypeError("Undefined content type")
@@ -277,35 +225,27 @@ class HdRezkaApi():
 		if not progress:
 			progress = lambda cur, all: print(f"{cur}/{all}", end="\r")
 
-		if not self.translators:
-			self.translators = self.getTranslations()
-		trs = self.translators
-
 		if translation:
-			if translation.isnumeric():
-				if translation in trs.values():
-					tr_id = translation
+			if str(translation).isnumeric():
+				if int(translation) in self.translators.values():
+					tr_id = int(translation)
 				else:
 					raise ValueError(f'Translation with code "{translation}" is not defined')
 
-			elif translation in trs:
-				tr_id = trs[translation]
+			elif translation in self.translators:
+				tr_id = self.translators[translation]
 			else:
 				raise ValueError(f'Translation "{translation}" is not defined')
 
 		else:
-			tr_id = list(trs.values())[index]
+			tr_id = list(self.translators.values())[index]
 
-		tr_str = list(trs.keys())[list(trs.values()).index(tr_id)]
+		tr_str = list(self.translators.keys())[list(self.translators.values()).index(tr_id)]
 
-		if not self.seriesInfo:
-			self.getSeasons()
-		seasons = self.seriesInfo
-
-		if not season in list(seasons[tr_str]['episodes']):
+		if not season in list(self.seriesInfo[tr_str]['episodes']):
 			raise ValueError(f'Season "{season}" is not defined')
 
-		series = seasons[tr_str]['episodes'][season]
+		series = self.seriesInfo[tr_str]['episodes'][season]
 		series_length = len(series)
 
 		streams = {}
