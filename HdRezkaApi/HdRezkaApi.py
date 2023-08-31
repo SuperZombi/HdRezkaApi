@@ -3,19 +3,21 @@ from bs4 import BeautifulSoup
 import base64
 from itertools import product
 from functools import cached_property
-import threading
 import time
 
 try:
-	from utils.types import (HdRezkaTVSeries, HdRezkaMovie)
+	from utils.types import (HdRezkaTVSeries, HdRezkaMovie, HdRezkaRating)
 	from utils.stream import HdRezkaStream
 except ImportError:
-	from .utils.types import (HdRezkaTVSeries, HdRezkaMovie)
+	from .utils.types import (HdRezkaTVSeries, HdRezkaMovie, HdRezkaRating)
 	from .utils.stream import HdRezkaStream
 
+class BeautifulSoupCustom(BeautifulSoup):
+	def __repr__(self):
+		return "<HTMLDocument>"
 
 class HdRezkaApi():
-	__version__ = 6.0
+	__version__ = 6.1
 	def __init__(self, url):
 		self.HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36'}
 		self.url = url.split(".html")[0] + ".html"
@@ -26,7 +28,7 @@ class HdRezkaApi():
 
 	@cached_property
 	def soup(self):
-		return BeautifulSoup(self.page.content, 'html.parser')
+		return BeautifulSoupCustom(self.page.content, 'html.parser')
 
 	@cached_property
 	def id(self):
@@ -51,7 +53,10 @@ class HdRezkaApi():
 
 	@cached_property
 	def rating(self):
-		return float(self.soup.find(class_='b-post__rating').find(class_='num').get_text())
+		wraper = self.soup.find(class_='b-post__rating')
+		rating = wraper.find(class_='num').get_text()
+		votes = wraper.find(class_='votes').get_text().strip("()")
+		return HdRezkaRating(value=float(rating), votes=int(votes))
 
 	@cached_property
 	def translators(self):
@@ -123,14 +128,14 @@ class HdRezkaApi():
 
 		seasons_ = {}
 		for season in seasons.findAll(class_="b-simple_season__item"):
-			seasons_[ season.attrs['data-tab_id'] ] = season.text
+			seasons_[ int(season.attrs['data-tab_id']) ] = season.text
 
 		episodes_ = {}
 		for episode in episodes.findAll(class_="b-simple_episode__item"):
-			if episode.attrs['data-season_id'] in episodes_:
-				episodes_[episode.attrs['data-season_id']] [ episode.attrs['data-episode_id'] ] = episode.text
+			if int(episode.attrs['data-season_id']) in episodes_:
+				episodes_[int(episode.attrs['data-season_id'])] [ int(episode.attrs['data-episode_id']) ] = episode.text
 			else:
-				episodes_[episode.attrs['data-season_id']] = {episode.attrs['data-episode_id']: episode.text}
+				episodes_[int(episode.attrs['data-season_id'])] = {int(episode.attrs['data-episode_id']): episode.text}
 
 		return seasons_, episodes_
 
@@ -173,8 +178,6 @@ class HdRezkaApi():
 			if not (season and episode):
 				raise TypeError("getStream() missing required arguments (season and episode)")
 			
-			season = str(season)
-			episode = str(episode)
 			tr_str = list(self.translators.keys())[list(self.translators.values()).index(translation_id)]
 
 			if not season in list(self.seriesInfo[tr_str]['episodes']):
@@ -216,7 +219,7 @@ class HdRezkaApi():
 
 
 		if self.type == HdRezkaTVSeries:
-			return getStreamSeries(self, season, episode, tr_id)
+			return getStreamSeries(self, int(season), int(episode), tr_id)
 		elif self.type == HdRezkaMovie:
 			return getStreamMovie(self, tr_id)
 		else:
@@ -227,7 +230,7 @@ class HdRezkaApi():
 		season = str(season)
 
 		if not progress:
-			progress = lambda cur, all: print(f"{cur}/{all}", end="\r")
+			progress = lambda cur, all: None
 
 		if translation:
 			if str(translation).isnumeric():
@@ -246,14 +249,13 @@ class HdRezkaApi():
 
 		tr_str = list(self.translators.keys())[list(self.translators.values()).index(tr_id)]
 
-		if not season in list(self.seriesInfo[tr_str]['episodes']):
+		if not int(season) in list(self.seriesInfo[tr_str]['episodes']):
 			raise ValueError(f'Season "{season}" is not defined')
 
-		series = self.seriesInfo[tr_str]['episodes'][season]
+		series = self.seriesInfo[tr_str]['episodes'][int(season)]
 		series_length = len(series)
 
 		streams = {}
-		threads = []
 		progress(0, series_length)
 
 		for episode_id in series:
@@ -262,6 +264,7 @@ class HdRezkaApi():
 					stream = self.getStream(season, ep_id, tr_str)
 					streams[ep_id] = stream
 					progress(len(streams), series_length)
+					return stream
 				except Exception as e:
 					if retry:
 						time.sleep(1)
@@ -275,13 +278,5 @@ class HdRezkaApi():
 						print(f"{ex_name} > ep:{ep_id}: {ex_desc}")
 						streams[ep_id] = None
 						progress(len(streams), series_length)
-			
-			t = threading.Thread(target=make_call, args=(episode_id,), daemon=True)
-			t.start()
-			threads.append(t)
 
-		for t in threads:
-			t.join()
-
-		sorted_streams = {k: streams[k] for k in sorted(streams, key=lambda x: int(x))}
-		return sorted_streams
+			yield episode_id, make_call(episode_id)

@@ -1,6 +1,6 @@
 # HdRezkaApi
 
-<img src="https://shields.io/badge/version-v6.0-blue">
+<img src="https://shields.io/badge/version-v6.1-blue">
 
 ### Install:
 ```
@@ -17,7 +17,8 @@ url = "https://hdrezka.ag/   __YOUR_URL__   .html"
 rezka = HdRezkaApi(url)
 print(rezka.name)
 print(rezka.thumbnail)
-print( rezka.rating )
+print( rezka.rating.value )
+print( rezka.rating.votes )
 print( rezka.translators )
 print( rezka.otherParts )
 print( rezka.seriesInfo )
@@ -27,14 +28,14 @@ print(rezka.type == HdRezkaTVSeries == HdRezkaTVSeries() == "tv_series")
 
 print( rezka.getStream()('720p') ) # if movie
 print( rezka.getStream('1', '1')('720p') )
-print( rezka.getSeasonStreams('1') )
+print( dict(rezka.getSeasonStreams('1')) )
 ```
 
 #### `self.id` - Film id (`post_id`)
 #### `self.name` - Film name (`post__title`)
 #### `self.type` - `HdRezkaTVSeries` or `HdRezkaMovie`
 #### `self.thumbnail` - Film thumbnail
-#### `self.rating` - Film rating (float)
+#### `self.rating` - Film rating (`HdRezkaRating`)
 #### `self.translators` - Translators array
 #### `self.seriesInfo` - Seasons and Episodes array
 #### `self.otherParts` - Other parts of this film
@@ -68,7 +69,7 @@ def progress(current, all):
     percent = round(current * 100 / all)
     print(f"{percent}%: {current}/{all}", end="\r")
 
-print( rezka.getSeasonStreams(1, ignore=True, progress=progress) )
+print( dict(rezka.getSeasonStreams(1, ignore=True, progress=progress)) )
 ```
 
 Output example:
@@ -81,7 +82,7 @@ But if the error occurs again, then `None` will be added to the final dict.<br>
 To ignore errors and retry requests until a response is received, specify the `ignore=True` option.
 
 ```python
-for i, stream in rezka.getSeasonStreams('1').items():
+for i, stream in rezka.getSeasonStreams('1'):
     print(stream)
 ```
 
@@ -129,3 +130,9 @@ print( stream.subtitles('English') )  # 'https:/'
 print( stream.subtitles(0) )          # 'https:/'
 #                       ^ index
 ```
+
+<br>
+
+# HdRezkaRating:
+#### `self.value` - rating value (`float`)
+#### `self.votes` - votes amount (`int`)
