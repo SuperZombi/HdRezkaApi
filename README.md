@@ -95,7 +95,7 @@ for i, stream in rezka.getSeasonStreams('1'):
 #### `self.translator_id`
 #### `self.season` - (`None` if film)
 #### `self.episode` - (`None` if film)
-#### `self.subtitles` - `HdRezkaStreamSubtitles`
+#### `self.subtitles` - <a href="#hdrezkastreamsubtitles" >HdRezkaStreamSubtitles</a>
 #### `HdRezkaStream(resolutin)` - call object with argument to get url of video
 
 ### Usage examples:
@@ -116,7 +116,7 @@ print( stream.videos )
 # HdRezkaStreamSubtitles:
 #### `self.subtitles` - dict of subtitles
 #### `self.keys` - list of subtitles codes
-#### `HdRezkaStreamSubtitles(id)` - call object with argument to get url of subtitles
+#### `self(id)` - call object with argument to get url of subtitles
 
 ### Usage examples:
 
