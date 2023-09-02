@@ -34,8 +34,8 @@ print( dict(rezka.getSeasonStreams('1')) )
 #### `self.id` - Film id (`post_id`)
 #### `self.name` - Film name (`post__title`)
 #### `self.type` - `HdRezkaTVSeries` or `HdRezkaMovie`
-#### `self.thumbnail` - Film thumbnail
-#### `self.rating` - Film rating (`HdRezkaRating`)
+#### `self.thumbnail` - Film thumbnail url
+#### `self.rating` - Film rating (<a href="#hdrezkarating">Hdrezka Rating</a>)
 #### `self.translators` - Translators array
 #### `self.seriesInfo` - Seasons and Episodes array
 #### `self.otherParts` - Other parts of this film
