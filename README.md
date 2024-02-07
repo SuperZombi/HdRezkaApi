@@ -136,3 +136,10 @@ print( stream.subtitles(0) )          # 'https:/'
 # HdRezkaRating:
 #### `self.value` - rating value (`float`)
 #### `self.votes` - votes amount (`int`)
+
+<hr>
+
+### Proxy usage example:
+```python
+rezka = HdRezkaApi(url, proxy={'http': 'http://192.168.0.1:80'})
+```
