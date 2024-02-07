@@ -1,25 +1,35 @@
 class HdRezkaStream():
 	def __init__(self, season, episode, name, translator_id, subtitles={}):
-		self.videos = {}
+		self._videos = {}
 		self.season = season
 		self.episode = episode
 		self.name = name
 		self.translator_id = translator_id
 		self.subtitles = HdRezkaStreamSubtitles(**subtitles)
+	
+	@property
+	def videos(self): return self._videos
+
 	def append(self, resolution, link):
-		self.videos[resolution] = link
+		if resolution in self._videos.keys():
+			self._videos[resolution].append(link)
+		else:
+			self._videos[resolution] = [link]
+
+	def __call__(self, resolution):
+		coincidences = list(filter(lambda x: str(resolution) in x , self._videos))
+		if len(coincidences) > 0:
+			return self._videos[coincidences[0]]
+		raise ValueError(f'Resolution "{resolution}" is not defined')
+
 	def __str__(self):
-		resolutions = list(self.videos.keys())
+		resolutions = list(self._videos.keys())
 		if self.subtitles.subtitles:
 			return f"<HdRezkaStream> : {resolutions}, subtitles={self.subtitles}"
 		return "<HdRezkaStream> : " + str(resolutions)
+	
 	def __repr__(self):
 		return f"<HdRezkaStream(season:{self.season}, episode:{self.episode})>"
-	def __call__(self, resolution):
-		coincidences = list(filter(lambda x: str(resolution) in x , self.videos))
-		if len(coincidences) > 0:
-			return self.videos[coincidences[0]]
-		raise ValueError(f'Resolution "{resolution}" is not defined')
 
 class HdRezkaStreamSubtitles():
 	def __init__(self, data, codes):
