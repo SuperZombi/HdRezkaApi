@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import base64
 from itertools import product
 from functools import cached_property
+from urllib.parse import urlparse
 import time
 
 try:
@@ -17,9 +18,11 @@ class BeautifulSoupCustom(BeautifulSoup):
 		return "<HTMLDocument>"
 
 class HdRezkaApi():
-	__version__ = "7.0.0"
+	__version__ = "7.1.0"
 	def __init__(self, url, proxy={}, headers={}):
 		self.url = url.split(".html")[0] + ".html"
+		uri = urlparse(self.url)
+		self.origin = f'{uri.scheme}://{uri.netloc}'
 		self.proxy = proxy
 		self.HEADERS = {
 			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36',
@@ -152,7 +155,7 @@ class HdRezkaApi():
 				"translator_id": self.translators[i],
 				"action": "get_episodes"
 			}
-			r = requests.post("https://rezka.ag/ajax/get_cdn_series/", data=js, headers=self.HEADERS, proxies=self.proxy)
+			r = requests.post(f"{self.origin}/ajax/get_cdn_series/", data=js, headers=self.HEADERS, proxies=self.proxy)
 			response = r.json()
 			if response['success']:
 				seasons, episodes = self.getEpisodes(response['seasons'], response['episodes'])
@@ -164,7 +167,7 @@ class HdRezkaApi():
 
 	def getStream(self, season=None, episode=None, translation=None, index=0):
 		def makeRequest(data):
-			r = requests.post("https://rezka.ag/ajax/get_cdn_series/", data=data, headers=self.HEADERS, proxies=self.proxy)
+			r = requests.post(f"{self.origin}/ajax/get_cdn_series/", data=data, headers=self.HEADERS, proxies=self.proxy)
 			r = r.json()
 			if r['success']:
 				arr = self.clearTrash(r['url']).split(",")
