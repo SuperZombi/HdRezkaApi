@@ -25,6 +25,8 @@ class HdRezkaRating():
 
 	def __float__(self):
 		return float(self.value)
+	def __int__(self):
+		return int(self.value)
 
 	def __gt__(self, other):
 		return self.value > other.value
