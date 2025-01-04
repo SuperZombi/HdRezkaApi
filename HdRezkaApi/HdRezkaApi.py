@@ -73,7 +73,7 @@ class HdRezkaApi():
 			children = translators.findChildren(recursive=False)
 			for child in children:
 				if child.text:
-					arr[child.text] = int(child.attrs['data-translator_id'])
+					arr[child.text.strip()] = int(child.attrs['data-translator_id'])
 		if not arr:
 			#auto-detect
 			def getTranslationName(s):
