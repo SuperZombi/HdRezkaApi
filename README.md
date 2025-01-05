@@ -1,6 +1,6 @@
 # HdRezkaApi
 
-<img src="https://shields.io/badge/version-v7.1-blue">
+<img src="https://shields.io/badge/version-v7.2-blue">
 
 ### Install:
 ```
@@ -137,9 +137,25 @@ print( stream.subtitles(0) )          # 'https:/'
 #### `self.value` - rating value (`float`)
 #### `self.votes` - votes amount (`int`)
 
-<hr>
+<br>
 
-### Proxy usage example:
+# Proxy:
 ```python
 rezka = HdRezkaApi(url, proxy={'http': 'http://192.168.0.1:80'})
+```
+
+<br>
+
+# Cookies:
+```python
+rezka = HdRezkaApi(url, cookies={"dle_user_id": user_id, "dle_password": password_hash})
+```
+If you are not sure:
+```python
+rezka = HdRezkaApi(url, cookies=HdRezkaApi.make_cookies(user_id, password_hash))
+```
+Manually login:
+```python
+rezka = HdRezkaApi(url)
+rezka.login("your_email@gmail.com", "your_password1234")
 ```

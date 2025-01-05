@@ -14,28 +14,43 @@ except ImportError:
 	from .utils.stream import HdRezkaStream
 
 class BeautifulSoupCustom(BeautifulSoup):
-	def __repr__(self):
-		return "<HTMLDocument>"
+	def __repr__(self): return "<HTMLDocument>"
+
+class LoginRequiredError(Exception):
+	def __init__(self): super().__init__("Login is required to access this page.")
+
 
 class HdRezkaApi():
-	__version__ = "7.1.0"
-	def __init__(self, url, proxy={}, headers={}):
+	__version__ = "7.2.0"
+	def __init__(self, url, proxy={}, headers={}, cookies={}):
 		self.url = url.split(".html")[0] + ".html"
 		uri = urlparse(self.url)
 		self.origin = f'{uri.scheme}://{uri.netloc}'
 		self.proxy = proxy
+		self.cookies = cookies
 		self.HEADERS = {
 			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36',
 			**headers
 		}
 
+	def login(self, email:str, password:str):
+		response = requests.post(f"{self.origin}/ajax/login/",data={"login_name":email,"login_password":password},headers=self.HEADERS,proxies=self.proxy)
+		if response.json()['success']:self.cookies = {**self.cookies,**response.cookies.get_dict()}
+
+	@staticmethod
+	def make_cookies(user_id:str, password_hash:str):
+		"""Build cookies helper"""
+		return {"dle_user_id":str(user_id),"dle_password":password_hash}
+
 	@cached_property
 	def page(self):
-		return requests.get(self.url, headers=self.HEADERS, proxies=self.proxy)
+		return requests.get(self.url, headers=self.HEADERS, proxies=self.proxy, cookies=self.cookies)
 
 	@cached_property
 	def soup(self):
-		return BeautifulSoupCustom(self.page.content, 'html.parser')
+		s = BeautifulSoupCustom(self.page.content, 'html.parser')
+		if s.title.text == "Sign In": raise LoginRequiredError()
+		return s
 
 	@cached_property
 	def id(self):
@@ -73,7 +88,7 @@ class HdRezkaApi():
 			children = translators.findChildren(recursive=False)
 			for child in children:
 				if child.text:
-					arr[child.text] = int(child.attrs['data-translator_id'])
+					arr[child.text.strip()] = int(child.attrs['data-translator_id'])
 		if not arr:
 			#auto-detect
 			def getTranslationName(s):
@@ -155,7 +170,7 @@ class HdRezkaApi():
 				"translator_id": self.translators[i],
 				"action": "get_episodes"
 			}
-			r = requests.post(f"{self.origin}/ajax/get_cdn_series/", data=js, headers=self.HEADERS, proxies=self.proxy)
+			r = requests.post(f"{self.origin}/ajax/get_cdn_series/", data=js, headers=self.HEADERS, proxies=self.proxy, cookies=self.cookies)
 			response = r.json()
 			if response['success']:
 				seasons, episodes = self.getEpisodes(response['seasons'], response['episodes'])
@@ -167,14 +182,14 @@ class HdRezkaApi():
 
 	def getStream(self, season=None, episode=None, translation=None, index=0):
 		def makeRequest(data):
-			r = requests.post(f"{self.origin}/ajax/get_cdn_series/", data=data, headers=self.HEADERS, proxies=self.proxy)
+			r = requests.post(f"{self.origin}/ajax/get_cdn_series/", data=data, headers=self.HEADERS, proxies=self.proxy, cookies=self.cookies)
 			r = r.json()
-			if r['success']:
+			if r['success'] and r['url']:
 				arr = self.clearTrash(r['url']).split(",")
 				stream = HdRezkaStream( season=season, episode=episode,
 										name=self.name, translator_id=data['translator_id'],
-										subtitles={'data':  r['subtitle'], 'codes': r['subtitle_lns']}
-									  )
+										subtitles={'data': r['subtitle'], 'codes': r['subtitle_lns']}
+									)
 				for i in arr:
 					temp = i.split("[")[1].split("]")
 					quality = str(temp[0])
@@ -182,6 +197,7 @@ class HdRezkaApi():
 					for video in links:
 						stream.append(quality, video)
 				return stream
+			print("[WARN]: Failed to fetch!")
 
 		def getStreamSeries(self, season, episode, translation_id):
 			if not (season and episode):
