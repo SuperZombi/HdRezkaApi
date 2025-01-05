@@ -1,0 +1,14 @@
+{
+    "folder": "C:/Users/rost/Downloads/HdRezkaApi",
+    "package_name": "HdRezkaApi",
+    "version": "7.2.0",
+    "readme": "C:/Users/rost/Downloads/README.md",
+    "username": "Super_Zombi",
+    "email": "super.zombi.yt@gmail.com",
+    "github": "https://github.com/SuperZombi/HdRezkaApi",
+    "python_ver": "3.9",
+    "dependencies": [
+        "requests",
+        "beautifulsoup4"
+    ]
+}
