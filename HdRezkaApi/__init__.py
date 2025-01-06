@@ -6,22 +6,14 @@ from functools import cached_property
 from urllib.parse import urlparse
 import time
 
-try:
-	from utils.types import (HdRezkaTVSeries, HdRezkaMovie, HdRezkaRating)
-	from utils.stream import HdRezkaStream
-except ImportError:
-	from .utils.types import (HdRezkaTVSeries, HdRezkaMovie, HdRezkaRating)
-	from .utils.stream import HdRezkaStream
-
-class BeautifulSoupCustom(BeautifulSoup):
-	def __repr__(self): return "<HTMLDocument>"
-
-class LoginRequiredError(Exception):
-	def __init__(self): super().__init__("Login is required to access this page.")
+from .utils.stream import HdRezkaStream
+from .utils.types import BeautifulSoupCustom
+from .utils.types import (HdRezkaTVSeries, HdRezkaMovie, HdRezkaRating)
+from .utils.errors import (LoginRequiredError, LoginFailed, FetchFailed)
 
 
 class HdRezkaApi():
-	__version__ = "7.2.0"
+	__version__ = "7.2.1"
 	def __init__(self, url, proxy={}, headers={}, cookies={}):
 		self.url = url.split(".html")[0] + ".html"
 		uri = urlparse(self.url)
@@ -35,7 +27,9 @@ class HdRezkaApi():
 
 	def login(self, email:str, password:str):
 		response = requests.post(f"{self.origin}/ajax/login/",data={"login_name":email,"login_password":password},headers=self.HEADERS,proxies=self.proxy)
-		if response.json()['success']:self.cookies = {**self.cookies,**response.cookies.get_dict()}
+		data = response.json()
+		if data['success']: self.cookies = {**self.cookies,**response.cookies.get_dict()}
+		else: raise LoginFailed(data.get("message"))
 
 	@staticmethod
 	def make_cookies(user_id:str, password_hash:str):
@@ -197,7 +191,7 @@ class HdRezkaApi():
 					for video in links:
 						stream.append(quality, video)
 				return stream
-			print("[WARN]: Failed to fetch!")
+			raise FetchFailed()
 
 		def getStreamSeries(self, season, episode, translation_id):
 			if not (season and episode):
@@ -244,7 +238,14 @@ class HdRezkaApi():
 
 
 		if self.type == HdRezkaTVSeries:
-			return getStreamSeries(self, int(season), int(episode), tr_id)
+			if season and episode:
+				return getStreamSeries(self, int(season), int(episode), tr_id)
+			elif season and (not episode):
+				raise TypeError("getStream() missing one required argument (episode)")
+			elif episode and (not season):
+				raise TypeError("getStream() missing one required argument (season)")
+			else:
+				raise TypeError("getStream() missing required arguments (season and episode)")
 		elif self.type == HdRezkaMovie:
 			return getStreamMovie(self, tr_id)
 		else:
