@@ -1,3 +1,8 @@
+from bs4 import BeautifulSoup
+
+class BeautifulSoupCustom(BeautifulSoup):
+	def __repr__(self): return "<HTMLDocument>"
+
 class HdRezkaType():
 	def __init__(self, name):
 		self.name = name
