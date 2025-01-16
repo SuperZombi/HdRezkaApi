@@ -55,6 +55,10 @@ class HdRezkaApi():
 		return self.soup.find(class_="b-post__title").get_text().strip()
 
 	@cached_property
+	def description(self):
+		return self.soup.find(class_="b-post__description_text").get_text().strip()
+
+	@cached_property
 	def thumbnail(self):
 		return self.soup.find(class_="b-sidecover").find('img').attrs['src']
 
