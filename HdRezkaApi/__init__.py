@@ -9,11 +9,11 @@ import time
 from .utils.stream import HdRezkaStream
 from .utils.types import BeautifulSoupCustom
 from .utils.types import (HdRezkaTVSeries, HdRezkaMovie, HdRezkaRating)
-from .utils.errors import (LoginRequiredError, LoginFailed, FetchFailed)
+from .utils.errors import (LoginRequiredError, LoginFailed, FetchFailed, HTTP)
 
 
 class HdRezkaApi():
-	__version__ = "7.3.0"
+	__version__ = "7.4.0"
 	def __init__(self, url, proxy={}, headers={}, cookies={}):
 		self.url = url.split(".html")[0] + ".html"
 		uri = urlparse(self.url)
@@ -38,7 +38,9 @@ class HdRezkaApi():
 
 	@cached_property
 	def page(self):
-		return requests.get(self.url, headers=self.HEADERS, proxies=self.proxy, cookies=self.cookies)
+		r = requests.get(self.url, allow_redirects=True, headers=self.HEADERS, proxies=self.proxy, cookies=self.cookies)
+		if r.ok: return r
+		raise HTTP(r.status_code, r.reason)
 
 	@cached_property
 	def soup(self):
@@ -177,6 +179,37 @@ class HdRezkaApi():
 					"seasons": seasons, "episodes": episodes
 				}
 		return arr
+
+	@cached_property
+	def episodesInfo(self):
+		output_data = []
+		for translator_name, translator_info in self.seriesInfo.items():
+			translator_id = translator_info["translator_id"]
+			for season, season_text in translator_info["seasons"].items():
+				season_obj = next((s for s in output_data if s["season"] == int(season)), None)
+				if not season_obj:
+					season_obj = {
+						"season": int(season),
+						"season_text": season_text,
+						"episodes": []
+					}
+					output_data.append(season_obj)
+
+				for episode, episode_text in translator_info["episodes"].get(season, {}).items():
+					episode_obj = next((e for e in season_obj["episodes"] if e["episode"] == int(episode)), None)
+					if not episode_obj:
+						episode_obj = {
+							"episode": int(episode),
+							"episode_text": episode_text,
+							"translations": []
+						}
+						season_obj["episodes"].append(episode_obj)
+
+					episode_obj["translations"].append({
+						"translator_id": translator_id,
+						"translator_name": translator_name
+					})
+		return output_data
 
 	def getStream(self, season=None, episode=None, translation=None, index=0):
 		def makeRequest(data):

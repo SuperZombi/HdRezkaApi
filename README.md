@@ -1,6 +1,6 @@
 # HdRezkaApi
 
-<img src="https://shields.io/badge/version-v7.3.0-blue"> <a href="#donate"><img src="https://shields.io/badge/💲-Support_Project-2ea043"></a>
+<img src="https://shields.io/badge/version-v7.4.0-blue"> <a href="#donate"><img src="https://shields.io/badge/💲-Support_Project-2ea043"></a>
 
 ### Install:
 ```
@@ -37,9 +37,44 @@ print( dict(rezka.getSeasonStreams('1')) )
 #### `self.type` - `HdRezkaTVSeries` or `HdRezkaMovie`
 #### `self.thumbnail` - Film thumbnail url
 #### `self.rating` - Film rating (<a href="#hdrezkarating">Hdrezka Rating</a>)
-#### `self.translators` - Translators array
-#### `self.seriesInfo` - Seasons and Episodes array
 #### `self.otherParts` - Other parts of this film
+```
+[ {Film_name: url} ]
+```
+
+#### `self.translators` - Translators dict
+```
+{Translator_name: translator_id}
+```
+
+#### `self.seriesInfo` - Series by translators dict
+```
+{
+	Translator_name: {
+		translator_id,
+		seasons: {1, 2},
+		episodes: {
+			1: {1, 2, 3},
+			2: {1, 2, 3}
+		}
+	}
+}
+```
+    
+#### `self.episodesInfo` - All seasons and episodes
+```
+[
+	{
+		season: 1, season_text,
+		episodes: [
+			{
+				episode: 1, episode_text,
+				translations: [{translator_id, translator_name}]
+			}
+		]
+	}
+]
+```
 
 <hr>
 
