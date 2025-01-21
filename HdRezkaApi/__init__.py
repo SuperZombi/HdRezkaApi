@@ -65,6 +65,10 @@ class HdRezkaApi():
 		return self.soup.find(class_="b-sidecover").find('img').attrs['src']
 
 	@cached_property
+	def thumbnailHQ(self):
+		return self.soup.find(class_="b-sidecover").find('a').attrs['href']
+
+	@cached_property
 	def type(self):
 		type_str = self.soup.find('meta', property="og:type").attrs['content']
 		if type_str == "video.tv_series":
