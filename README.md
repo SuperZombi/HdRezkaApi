@@ -1,6 +1,6 @@
 # HdRezkaApi
 
-<img src="https://shields.io/badge/version-v7.4.0-blue"> <a href="#donate"><img src="https://shields.io/badge/💲-Support_Project-2ea043"></a>
+<img src="https://shields.io/badge/version-v7.4.1-blue"> <a href="#donate"><img src="https://shields.io/badge/💲-Support_Project-2ea043"></a>
 
 ### Install:
 ```
@@ -36,6 +36,7 @@ print( dict(rezka.getSeasonStreams('1')) )
 #### `self.description` - Film description
 #### `self.type` - `HdRezkaTVSeries` or `HdRezkaMovie`
 #### `self.thumbnail` - Film thumbnail url
+#### `self.thumbnailHQ` - Film thumbnail in high quality
 #### `self.rating` - Film rating (<a href="#hdrezkarating">Hdrezka Rating</a>)
 #### `self.otherParts` - Other parts of this film
 ```
