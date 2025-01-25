@@ -2,12 +2,41 @@
 
 <img src="https://shields.io/badge/version-v7.5.0-blue"> <a href="#donate"><img src="https://shields.io/badge/💲-Support_Project-2ea043"></a>
 
-### Install:
+## Install:
 ```
 pip install HdRezkaApi
 ```
 
-### Usage:
+## Table of Contents:
+1. [Usage](#usage)
+2. <details>
+   <summary>Film Information</summary>
+
+   - [self.id](#film-id)
+   - [self.name](#film-name)
+   - [self.description](#film-description)
+   - [self.type](#film-type)
+   - [self.thumbnail](#film-thumbnail)
+   - [self.thumbnailHQ](#film-thumbnailhq)
+   - [self.rating](#film-rating)
+   - [self.otherParts](#film-otherparts)
+   - [self.translators](#film-translators)
+   - [self.seriesInfo](#film-seriesinfo)
+   - [self.episodesInfo](#film-episodesinfo)
+   </details>
+
+3. [getStream](#getstream)
+4. [getSeasonStreams](#getseasonstreams)
+5. [HdRezkaStream](#hdrezkastream)
+6. [HdRezkaStreamSubtitles](#hdrezkastreamsubtitles)
+7. [HdRezkaRating](#hdrezkarating)
+8. [Proxy](#proxy)
+9. [Cookies](#cookies)
+10. [HdRezkaSession](#hdrezkasession)
+
+<hr>
+
+## Usage:
 
 ```python
 from HdRezkaApi import *
@@ -31,24 +60,23 @@ print( rezka.getStream('1', '1')('720p') )
 print( dict(rezka.getSeasonStreams('1')) )
 ```
 
-#### `self.id` - Film id
-#### `self.name` - Film name
-#### `self.description` - Film description
-#### `self.type` - `HdRezkaTVSeries` or `HdRezkaMovie`
-#### `self.thumbnail` - Film thumbnail url
-#### `self.thumbnailHQ` - Film thumbnail in high quality
-#### `self.rating` - Film rating (<a href="#hdrezkarating">Hdrezka Rating</a>)
-#### `self.otherParts` - Other parts of this film
-```
-[ {Film_name: url} ]
-```
+## Film Information
 
-#### `self.translators` - Translators dict
-```
-{Translator_name: translator_id}
-```
+| Attribute                        | Description                          |
+|----------------------------------|--------------------------------------|
+| <a id="film-id"></a>`self.id`    | Film ID                              |
+| <a id="film-name"></a>`self.name`| Film name                            |
+| <a id="film-description"></a>`self.description`| Film description       |
+| <a id="film-type"></a>`self.type`| `HdRezkaTVSeries` or `HdRezkaMovie`  |
+| <a id="film-thumbnail"></a>`self.thumbnail`    | Film thumbnail URL     |
+| <a id="film-thumbnailhq"></a>`self.thumbnailHQ`| Film thumbnail in high quality |
+| <a id="film-rating"></a>`self.rating` | Film rating ([HdRezkaRating](#hdrezkarating)) |
+| <a id="film-otherparts"></a>`self.otherParts` | Other parts of this film `[{Film_name: url}]`|
+| <a id="film-translators"></a>`self.translators` | Translators dict `{Translator_name: translator_id}` |
+| <a id="film-seriesinfo"></a>`self.seriesInfo` | Series info by translators    |
+| <a id="film-episodesinfo"></a>`self.episodesInfo` | All seasons and episodes  |
 
-#### `self.seriesInfo` - Series by translators dict
+#### `self.seriesInfo`
 ```
 {
 	Translator_name: {
@@ -62,7 +90,7 @@ print( dict(rezka.getSeasonStreams('1')) )
 }
 ```
     
-#### `self.episodesInfo` - All seasons and episodes
+#### `self.episodesInfo`
 ```
 [
 	{
