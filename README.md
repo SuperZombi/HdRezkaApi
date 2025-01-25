@@ -1,6 +1,6 @@
 # HdRezkaApi
 
-<img src="https://shields.io/badge/version-v7.4.1-blue"> <a href="#donate"><img src="https://shields.io/badge/💲-Support_Project-2ea043"></a>
+<img src="https://shields.io/badge/version-v7.5.0-blue"> <a href="#donate"><img src="https://shields.io/badge/💲-Support_Project-2ea043"></a>
 
 ### Install:
 ```
@@ -195,6 +195,37 @@ Manually login:
 ```python
 rezka = HdRezkaApi(url)
 rezka.login("your_email@gmail.com", "your_password1234")
+```
+<br>
+
+# HdRezkaSession
+HdRezkaSession allows you to log in once and not send login requests every time.
+
+You can also specify origin to make requests to a same site. Origin in full urls will be ignored.<br>
+In the next example, the request will be made to the url: `"https://rezka_mirror.com/__YOUR_URL__.html"`
+```python
+with HdRezkaSession("https://rezka_mirror.com/") as session:
+	session.login("email@gmail.com", "password")
+	rezka = session.get("https://hdrezka.ag/__URL_PATH__.html")
+```
+Also when specifying origin you can specify only url path.
+```python
+with HdRezkaSession("https://rezka_mirror.com/") as session:
+	rezka = session.get("__URL_PATH__.html")
+```
+<br>
+
+You can also not specify origin and then requests will be made to the URL you specified.
+```python
+with HdRezkaSession() as session:
+	rezka = session.get("https://hdrezka.ag/__URL_PATH__.html")
+```
+```python
+with HdRezkaSession(cookies=cookies, headers=headers, proxy=proxy) as session:
+	# also inline seting up
+	session.cookies = cookies
+	session.headers = headers
+	session.proxy = proxy
 ```
 
 <br>
