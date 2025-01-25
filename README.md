@@ -21,7 +21,7 @@ pip install HdRezkaApi
 
 <hr>
 
-## Usage:
+## Usage
 
 ```python
 from HdRezkaApi import *
@@ -139,9 +139,8 @@ for i, stream in rezka.getSeasonStreams('1'):
 ```
 
 <hr>
-<br>
 
-# HdRezkaStream:
+# HdRezkaStream
 
 | Attribute              | Description                                             |
 |------------------------|---------------------------------------------------------|
@@ -173,9 +172,8 @@ print( stream.videos )
 }
 ```
 
-<br>
 
-# HdRezkaStreamSubtitles:
+# HdRezkaStreamSubtitles
 | Attribute              | Description                   |
 |------------------------|-------------------------------|
 |<a id="subtitles" href="#subtitles">`self.subtitles`</a>|Dict of subtitles where the key is the language code and value is the subtitle information|
@@ -195,22 +193,21 @@ print( stream.subtitles(0) )         # 'https:/'
 #                       ^ index
 ```
 
-<br>
 
-# HdRezkaRating:
+# HdRezkaRating
 | Attribute                         | Description                                      |
 |-----------------------------------|--------------------------------------------------|
 | <a id="rating-value" href="#rating-value">`self.value`</a> | Rating value (`float`)  |
 | <a id="rating-votes" href="#rating-votes">`self.votes`</a> | Number of votes (`int`) |
 
-# Proxy:
+<hr>
+
+# Proxy
 ```python
 rezka = HdRezkaApi(url, proxy={'http': 'http://192.168.0.1:80'})
 ```
 
-<br>
-
-# Cookies:
+# Cookies
 ```python
 rezka = HdRezkaApi(url, cookies={"dle_user_id": user_id, "dle_password": password_hash})
 ```
@@ -223,7 +220,8 @@ Manually login:
 rezka = HdRezkaApi(url)
 rezka.login("your_email@gmail.com", "your_password1234")
 ```
-<br>
+<hr>
+
 
 # HdRezkaSession
 HdRezkaSession allows you to log in once and not send login requests every time.
