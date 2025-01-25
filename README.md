@@ -240,14 +240,15 @@ with HdRezkaSession("https://rezka_mirror.com/") as session:
 ```
 <br>
 
-You can also not specify origin and then requests will be made to the URL you specified.
+You can also not specify origin and then requests will be made to the URL you specified.<br>
+But then you won't be able to use login().
 ```python
 with HdRezkaSession() as session:
 	rezka = session.get("https://hdrezka.ag/__URL_PATH__.html")
 ```
 ```python
 with HdRezkaSession(cookies=cookies, headers=headers, proxy=proxy) as session:
-	# also inline seting up
+	# or inline seting up
 	session.cookies = cookies
 	session.headers = headers
 	session.proxy = proxy
