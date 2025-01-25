@@ -49,17 +49,17 @@ print( dict(rezka.getSeasonStreams('1')) )
 
 | Attribute                        | Description                          |
 |----------------------------------|--------------------------------------|
-| <a id="film-id"></a>`self.id`    | Film ID                              |
-| <a id="film-name"></a>`self.name`| Film name                            |
-| <a id="film-description"></a>`self.description`| Film description       |
-| <a id="film-type"></a>`self.type`| `HdRezkaTVSeries` or `HdRezkaMovie`  |
-| <a id="film-thumbnail"></a>`self.thumbnail`    | Film thumbnail URL     |
-| <a id="film-thumbnailhq"></a>`self.thumbnailHQ`| Film thumbnail in high quality |
-| <a id="film-rating"></a>`self.rating` | Film rating ([HdRezkaRating](#hdrezkarating)) |
-| <a id="film-otherparts"></a>`self.otherParts` | Other parts of this film `[{Film_name: url}]`|
-| <a id="film-translators"></a>`self.translators` | Translators dict `{Translator_name: translator_id}` |
-| <a id="film-seriesinfo"></a>`self.seriesInfo`    | [Series info](#seriesInfo) by translators|
-| <a id="film-episodesinfo"></a>`self.episodesInfo`| All [seasons and episodes](#episodesInfo)|
+| <a id="film-id" href="#film-id">`self.id`</a>| Film ID                  |
+| <a id="film-name" href="#film-name">`self.name`</a>| Film name          |
+| <a id="film-description" href="#film-description">`self.description`</a>| Film description |
+| <a id="film-type" href="#film-type">`self.type`</a> | `HdRezkaTVSeries` or `HdRezkaMovie`  |
+| <a id="film-thumbnail" href="#film-thumbnail">`self.thumbnail`</a>     | Film thumbnail URL|
+| <a id="film-thumbnailhq" href="#film-thumbnailhq">`self.thumbnailHQ`</a>| Film thumbnail in high quality |
+| <a id="film-rating" href="#film-rating">`self.rating`</a> |Film rating ([HdRezkaRating](#hdrezkarating)) |
+| <a id="film-otherparts" href="#film-otherparts">`self.otherParts`</a>|Other parts of this film `[{Film_name: url}]`|
+| <a id="film-translators" href="#film-translators">`self.translators`</a>|Translators dict `{Translator_name: translator_id}`|
+| <a id="film-seriesinfo" href="#film-seriesinfo">`self.seriesInfo`</a>| [Series info](#seriesInfo) by translators|
+| <a id="film-episodesinfo" href="#film-episodesinfo">`self.episodesInfo`</a>|All [seasons and episodes](#episodesInfo)|
 
 #### `seriesInfo`
 ```
