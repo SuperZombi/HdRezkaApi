@@ -198,8 +198,10 @@ print( stream.subtitles(0) )         # 'https:/'
 <br>
 
 # HdRezkaRating:
-#### `self.value` - rating value (`float`)
-#### `self.votes` - votes amount (`int`)
+| Attribute                         | Description                                      |
+|-----------------------------------|--------------------------------------------------|
+| <a id="rating-value" href="#rating-value">`self.value`</a> | Rating value (`float`)  |
+| <a id="rating-votes" href="#rating-votes">`self.votes`</a> | Number of votes (`int`) |
 
 <br>
 
