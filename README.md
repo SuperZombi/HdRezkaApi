@@ -12,17 +12,17 @@ pip install HdRezkaApi
 2. <details>
    <summary>Film Information</summary>
 
-   - [self.id](#film-id)
-   - [self.name](#film-name)
-   - [self.description](#film-description)
-   - [self.type](#film-type)
-   - [self.thumbnail](#film-thumbnail)
-   - [self.thumbnailHQ](#film-thumbnailhq)
-   - [self.rating](#film-rating)
-   - [self.otherParts](#film-otherparts)
-   - [self.translators](#film-translators)
-   - [self.seriesInfo](#film-seriesinfo)
-   - [self.episodesInfo](#film-episodesinfo)
+   - [id](#film-id)
+   - [name](#film-name)
+   - [description](#film-description)
+   - [type](#film-type)
+   - [thumbnail](#film-thumbnail)
+   - [thumbnailHQ](#film-thumbnailhq)
+   - [rating](#film-rating)
+   - [otherParts](#film-otherparts)
+   - [translators](#film-translators)
+   - [seriesInfo](#film-seriesinfo)
+   - [episodesInfo](#film-episodesinfo)
    </details>
 
 3. [getStream](#getstream)
@@ -73,10 +73,10 @@ print( dict(rezka.getSeasonStreams('1')) )
 | <a id="film-rating"></a>`self.rating` | Film rating ([HdRezkaRating](#hdrezkarating)) |
 | <a id="film-otherparts"></a>`self.otherParts` | Other parts of this film `[{Film_name: url}]`|
 | <a id="film-translators"></a>`self.translators` | Translators dict `{Translator_name: translator_id}` |
-| <a id="film-seriesinfo"></a>`self.seriesInfo` | Series info by translators    |
-| <a id="film-episodesinfo"></a>`self.episodesInfo` | All seasons and episodes  |
+| <a id="film-seriesinfo"></a>`self.seriesInfo`    | [Series info](#seriesInfo) by translators|
+| <a id="film-episodesinfo"></a>`self.episodesInfo`| All [seasons and episodes](#episodesInfo)|
 
-#### `self.seriesInfo`
+#### `seriesInfo`
 ```
 {
 	Translator_name: {
@@ -90,7 +90,7 @@ print( dict(rezka.getSeasonStreams('1')) )
 }
 ```
     
-#### `self.episodesInfo`
+#### `episodesInfo`
 ```
 [
 	{
@@ -155,13 +155,16 @@ for i, stream in rezka.getSeasonStreams('1'):
 <br>
 
 # HdRezkaStream:
-#### `self.videos` - dict of videos, where key is resolution and value is url
-#### `self.name`
-#### `self.translator_id`
-#### `self.season` - (`None` if film)
-#### `self.episode` - (`None` if film)
-#### `self.subtitles` - <a href="#hdrezkastreamsubtitles" >HdRezkaStreamSubtitles</a>
-#### `HdRezkaStream(resolutin)` - call object with argument to get url of video
+
+| Attribute              | Description                                             |
+|------------------------|---------------------------------------------------------|
+|<a id="stream-videos"></a>`self.videos`|Dict of videos where the key is resolution and value is the URL|
+|<a id="stream-name"></a>`self.name`    | Film name                                |
+|<a id="stream-translatorid"></a>`self.translator_id` | Translator ID              |
+|<a id="stream-season"></a>`self.season`  | Season number (`None` if film)         |
+|<a id="stream-episode"></a>`self.episode`| Episode number (`None` if film)        |
+|<a id="stream-subtitles"></a>`self.subtitles`| [HdRezkaStreamSubtitles](#hdrezkastreamsubtitles) object|
+|<a id="stream-call"></a>`HdRezkaStream(resolution)`|Call object with argument to get the URL of the video|
 
 ### Usage examples:
 
