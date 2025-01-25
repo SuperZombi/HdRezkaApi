@@ -224,7 +224,7 @@ rezka.login("your_email@gmail.com", "your_password1234")
 <hr>
 
 # HdRezkaSearch
-`HdRezkaSearch(origin, proxy, headers, cookies)`
+`HdRezkaSearch(origin, proxy, headers, cookies)(query)`
 ```python
 results = HdRezkaSearch("https://hdrezka.ag/")("film name")
 ```
