@@ -74,7 +74,7 @@ print( dict(rezka.getSeasonStreams('1')) )
 	}
 }
 ```
-    
+
 #### `episodesInfo`
 ```
 [
@@ -118,8 +118,8 @@ getSeasonStreams(
 
 ```python
 def progress(current, all):
-    percent = round(current * 100 / all)
-    print(f"{percent}%: {current}/{all}", end="\r")
+	percent = round(current * 100 / all)
+	print(f"{percent}%: {current}/{all}", end="\r")
 
 print( dict(rezka.getSeasonStreams(1, ignore=True, progress=progress)) )
 ```
@@ -135,7 +135,7 @@ To ignore errors and retry requests until a response is received, specify the `i
 
 ```python
 for i, stream in rezka.getSeasonStreams('1'):
-    print(stream)
+	print(stream)
 ```
 
 <hr>
@@ -145,7 +145,7 @@ for i, stream in rezka.getSeasonStreams('1'):
 
 | Attribute              | Description                                             |
 |------------------------|---------------------------------------------------------|
-|<a id="stream-videos" href="#stream-videos">`self.videos`</a>|Dict of videos where the key is resolution and value is the URL|
+|<a id="stream-videos" href="#stream-videos">`self.videos`</a>|Dict of videos where the key is resolution and value is list of URLs|
 |<a id="stream-name" href="#stream-name">`self.name`</a>| Film name                |
 |<a id="stream-translatorid" href="#stream-translatorid">`self.translator_id`</a>  | Translator ID |
 |<a id="stream-season" href="#stream-season">`self.season`</a> | Season number (`None` if film)    |
@@ -165,24 +165,33 @@ print( stream('Ultra') )
 print( stream('1080p Ultra') )
 print( stream.videos )
 ```
+```
+{
+	'360p': ['https://sambray.org/...mp4', 'https://stream.voidboost.cc/...mp4'],
+	'480p': ['https://sambray.org/...mp4', 'https://stream.voidboost.cc/...mp4'],
+	'720p': ['https://sambray.org/...mp4', 'https://stream.voidboost.cc/...mp4'],
+}
+```
 
 <br>
 
 # HdRezkaStreamSubtitles:
-#### `self.subtitles` - dict of subtitles
-#### `self.keys` - list of subtitles codes
-#### `self(id)` - call object with argument to get url of subtitles
+| Attribute              | Description                   |
+|------------------------|-------------------------------|
+|<a id="subtitles" href="#subtitles">`self.subtitles`</a>|Dict of subtitles where the key is the language code and value is the subtitle information|
+| <a id="subtitles-keys" href="#subtitles-keys">`self.keys`</a>|List of available subtitle language codes|
+| <a id="subtitles-call" href="#subtitles-call">`self(id)`</a> |Call object with argument to get URL of subtitles|
 
 ### Usage examples:
 
 ```python
 stream = rezka.getStream(1, 5)
 
-print( stream.subtitles.keys )        # ['en', 'ru']
-print( stream.subtitles.subtitles )   # { 'en': {'title': 'English', 'link': 'https:/'}, ...  }
-print( stream.subtitles('en') )       # 'https:/'
-print( stream.subtitles('English') )  # 'https:/'
-print( stream.subtitles(0) )          # 'https:/'
+print( stream.subtitles.subtitles )  # { 'en': {'title': 'English', 'link': 'https:/'}, ...  }
+print( stream.subtitles.keys )       # ['en', 'ru']
+print( stream.subtitles('en') )      # 'https:/'
+print( stream.subtitles('English') ) # 'https:/'
+print( stream.subtitles(0) )         # 'https:/'
 #                       ^ index
 ```
 
@@ -251,20 +260,20 @@ with HdRezkaSession(cookies=cookies, headers=headers, proxy=proxy) as session:
 ## 💲Donate
 
 <table>
-  <tr>
-    <td>
-       <img width="18px" src="https://www.google.com/s2/favicons?domain=https://donatello.to&sz=256">
-    </td>
-    <td>
-      <a href="https://donatello.to/super_zombi">Donatello</a>
-    </td>
-  </tr>
-  <tr>
-    <td>
-       <img width="18px" src="https://www.google.com/s2/favicons?domain=https://www.donationalerts.com&sz=256">
-    </td>
-    <td>
-      <a href="https://www.donationalerts.com/r/super_zombi">Donation Alerts</a>
-    </td>
-  </tr>
+	<tr>
+		<td>
+			<img width="18px" src="https://www.google.com/s2/favicons?domain=https://donatello.to&sz=256">
+		</td>
+		<td>
+			<a href="https://donatello.to/super_zombi">Donatello</a>
+		</td>
+	</tr>
+	<tr>
+		<td>
+		<img width="18px" src="https://www.google.com/s2/favicons?domain=https://www.donationalerts.com&sz=256">
+		</td>
+		<td>
+		<a href="https://www.donationalerts.com/r/super_zombi">Donation Alerts</a>
+		</td>
+	</tr>
 </table>
