@@ -13,7 +13,7 @@ from .utils.errors import (LoginRequiredError, LoginFailed, FetchFailed, HTTP)
 
 
 class HdRezkaApi():
-	__version__ = "7.4.2"
+	__version__ = "7.5.0"
 	def __init__(self, url, proxy={}, headers={}, cookies={}):
 		self.url = url.split(".html")[0] + ".html"
 		uri = urlparse(self.url)
@@ -352,3 +352,37 @@ class HdRezkaApi():
 						progress(len(streams), series_length)
 
 			yield episode_id, make_call(episode_id)
+
+
+class HdRezkaSession:
+	def __init__(self, origin="", proxy={}, headers={}, cookies={}):
+		self.origin = None
+		if origin:
+			uri = urlparse(origin)
+			self.origin = f'{uri.scheme}://{uri.netloc}'
+		self.proxy = proxy
+		self.cookies = cookies
+		self.HEADERS = {
+			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36',
+			**headers
+		}
+	def __enter__(self): return self
+	def __exit__(self, type, value, traceback): pass
+
+	def login(self, email:str, password:str):
+		if not self.origin: raise LoginFailed("For login origin is required")
+		response = requests.post(f"{self.origin}/ajax/login/",data={"login_name":email,"login_password":password},headers=self.HEADERS,proxies=self.proxy)
+		data = response.json()
+		if data['success']: self.cookies = {**self.cookies,**response.cookies.get_dict()}
+		else: raise LoginFailed(data.get("message"))
+
+	def get(self, url, **kwargs):
+		if self.origin:
+			uri = urlparse(url)
+			url = self.origin+"/"+uri.path.lstrip("/")
+		return HdRezkaApi(url, **{
+			"proxy": self.proxy,
+			"headers": self.HEADERS,
+			"cookies": self.cookies,
+			**kwargs
+		})
