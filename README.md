@@ -1,6 +1,6 @@
 # HdRezkaApi
 
-<img src="https://shields.io/badge/version-v7.5.0-blue"> <a href="#donate"><img src="https://shields.io/badge/💲-Support_Project-2ea043"></a>
+<img src="https://shields.io/badge/version-v7.6.0-blue"> <a href="#donate"><img src="https://shields.io/badge/💲-Support_Project-2ea043"></a>
 
 ## Install:
 ```
@@ -17,7 +17,8 @@ pip install HdRezkaApi
 7. [HdRezkaRating](#hdrezkarating)
 8. [Proxy](#proxy)
 9. [Cookies](#cookies)
-10. [HdRezkaSession](#hdrezkasession)
+10. [HdRezkaSearch](#hdrezkasearch)
+11. [HdRezkaSession](#hdrezkasession)
 
 <hr>
 
@@ -222,6 +223,22 @@ rezka.login("your_email@gmail.com", "your_password1234")
 ```
 <hr>
 
+# HdRezkaSearch
+`HdRezkaSearch(origin, proxy, headers, cookies)`
+```python
+results = HdRezkaSearch("https://hdrezka.ag/")("film name")
+```
+```
+[
+	{
+		'title': 'Film name',
+		'url': 'https://hdrezka.ag/__FILM_URL.html'
+	}
+]
+```
+[Searching with session](#searching-with-session)
+<hr>
+
 
 # HdRezkaSession
 HdRezkaSession allows you to log in once and not send login requests every time.
@@ -254,7 +271,14 @@ with HdRezkaSession(cookies=cookies, headers=headers, proxy=proxy) as session:
 	session.proxy = proxy
 ```
 
-<br>
+### Searching with session
+```python
+with HdRezkaSession("https://rezka_mirror.com/") as session:
+	results = session.search("film name")
+```
+[More info](#hdrezkasearch)
+
+<hr>
 
 ## 💲Donate
 
