@@ -7,13 +7,14 @@ from urllib.parse import urlparse
 import time
 
 from .utils.stream import HdRezkaStream
+from .utils.search import HdRezkaSearch
 from .utils.types import BeautifulSoupCustom
 from .utils.types import (HdRezkaTVSeries, HdRezkaMovie, HdRezkaRating, HdRezkaEmptyRating)
 from .utils.errors import (LoginRequiredError, LoginFailed, FetchFailed, HTTP)
 
 
 class HdRezkaApi():
-	__version__ = "7.5.0"
+	__version__ = "7.6.0"
 	def __init__(self, url, proxy={}, headers={}, cookies={}):
 		self.url = url.split(".html")[0] + ".html"
 		uri = urlparse(self.url)
@@ -370,7 +371,7 @@ class HdRezkaSession:
 	def __exit__(self, type, value, traceback): pass
 
 	def login(self, email:str, password:str):
-		if not self.origin: raise LoginFailed("For login origin is required")
+		if not self.origin: raise ValueError("For login origin is required")
 		response = requests.post(f"{self.origin}/ajax/login/",data={"login_name":email,"login_password":password},headers=self.HEADERS,proxies=self.proxy)
 		data = response.json()
 		if data['success']: self.cookies = {**self.cookies,**response.cookies.get_dict()}
@@ -386,3 +387,7 @@ class HdRezkaSession:
 			"cookies": self.cookies,
 			**kwargs
 		})
+
+	def search(self, query):
+		if not self.origin: raise ValueError("For search origin is required")
+		return HdRezkaSearch(self.origin,proxy=self.proxy,headers=self.HEADERS,cookies=self.cookies)(query)
