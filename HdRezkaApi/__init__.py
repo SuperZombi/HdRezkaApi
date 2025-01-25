@@ -8,12 +8,12 @@ import time
 
 from .utils.stream import HdRezkaStream
 from .utils.types import BeautifulSoupCustom
-from .utils.types import (HdRezkaTVSeries, HdRezkaMovie, HdRezkaRating)
+from .utils.types import (HdRezkaTVSeries, HdRezkaMovie, HdRezkaRating, HdRezkaEmptyRating)
 from .utils.errors import (LoginRequiredError, LoginFailed, FetchFailed, HTTP)
 
 
 class HdRezkaApi():
-	__version__ = "7.4.1"
+	__version__ = "7.4.2"
 	def __init__(self, url, proxy={}, headers={}, cookies={}):
 		self.url = url.split(".html")[0] + ".html"
 		uri = urlparse(self.url)
@@ -24,6 +24,8 @@ class HdRezkaApi():
 			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36',
 			**headers
 		}
+	def __str__(self): return f'HdRezka("{self.name}")'
+	def __repr__(self): return str(self)
 
 	def login(self, email:str, password:str):
 		response = requests.post(f"{self.origin}/ajax/login/",data={"login_name":email,"login_password":password},headers=self.HEADERS,proxies=self.proxy)
@@ -85,7 +87,7 @@ class HdRezkaApi():
 			votes = wraper.find(class_='votes').get_text().strip("()")
 			return HdRezkaRating(value=float(rating), votes=int(votes))
 		else:
-			return HdRezkaRating(value=None, votes=None)
+			return HdRezkaEmptyRating()
 
 	@cached_property
 	def translators(self):

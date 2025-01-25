@@ -20,18 +20,14 @@ class HdRezkaMovie(HdRezkaType):
 
 
 class HdRezkaRating():
-	def __init__(self, value, votes):
+	def __init__(self, value:float, votes:int):
 		self.value = value
 		self.votes = votes
-	def __str__(self):
-		return f"{self.value} ({self.votes})"
-	def __repr__(self):
-		return f"<HdRezkaRating(value:{self.value}, votes:{self.votes})>"
+	def __str__(self): return f"{self.value} ({self.votes})"
+	def __repr__(self): return f"<HdRezkaRating({self.value})>"
 
-	def __float__(self):
-		return float(self.value)
-	def __int__(self):
-		return int(self.value)
+	def __float__(self): return float(self.value)
+	def __int__(self): return int(self.value)
 
 	def __gt__(self, other):
 		return self.value > other.value
@@ -42,4 +38,20 @@ class HdRezkaRating():
 	def __le__(self, other):
 		return self.value <= other.value
 	def __eq__(self, other):
-		return self.value == other.value
+		if isinstance(other, self.__class__):
+			return self.value == other.value
+		return self.value == other
+
+class HdRezkaEmptyRating(HdRezkaRating):
+	def __init__(self):
+		super().__init__(value=None, votes=None)
+	def __str__(self): return f"HdRezkaRating(Empty)"
+	def __repr__(self): return f"<HdRezkaEmptyRating>"
+	def __float__(self): return 0
+	def __int__(self): return 0
+	def __bool__(self): return False
+
+	def __gt__(self, other): return False                          # >
+	def __lt__(self, other): return True if other.value else False # <
+	def __ge__(self, other): return False if other.value else True # >=
+	def __le__(self, other): return True if other.value else False # <=
