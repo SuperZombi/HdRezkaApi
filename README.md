@@ -9,22 +9,7 @@ pip install HdRezkaApi
 
 ## Table of Contents:
 1. [Usage](#usage)
-2. <details>
-   <summary>Film Information</summary>
-
-   - [id](#film-id)
-   - [name](#film-name)
-   - [description](#film-description)
-   - [type](#film-type)
-   - [thumbnail](#film-thumbnail)
-   - [thumbnailHQ](#film-thumbnailhq)
-   - [rating](#film-rating)
-   - [otherParts](#film-otherparts)
-   - [translators](#film-translators)
-   - [seriesInfo](#film-seriesinfo)
-   - [episodesInfo](#film-episodesinfo)
-   </details>
-
+2. [Film Information](#film-information)
 3. [getStream](#getstream)
 4. [getSeasonStreams](#getseasonstreams)
 5. [HdRezkaStream](#hdrezkastream)
