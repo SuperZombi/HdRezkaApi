@@ -145,13 +145,13 @@ for i, stream in rezka.getSeasonStreams('1'):
 
 | Attribute              | Description                                             |
 |------------------------|---------------------------------------------------------|
-|<a id="stream-videos"></a>`self.videos`|Dict of videos where the key is resolution and value is the URL|
-|<a id="stream-name"></a>`self.name`    | Film name                                |
-|<a id="stream-translatorid"></a>`self.translator_id` | Translator ID              |
-|<a id="stream-season"></a>`self.season`  | Season number (`None` if film)         |
-|<a id="stream-episode"></a>`self.episode`| Episode number (`None` if film)        |
-|<a id="stream-subtitles"></a>`self.subtitles`| [HdRezkaStreamSubtitles](#hdrezkastreamsubtitles) object|
-|<a id="stream-call"></a>`HdRezkaStream(resolution)`|Call object with argument to get the URL of the video|
+|<a id="stream-videos" href="#stream-videos">`self.videos`</a>|Dict of videos where the key is resolution and value is the URL|
+|<a id="stream-name" href="#stream-name">`self.name`</a>| Film name                |
+|<a id="stream-translatorid" href="#stream-translatorid">`self.translator_id`</a>  | Translator ID |
+|<a id="stream-season" href="#stream-season">`self.season`</a> | Season number (`None` if film)    |
+|<a id="stream-episode" href="#stream-episode">`self.episode`</a>| Episode number (`None` if film) |
+|<a id="stream-subtitles" href="#stream-subtitles">`self.subtitles`</a>| [HdRezkaStreamSubtitles](#hdrezkastreamsubtitles) object|
+|<a id="stream-call" href="#stream-call">`HdRezkaStream(resolution)`</a>|Call object with argument to get the URL of the video|
 
 ### Usage examples:
 
