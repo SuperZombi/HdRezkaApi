@@ -80,9 +80,12 @@ class HdRezkaApi():
 	@cached_property
 	def rating(self):
 		wraper = self.soup.find(class_='b-post__rating')
-		rating = wraper.find(class_='num').get_text()
-		votes = wraper.find(class_='votes').get_text().strip("()")
-		return HdRezkaRating(value=float(rating), votes=int(votes))
+		if wraper:
+			rating = wraper.find(class_='num').get_text()
+			votes = wraper.find(class_='votes').get_text().strip("()")
+			return HdRezkaRating(value=float(rating), votes=int(votes))
+		else:
+			return HdRezkaRating(value=None, votes=None)
 
 	@cached_property
 	def translators(self):
