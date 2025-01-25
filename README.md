@@ -107,19 +107,21 @@ print( dict(rezka.getSeasonStreams('1')) )
 
 <hr>
 
-### getStream(`season`, `episode`, `translation=None`, `index=0`)
+### getStream
+`getStream(season, episode, translation=None, index=0)`
 ```
 getStream(
     translation='Дубляж' or translation='56' or index=0
 )                                               ^ this is index in translators array
 ```
-If type == movie then there is no need to specify season and episode.
+If `type == movie` then there is no need to specify season and episode.
 ```python
 stream = rezka.getStream() # if movie
 ```
 <hr>
 
-### getSeasonStreams(`season`, `translation=None`, `index=0`, `ignore=False`, `progress=None`)
+### getSeasonStreams
+`getSeasonStreams(season, translation=None, index=0, ignore=False, progress=None)`
 ```
 getSeasonStreams(
     translation='Дубляж' or translation='56' or index=0
