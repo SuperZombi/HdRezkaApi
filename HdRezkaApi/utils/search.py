@@ -20,5 +20,7 @@ class HdRezkaSearch:
 		for item in soup.select('.b-search__section_list li'):
 			title = item.find('span', class_='enty').get_text().strip()
 			url = item.find('a').attrs['href']
-			results.append({"title": title, "url": url})
+			rating_span = item.find('span', class_='rating')
+			rating = float(rating_span.get_text()) if rating_span else None
+			results.append({"title": title, "url": url, "rating": rating})
 		return results

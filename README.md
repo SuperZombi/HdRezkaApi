@@ -1,6 +1,6 @@
 # HdRezkaApi
 
-<img src="https://shields.io/badge/version-v7.6.0-blue"> <a href="#donate"><img src="https://shields.io/badge/💲-Support_Project-2ea043"></a>
+<img src="https://shields.io/badge/version-v7.6.1-blue"> <a href="#donate"><img src="https://shields.io/badge/💲-Support_Project-2ea043"></a>
 
 ## Install:
 ```
@@ -232,7 +232,8 @@ results = HdRezkaSearch("https://hdrezka.ag/")("film name")
 [
 	{
 		'title': 'Film name',
-		'url': 'https://hdrezka.ag/__FILM_URL.html'
+		'url': 'https://hdrezka.ag/__FILM_URL.html',
+		'rating': 7.8
 	}
 ]
 ```
