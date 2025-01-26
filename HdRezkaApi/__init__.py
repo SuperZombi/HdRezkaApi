@@ -14,7 +14,7 @@ from .utils.errors import (LoginRequiredError, LoginFailed, FetchFailed, HTTP)
 
 
 class HdRezkaApi():
-	__version__ = "7.6.1"
+	__version__ = "7.6.0"
 	def __init__(self, url, proxy={}, headers={}, cookies={}):
 		self.url = url.split(".html")[0] + ".html"
 		uri = urlparse(self.url)
