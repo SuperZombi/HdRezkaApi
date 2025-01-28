@@ -14,7 +14,7 @@ from .utils.errors import (LoginRequiredError, LoginFailed, FetchFailed, HTTP)
 
 
 class HdRezkaApi():
-	__version__ = "7.6.1"
+	__version__ = "7.6.2"
 	def __init__(self, url, proxy={}, headers={}, cookies={}):
 		self.url = url.split(".html")[0] + ".html"
 		uri = urlparse(self.url)
@@ -53,7 +53,13 @@ class HdRezkaApi():
 
 	@cached_property
 	def id(self):
-		return self.soup.find(id="post_id").attrs['value']
+		def get_val(el, attr): return el.attrs.get(attr) if el else None
+		return int(
+			get_val(self.soup.find(id="post_id"), 'value') or
+			get_val(self.soup.find(id="send-video-issue"), 'data-id') or
+			get_val(self.soup.find(id="user-favorites-holder"), 'data-post_id') or
+			self.url.split("/")[-1].split("-")[0]
+		)
 
 	@cached_property
 	def name(self):

@@ -1,6 +1,6 @@
 # HdRezkaApi
 
-<img src="https://shields.io/badge/version-v7.6.1-blue"> <a href="#donate"><img src="https://shields.io/badge/💲-Support_Project-2ea043"></a>
+<img src="https://shields.io/badge/version-v7.6.2-blue"> <a href="#donate"><img src="https://shields.io/badge/💲-Support_Project-2ea043"></a>
 
 ## Install:
 ```
