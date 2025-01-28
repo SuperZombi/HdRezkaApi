@@ -53,7 +53,7 @@ class HdRezkaApi():
 
 	@cached_property
 	def id(self):
-		return self.soup.find(id="post_id").attrs['value']
+		return self.url.split("/")[-1].split("-")[0]
 
 	@cached_property
 	def name(self):
