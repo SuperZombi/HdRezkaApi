@@ -1,6 +1,6 @@
 # HdRezkaApi
 
-<img src="https://shields.io/badge/version-v7.6.2-blue"> <a href="#donate"><img src="https://shields.io/badge/💲-Support_Project-2ea043"></a>
+<img src="https://shields.io/badge/version-v8.0.0-blue"> <a href="#donate"><img src="https://shields.io/badge/💲-Support_Project-2ea043"></a>
 
 ## Install:
 ```
@@ -224,7 +224,8 @@ rezka.login("your_email@gmail.com", "your_password1234")
 <hr>
 
 # HdRezkaSearch
-`HdRezkaSearch(origin, proxy, headers, cookies)(query)`
+`HdRezkaSearch(origin, proxy, headers, cookies)(query, find_all=False)`
+### Fast search
 ```python
 results = HdRezkaSearch("https://hdrezka.ag/")("film name")
 ```
@@ -237,6 +238,47 @@ results = HdRezkaSearch("https://hdrezka.ag/")("film name")
 	}
 ]
 ```
+### Advanced search
+```python
+results = HdRezkaSearch("https://hdrezka.ag/", cookies)("film name", find_all=True)
+for page in results:
+	for result in page:
+		print(result)
+```
+```
+{
+	'title': 'Film name',
+	'url': 'https://hdrezka.ag/__FILM_URL.html',
+	'image': 'https://hdrezka.ag/image.jpg'
+}
+```
+#### All pages
+```python
+print(results.all_pages)
+```
+```
+[
+	[{'title', 'url', 'image'}, ...],
+	[{'title', 'url', 'image'}, ...],
+	...
+]
+```
+#### Flatten results
+```python
+print(results.all)
+```
+```
+[
+	{'title', 'url', 'image'}, {'title', 'url', 'image'}, ...
+]
+```
+#### Specific page
+```python
+print(results.get_page(2)) # page number
+# or
+print(results[1]) # index
+```
+
 [Searching with session](#searching-with-session)
 <hr>
 
@@ -273,9 +315,19 @@ with HdRezkaSession(cookies=cookies, headers=headers, proxy=proxy) as session:
 ```
 
 ### Searching with session
+#### Fast search
 ```python
 with HdRezkaSession("https://rezka_mirror.com/") as session:
 	results = session.search("film name")
+```
+#### Advanced search
+```python
+with HdRezkaSession("https://rezka_mirror.com/") as session:
+	session.login("email@gmail.com", "password")
+	results = session.search("film name", find_all=True)
+	for page in results:
+		for result in page:
+			print(result)
 ```
 [More info](#hdrezkasearch)
 
