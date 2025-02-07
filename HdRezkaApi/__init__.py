@@ -10,7 +10,7 @@ from .utils.stream import HdRezkaStream
 from .utils.search import HdRezkaSearch
 from .utils.types import BeautifulSoupCustom
 from .utils.types import (HdRezkaTVSeries, HdRezkaMovie, HdRezkaRating, HdRezkaEmptyRating)
-from .utils.errors import (LoginRequiredError, LoginFailed, FetchFailed, HTTP)
+from .utils.errors import (LoginRequiredError, LoginFailed, FetchFailed, CaptchaError, HTTP)
 
 
 class HdRezkaApi():
@@ -20,7 +20,7 @@ class HdRezkaApi():
 		uri = urlparse(self.url)
 		self.origin = f'{uri.scheme}://{uri.netloc}'
 		self.proxy = proxy
-		self.cookies = cookies
+		self.cookies = {"hdmbbs": "1", **cookies}
 		self.HEADERS = {
 			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36',
 			**headers
@@ -28,11 +28,13 @@ class HdRezkaApi():
 	def __str__(self): return f'HdRezka("{self.name}")'
 	def __repr__(self): return str(self)
 
-	def login(self, email:str, password:str):
+	def login(self, email:str, password:str, raise_exception=True):
 		response = requests.post(f"{self.origin}/ajax/login/",data={"login_name":email,"login_password":password},headers=self.HEADERS,proxies=self.proxy)
 		data = response.json()
-		if data['success']: self.cookies = {**self.cookies,**response.cookies.get_dict()}
-		else: raise LoginFailed(data.get("message"))
+		if data['success']:
+			self.cookies = {**self.cookies,**response.cookies.get_dict()}
+			return True
+		if raise_exception: raise LoginFailed(data.get("message"))
 
 	@staticmethod
 	def make_cookies(user_id:str, password_hash:str):
@@ -49,6 +51,7 @@ class HdRezkaApi():
 	def soup(self):
 		s = BeautifulSoupCustom(self.page.content, 'html.parser')
 		if s.title.text == "Sign In": raise LoginRequiredError()
+		if s.title.text == "Verify": raise CaptchaError()
 		return s
 
 	@cached_property

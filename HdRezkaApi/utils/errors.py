@@ -7,5 +7,8 @@ class LoginFailed(Exception):
 class FetchFailed(Exception):
 	def __init__(self): super().__init__("Failed to fetch stream!")
 
+class CaptchaError(Exception):
+	def __init__(self): super().__init__("Failed to bypass captcha!")
+
 class HTTP(Exception):
 	def __init__(self, code, message=""): super().__init__(f"{code}: {message}")
