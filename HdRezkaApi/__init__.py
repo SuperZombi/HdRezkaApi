@@ -14,7 +14,7 @@ from .utils.errors import (LoginRequiredError, LoginFailed, FetchFailed, Captcha
 
 
 class HdRezkaApi():
-	__version__ = "7.6.2"
+	__version__ = "8.0.0"
 	def __init__(self, url, proxy={}, headers={}, cookies={}):
 		self.url = url.split(".html")[0] + ".html"
 		uri = urlparse(self.url)
@@ -397,6 +397,6 @@ class HdRezkaSession:
 			**kwargs
 		})
 
-	def search(self, query):
+	def search(self, query, find_all=False):
 		if not self.origin: raise ValueError("For search origin is required")
-		return HdRezkaSearch(self.origin,proxy=self.proxy,headers=self.HEADERS,cookies=self.cookies)(query)
+		return HdRezkaSearch(self.origin,proxy=self.proxy,headers=self.HEADERS,cookies=self.cookies)(query, find_all=find_all)
