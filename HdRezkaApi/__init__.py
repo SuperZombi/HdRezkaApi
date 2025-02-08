@@ -14,7 +14,7 @@ from .utils.errors import (LoginRequiredError, LoginFailed, FetchFailed, Captcha
 
 
 class HdRezkaApi():
-	__version__ = "8.0.0"
+	__version__ = "8.1.0"
 	def __init__(self, url, proxy={}, headers={}, cookies={}):
 		self.url = url.split(".html")[0] + ".html"
 		uri = urlparse(self.url)
@@ -107,7 +107,13 @@ class HdRezkaApi():
 			children = translators.findChildren(recursive=False)
 			for child in children:
 				if child.text:
-					arr[child.text.strip()] = int(child.attrs['data-translator_id'])
+					name = child.text.strip()
+					img = child.find('img')
+					if img:
+						lang = img.attrs.get('title')
+						if not lang in name:
+							name += f" ({lang})"	
+					arr[name] = int(child.attrs['data-translator_id'])
 		if not arr:
 			#auto-detect
 			def getTranslationName(s):
