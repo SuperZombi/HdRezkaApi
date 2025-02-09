@@ -1,6 +1,6 @@
 # HdRezkaApi
 
-<img src="https://shields.io/badge/version-v8.1.0-blue"> <a href="#donate"><img src="https://shields.io/badge/💲-Support_Project-2ea043"></a>
+<img src="https://shields.io/badge/version-v8.2.0-blue"> <a href="#donate"><img src="https://shields.io/badge/💲-Support_Project-2ea043"></a>
 
 ## Install:
 ```
@@ -249,17 +249,23 @@ for page in results:
 {
 	'title': 'Film name',
 	'url': 'https://hdrezka.ag/__FILM_URL.html',
-	'image': 'https://hdrezka.ag/image.jpg'
+	'image': 'https://hdrezka.ag/image.jpg',
+	'type': HdRezkaType()
 }
 ```
+
+#### HdRezkaType
+
+`HdRezkaTVSeries`, `HdRezkaMovie`, `HdRezkaCartoon`, `HdRezkaAnime`.
+
 #### All pages
 ```python
 print(results.all_pages)
 ```
 ```
 [
-	[{'title', 'url', 'image'}, ...],
-	[{'title', 'url', 'image'}, ...],
+	[ {'title', 'url', 'image', 'type'}, ...],
+	[ {'title', 'url', 'image', 'type'}, ...],
 	...
 ]
 ```
@@ -269,7 +275,9 @@ print(results.all)
 ```
 ```
 [
-	{'title', 'url', 'image'}, {'title', 'url', 'image'}, ...
+	{'title', 'url', 'image', 'type'},
+	{'title', 'url', 'image', 'type'},
+	...
 ]
 ```
 #### Specific page

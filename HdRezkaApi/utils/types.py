@@ -8,15 +8,18 @@ class HdRezkaType():
 		self.name = name
 	def __str__(self):
 		return self.name
+	def __repr__(self): return str(self)
 	def __eq__(self, other):
 		return self.__class__ == other.__class__ or self.__class__ == other or self.name == other
 
 class HdRezkaTVSeries(HdRezkaType):
-	def __init__(self):
-		super().__init__("tv_series")
+	def __init__(self): super().__init__("tv_series")
 class HdRezkaMovie(HdRezkaType):
-	def __init__(self):
-		super().__init__("movie")
+	def __init__(self): super().__init__("movie")
+class HdRezkaCartoon(HdRezkaType):
+	def __init__(self): super().__init__("cartoon")
+class HdRezkaAnime(HdRezkaType):
+	def __init__(self): super().__init__("anime")
 
 
 class HdRezkaRating():

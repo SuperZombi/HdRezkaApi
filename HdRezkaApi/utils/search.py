@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from functools import lru_cache, cached_property
 from urllib.parse import urlparse
+from .types import (HdRezkaType, HdRezkaTVSeries, HdRezkaMovie, HdRezkaCartoon, HdRezkaAnime)
 from .errors import HTTP, LoginRequiredError, CaptchaError
 
 
@@ -83,13 +84,25 @@ class SearchResult:
 			items = soup.find_all(class_='b-content__inline_item')
 			if len(items) > 0: return list(map(self.process_item, items))
 
-	@staticmethod
-	def process_item(item):
-		# id = item.attrs['data-id']
-		# url = item.attrs['data-url']
+	@classmethod
+	def process_item(cls, item):
 		link = item.find(class_='b-content__inline_item-link').find('a')
 		cover = item.find(class_='b-content__inline_item-cover').find('img')
 		url = link.attrs['href']
 		title = link.text.strip()
 		image = cover.attrs['src']
-		return {"title": title, "url": url, "image": image}
+		cat = item.find(class_='cat')
+		type_ = cls.detect_type(list(filter(lambda x:x!='cat',cat['class']))) if cat else None
+		return {"title": title, "url": url, "image": image, "type": type_}
+
+	@staticmethod
+	def detect_type(classes):
+		if 'series' in classes:
+			return HdRezkaTVSeries()
+		elif 'films' in classes:
+			return HdRezkaMovie()
+		elif 'animation' in classes:
+			return HdRezkaAnime()
+		elif 'cartoons' in classes:
+			return HdRezkaCartoon()
+		return HdRezkaType(classes[0])
