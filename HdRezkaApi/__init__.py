@@ -178,18 +178,18 @@ class HdRezkaApi():
 	@cached_property
 	def seriesInfo(self):
 		arr = {}
-		for i in self.translators:
+		for tr in self.translators:
 			js = {
 				"id": self.id,
-				"translator_id": self.translators[i],
+				"translator_id": tr['id'],
 				"action": "get_episodes"
 			}
 			r = requests.post(f"{self.origin}/ajax/get_cdn_series/", data=js, headers=self.HEADERS, proxies=self.proxy, cookies=self.cookies)
 			response = r.json()
 			if response['success']:
 				seasons, episodes = self.getEpisodes(response['seasons'], response['episodes'])
-				arr[i] = {
-					"translator_id": self.translators[i],
+				arr[tr['name']] = {
+					"translator_id": tr['id'],
 					"seasons": seasons, "episodes": episodes
 				}
 		return arr
