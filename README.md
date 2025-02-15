@@ -58,15 +58,35 @@ print( dict(rezka.getSeasonStreams('1')) )
 | <a id="film-thumbnailhq" href="#film-thumbnailhq">`self.thumbnailHQ`</a>| Film thumbnail in high quality |
 | <a id="film-rating" href="#film-rating">`self.rating`</a> |Film rating ([HdRezkaRating](#hdrezkarating)) |
 | <a id="film-otherparts" href="#film-otherparts">`self.otherParts`</a>|Other parts of this film `[{Film_name: url}]`|
-| <a id="film-translators" href="#film-translators">`self.translators`</a>|Translators dict `{Translator_name: translator_id}`|
+| <a id="film-translators" href="#film-translators">`self.translators`</a>|[Translators dict by id](#translators)|
+| <a id="film-translators-names" href="#film-translators-names">`self.translators_names`</a>|[Translators dict by names](#translators_names)|
 | <a id="film-seriesinfo" href="#film-seriesinfo">`self.seriesInfo`</a>| [Series info](#seriesInfo) by translators|
 | <a id="film-episodesinfo" href="#film-episodesinfo">`self.episodesInfo`</a>|All [seasons and episodes](#episodesInfo)|
+
+#### `translators`
+```
+{
+	Translator_id: {
+		name: Translator_name,
+		premium: bool
+	}
+}
+```
+#### `translators_names`
+```
+{
+	Translator_name: {
+		id: Translator_id,
+		premium: bool
+	}
+}
+```
 
 #### `seriesInfo`
 ```
 {
-	Translator_name: {
-		translator_id,
+	Translator_id: {
+		translator_name,
 		seasons: {1, 2},
 		episodes: {
 			1: {1, 2, 3},
@@ -84,7 +104,9 @@ print( dict(rezka.getSeasonStreams('1')) )
 		episodes: [
 			{
 				episode: 1, episode_text,
-				translations: [{translator_id, translator_name}]
+				translations: [
+					{translator_id, translator_name, premium}
+				]
 			}
 		]
 	}
