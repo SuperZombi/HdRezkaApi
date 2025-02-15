@@ -9,7 +9,7 @@ import time
 from .utils.stream import HdRezkaStream
 from .utils.search import HdRezkaSearch
 from .utils.types import BeautifulSoupCustom
-from .utils.types import (HdRezkaTVSeries, HdRezkaMovie, HdRezkaRating, HdRezkaEmptyRating)
+from .utils.types import (HdRezkaTVSeries, HdRezkaMovie, HdRezkaAnime, HdRezkaCartoon, HdRezkaRating, HdRezkaEmptyRating)
 from .utils.errors import (LoginRequiredError, LoginFailed, FetchFailed, CaptchaError, HTTP)
 
 
@@ -82,12 +82,19 @@ class HdRezkaApi():
 
 	@cached_property
 	def type(self):
-		type_str = self.soup.find('meta', property="og:type").attrs['content']
-		if type_str == "video.tv_series":
-			return HdRezkaTVSeries()
-		elif type_str == "video.movie":
+		url = self.soup.find('meta', property="og:url").attrs['content']
+		type = url.split('/')[3]
+
+		if type == "films":
 			return HdRezkaMovie()
-		return type_str
+		elif type == "series":
+			return HdRezkaTVSeries()
+		elif type == "animation":
+			return HdRezkaAnime()
+		elif type == "cartoons":
+			return HdRezkaCartoon()
+
+		return type
 
 	@cached_property
 	def rating(self):
@@ -112,7 +119,7 @@ class HdRezkaApi():
 					if img:
 						lang = img.attrs.get('title')
 						if not lang in name:
-							name += f" ({lang})"	
+							name += f" ({lang})"
 					arr[name] = int(child.attrs['data-translator_id'])
 		if not arr:
 			#auto-detect
@@ -258,7 +265,7 @@ class HdRezkaApi():
 		def getStreamSeries(self, season, episode, translation_id):
 			if not (season and episode):
 				raise TypeError("getStream() missing required arguments (season and episode)")
-			
+
 			tr_str = list(self.translators.keys())[list(self.translators.values()).index(translation_id)]
 
 			if not season in list(self.seriesInfo[tr_str]['episodes']):
@@ -274,7 +281,7 @@ class HdRezkaApi():
 				"episode": episode,
 				"action": "get_stream"
 			})
-			
+
 
 		def getStreamMovie(self, translation_id):
 			return makeRequest({
