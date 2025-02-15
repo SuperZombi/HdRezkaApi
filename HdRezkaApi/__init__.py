@@ -14,7 +14,7 @@ from .utils.errors import (LoginRequiredError, LoginFailed, FetchFailed, Captcha
 
 
 class HdRezkaApi():
-	__version__ = "8.2.0"
+	__version__ = "9.0.0"
 	def __init__(self, url, proxy={}, headers={}, cookies={}):
 		self.url = url.split(".html")[0] + ".html"
 		uri = urlparse(self.url)
@@ -104,16 +104,18 @@ class HdRezkaApi():
 		arr = {}
 		translators = self.soup.find(id="translators-list")
 		if translators:
-			children = translators.findChildren(recursive=False)
-			for child in children:
-				if child.text:
-					name = child.text.strip()
-					img = child.find('img')
-					if img:
-						lang = img.attrs.get('title')
-						if not lang in name:
-							name += f" ({lang})"	
-					arr[name] = int(child.attrs['data-translator_id'])
+			for child in translators.findChildren(recursive=False):
+				id = int(child.attrs['data-translator_id'])
+				name = child.text.strip()
+				premium = 'b-prem_translator' in child['class']
+				img = child.find('img')
+				if img:
+					lang = img.attrs.get('title')
+					if not lang in name:
+						name += f" ({lang})"
+
+				arr[id] = {"name": name, "premium": premium}
+
 		if not arr:
 			#auto-detect
 			def getTranslationName(s):
@@ -128,8 +130,12 @@ class HdRezkaApi():
 				tmp = s.text.split(f"sof.tv.{initCDNEvents[f'video.{self.type}']}")[-1].split("{")[0]
 				return int(tmp.split(",")[1].strip())
 
-			arr[getTranslationName(self.soup)] = getTranslationID(self.page)
+			arr[getTranslationID(self.page)] = {"name": getTranslationName(self.soup), "premium": False}
 		return arr
+
+	@cached_property
+	def translators_names(self):
+		return {v["name"]: {"id": k, "premium": v["premium"]} for k, v in self.translators.items()}
 
 	@staticmethod
 	def clearTrash(data):
@@ -188,28 +194,34 @@ class HdRezkaApi():
 
 	@cached_property
 	def seriesInfo(self):
+		if self.type != HdRezkaTVSeries:
+			raise ValueError("The `seriesInfo` attribute is only available for HdRezkaTVSeries.")
 		arr = {}
-		for i in self.translators:
+		for tr_id, tr_val in self.translators.items():
 			js = {
 				"id": self.id,
-				"translator_id": self.translators[i],
+				"translator_id": tr_id,
 				"action": "get_episodes"
 			}
 			r = requests.post(f"{self.origin}/ajax/get_cdn_series/", data=js, headers=self.HEADERS, proxies=self.proxy, cookies=self.cookies)
 			response = r.json()
 			if response['success']:
 				seasons, episodes = self.getEpisodes(response['seasons'], response['episodes'])
-				arr[i] = {
-					"translator_id": self.translators[i],
+				arr[tr_id] = {
+					"translator_name": tr_val["name"],
+					"premium": tr_val["premium"],
 					"seasons": seasons, "episodes": episodes
 				}
 		return arr
 
 	@cached_property
 	def episodesInfo(self):
+		if self.type != HdRezkaTVSeries:
+			raise ValueError("The `episodesInfo` attribute is only available for HdRezkaTVSeries.")
 		output_data = []
-		for translator_name, translator_info in self.seriesInfo.items():
-			translator_id = translator_info["translator_id"]
+		for translator_id, translator_info in self.seriesInfo.items():
+			translator_name = translator_info["translator_name"]
+			premium = translator_info["premium"]
 			for season, season_text in translator_info["seasons"].items():
 				season_obj = next((s for s in output_data if s["season"] == int(season)), None)
 				if not season_obj:
@@ -232,7 +244,8 @@ class HdRezkaApi():
 
 					episode_obj["translations"].append({
 						"translator_id": translator_id,
-						"translator_name": translator_name
+						"translator_name": translator_name,
+						"premium": premium
 					})
 		return output_data
 
@@ -256,17 +269,6 @@ class HdRezkaApi():
 			raise FetchFailed()
 
 		def getStreamSeries(self, season, episode, translation_id):
-			if not (season and episode):
-				raise TypeError("getStream() missing required arguments (season and episode)")
-			
-			tr_str = list(self.translators.keys())[list(self.translators.values()).index(translation_id)]
-
-			if not season in list(self.seriesInfo[tr_str]['episodes']):
-				raise ValueError(f'Season "{season}" is not defined')
-
-			if not episode in list(self.seriesInfo[tr_str]['episodes'][season]):
-				raise ValueError(f'Episode "{episode}" is not defined')
-
 			return makeRequest({
 				"id": self.id,
 				"translator_id": translation_id,
@@ -283,24 +285,33 @@ class HdRezkaApi():
 				"action": "get_movie"
 			})
 
-		if translation:
-			if str(translation).isnumeric():
-				if int(translation) in self.translators.values():
-					tr_id = int(translation)
+		def get_translator_id(translators):
+			if translation:
+				if str(translation).isnumeric():
+					if any(d['translator_id'] == int(translation) for d in translators):
+						return int(translation)
+					else:
+						raise ValueError(f'Translation with code "{translation}" is not defined')
+
+				elif any(d['translator_name'] == translation for d in translators):
+					return next((d['translator_id'] for d in translators if d['translator_name'] == translation), None)
 				else:
-					raise ValueError(f'Translation with code "{translation}" is not defined')
-
-			elif translation in self.translators:
-				tr_id = self.translators[translation]
+					raise ValueError(f'Translation "{translation}" is not defined')
 			else:
-				raise ValueError(f'Translation "{translation}" is not defined')
-
-		else:
-			tr_id = list(self.translators.values())[index]
+				return translators[index]['translator_id']
 
 
 		if self.type == HdRezkaTVSeries:
 			if season and episode:
+				episodes = next((s['episodes'] for s in self.episodesInfo if s['season'] == int(season)), None)
+				if not episodes:
+					raise ValueError(f'Season "{season}" is not found!')
+				
+				translators = next((e['translations'] for e in episodes if e['episode'] == int(episode)), None)
+				if not translators:
+					raise ValueError(f'Episode "{episode}" in season "{season}" is not found!')
+
+				tr_id = get_translator_id(translators)
 				return getStreamSeries(self, int(season), int(episode), tr_id)
 			elif season and (not episode):
 				raise TypeError("getStream() missing one required argument (episode)")
@@ -309,65 +320,54 @@ class HdRezkaApi():
 			else:
 				raise TypeError("getStream() missing required arguments (season and episode)")
 		elif self.type == HdRezkaMovie:
+			translators = [{'translator_id': id, 'translator_name': details['name']} for id, details in self.translators.items()]
+			tr_id = get_translator_id(translators)
 			return getStreamMovie(self, tr_id)
 		else:
 			raise TypeError("Undefined content type")
 
 
 	def getSeasonStreams(self, season, translation=None, index=0, ignore=False, progress=None):
-		season = str(season)
-
-		if not progress:
-			progress = lambda cur, all: None
-
-		if translation:
-			if str(translation).isnumeric():
-				if int(translation) in self.translators.values():
-					tr_id = int(translation)
-				else:
-					raise ValueError(f'Translation with code "{translation}" is not defined')
-
-			elif translation in self.translators:
-				tr_id = self.translators[translation]
-			else:
-				raise ValueError(f'Translation "{translation}" is not defined')
-
-		else:
-			tr_id = list(self.translators.values())[index]
-
-		tr_str = list(self.translators.keys())[list(self.translators.values()).index(tr_id)]
-
-		if not int(season) in list(self.seriesInfo[tr_str]['episodes']):
-			raise ValueError(f'Season "{season}" is not defined')
-
-		series = self.seriesInfo[tr_str]['episodes'][int(season)]
-		series_length = len(series)
-
+		if not progress: progress = lambda cur, all: None
 		streams = {}
+
+		def get_translator_id(translators):
+			if translation:
+				if str(translation).isnumeric():
+					if any(d['translator_id'] == int(translation) for d in translators):
+						return int(translation)
+				elif any(d['translator_name'] == translation for d in translators):
+					return next((d['translator_id'] for d in translators if d['translator_name'] == translation), None)
+			return translators[index]['translator_id']
+
+		episodes = next((s['episodes'] for s in self.episodesInfo if s['season'] == int(season)), None)
+		if not episodes: raise ValueError(f'Season "{season}" is not found!')
+		series_length = len(episodes)
 		progress(0, series_length)
 
-		for episode_id in series:
-			def make_call(ep_id, retry=True):
-				try:
-					stream = self.getStream(season, ep_id, tr_str)
-					streams[ep_id] = stream
+		def make_call(data, retry=True):
+			try:
+				tr_id = get_translator_id(data['translations'])
+				stream = self.getStream(season, data['episode'], tr_id)
+				streams[data['episode']] = stream
+				progress(len(streams), series_length)
+				return stream
+			except Exception as e:
+				if retry:
+					time.sleep(1)
+					if ignore:
+						return make_call(data)
+					else:
+						return make_call(data, retry=False)
+				if not ignore:
+					ex_name = e.__class__.__name__
+					ex_desc = e
+					print(f"{ex_name} > ep:{data['episode']}: {ex_desc}")
+					streams[data['episode']] = None
 					progress(len(streams), series_length)
-					return stream
-				except Exception as e:
-					if retry:
-						time.sleep(1)
-						if ignore:
-							return make_call(ep_id)
-						else:
-							return make_call(ep_id, retry=False)
-					if not ignore:
-						ex_name = e.__class__.__name__
-						ex_desc = e
-						print(f"{ex_name} > ep:{ep_id}: {ex_desc}")
-						streams[ep_id] = None
-						progress(len(streams), series_length)
 
-			yield episode_id, make_call(episode_id)
+		for episode in episodes:
+			yield episode['episode'], make_call(episode)
 
 
 class HdRezkaSession:
