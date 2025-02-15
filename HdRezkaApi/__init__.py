@@ -101,34 +101,23 @@ class HdRezkaApi():
 
 	@cached_property
 	def translators(self):
-		arr = {}
+		arr = []
 		translators = self.soup.find(id="translators-list")
 		if translators:
 			children = translators.findChildren(recursive=False)
 			for child in children:
 				if child.text:
 					name = child.text.strip()
+					id = int(child.attrs['data-translator_id'])
 					img = child.find('img')
+					prem = False
 					if img:
 						lang = img.attrs.get('title')
 						if not lang in name:
-							name += f" ({lang})"	
-					arr[name] = int(child.attrs['data-translator_id'])
-		if not arr:
-			#auto-detect
-			def getTranslationName(s):
-				table = s.find(class_="b-post__info")
-				for i in table.findAll("tr"):
-					tmp = i.get_text()
-					if tmp.find("переводе") > 0:
-						return tmp.split("В переводе:")[-1].strip()
-			def getTranslationID(s):
-				initCDNEvents = {'video.tv_series': 'initCDNSeriesEvents',
-								 'video.movie'    : 'initCDNMoviesEvents'}
-				tmp = s.text.split(f"sof.tv.{initCDNEvents[f'video.{self.type}']}")[-1].split("{")[0]
-				return int(tmp.split(",")[1].strip())
-
-			arr[getTranslationName(self.soup)] = getTranslationID(self.page)
+							name += f" ({lang})"
+					if 'b-prem_translator' in child.get('class', []):
+					  prem = True
+					arr.append({'name': name, 'id': id, 'prem': prem})
 		return arr
 
 	@staticmethod
@@ -258,7 +247,7 @@ class HdRezkaApi():
 		def getStreamSeries(self, season, episode, translation_id):
 			if not (season and episode):
 				raise TypeError("getStream() missing required arguments (season and episode)")
-			
+
 			tr_str = list(self.translators.keys())[list(self.translators.values()).index(translation_id)]
 
 			if not season in list(self.seriesInfo[tr_str]['episodes']):
@@ -274,7 +263,7 @@ class HdRezkaApi():
 				"episode": episode,
 				"action": "get_stream"
 			})
-			
+
 
 		def getStreamMovie(self, translation_id):
 			return makeRequest({
