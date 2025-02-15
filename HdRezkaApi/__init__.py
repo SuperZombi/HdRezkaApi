@@ -116,8 +116,24 @@ class HdRezkaApi():
 						if not lang in name:
 							name += f" ({lang})"
 					if 'b-prem_translator' in child.get('class', []):
-					  prem = True
+					  	prem = True
 					arr.append({'name': name, 'id': id, 'prem': prem})
+		if not arr:
+			# auto-detect
+			def getTranslationName(s):
+				table = s.find(class_="b-post__info")
+				for i in table.findAll("tr"):
+					tmp = i.get_text()
+					if tmp.find("переводе") > 0:
+						return tmp.split("В переводе:")[-1].strip()
+
+			def getTranslationID(s):
+				initCDNEvents = {'video.tv_series': 'initCDNSeriesEvents',
+								 'video.movie': 'initCDNMoviesEvents'}
+				tmp = s.text.split(f"sof.tv.{initCDNEvents[f'video.{self.type}']}")[-1].split("{")[0]
+				return int(tmp.split(",")[1].strip())
+
+			arr.append({'name': getTranslationName(self.soup), 'id': getTranslationID(self.page)})
 		return arr
 
 	@staticmethod
