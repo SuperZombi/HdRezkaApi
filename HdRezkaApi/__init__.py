@@ -112,7 +112,7 @@ class HdRezkaApi():
 					if img:
 						lang = img.attrs.get('title')
 						if not lang in name:
-							name += f" ({lang})"	
+							name += f" ({lang})"
 					arr[name] = int(child.attrs['data-translator_id'])
 		if not arr:
 			#auto-detect
