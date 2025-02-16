@@ -14,7 +14,7 @@ from .utils.errors import (LoginRequiredError, LoginFailed, FetchFailed, Captcha
 
 
 class HdRezkaApi():
-	__version__ = "9.0.0"
+	__version__ = "9.1.0"
 	def __init__(self, url, proxy={}, headers={}, cookies={}):
 		self.url = url.split(".html")[0] + ".html"
 		uri = urlparse(self.url)
@@ -331,43 +331,65 @@ class HdRezkaApi():
 		if not progress: progress = lambda cur, all: None
 		streams = {}
 
+		def get_episodes_by_translator(data):
+			result = {}
+			for item in data:
+				episode = item['episode']
+				for translation in item['translations']:
+					translator_id = translation['translator_id']
+					translator_name = translation['translator_name']
+					if translator_id not in result:
+						result[translator_id] = {'translator_name': translator_name, 'episodes': []}
+					result[translator_id]['episodes'].append(episode)
+			return result
+
 		def get_translator_id(translators):
 			if translation:
 				if str(translation).isnumeric():
-					if any(d['translator_id'] == int(translation) for d in translators):
+					if int(translation) in translators.keys():
 						return int(translation)
-				elif any(d['translator_name'] == translation for d in translators):
-					return next((d['translator_id'] for d in translators if d['translator_name'] == translation), None)
-			return translators[index]['translator_id']
+					else:
+						raise ValueError(f'Translation with code "{translation}" is not defined')
 
+				elif any(v['translator_name'] == translation for k, v in translators.items()):
+					return next((k for k, v in translators.items() if v['translator_name'] == translation), None)
+				else:
+					raise ValueError(f'Translation "{translation}" is not defined')
+			else:
+				return list(translators.keys())[index]
+
+		
 		episodes = next((s['episodes'] for s in self.episodesInfo if s['season'] == int(season)), None)
 		if not episodes: raise ValueError(f'Season "{season}" is not found!')
-		series_length = len(episodes)
+
+		episodes_data = get_episodes_by_translator(episodes)
+		tr_id = get_translator_id(episodes_data)
+		series = episodes_data[tr_id]['episodes']
+		series_length = len(series)
 		progress(0, series_length)
 
-		def make_call(data, retry=True):
+		def make_call(episode, retry=True):
 			try:
-				tr_id = get_translator_id(data['translations'])
-				stream = self.getStream(season, data['episode'], tr_id)
-				streams[data['episode']] = stream
+				stream = self.getStream(season, episode, tr_id)
+				streams[episode] = stream
 				progress(len(streams), series_length)
 				return stream
 			except Exception as e:
 				if retry:
 					time.sleep(1)
 					if ignore:
-						return make_call(data)
+						return make_call(episode)
 					else:
-						return make_call(data, retry=False)
+						return make_call(episode, retry=False)
 				if not ignore:
 					ex_name = e.__class__.__name__
 					ex_desc = e
-					print(f"{ex_name} > ep:{data['episode']}: {ex_desc}")
-					streams[data['episode']] = None
+					print(f"{ex_name} > ep:{episode}: {ex_desc}")
+					streams[episode] = None
 					progress(len(streams), series_length)
 
-		for episode in episodes:
-			yield episode['episode'], make_call(episode)
+		for episode in series:
+			yield episode, make_call(episode)
 
 
 class HdRezkaSession:
