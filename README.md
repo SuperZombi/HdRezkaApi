@@ -1,6 +1,6 @@
 # HdRezkaApi
 
-<img src="https://shields.io/badge/version-v9.1.0-blue"> <a href="#donate"><img src="https://shields.io/badge/💲-Support_Project-2ea043"></a>
+<img src="https://shields.io/badge/version-v10.0.0-blue"> <a href="#donate"><img src="https://shields.io/badge/💲-Support_Project-2ea043"></a>
 
 ## Install:
 ```
@@ -39,7 +39,10 @@ print( rezka.otherParts )
 print( rezka.seriesInfo )
 
 print(rezka.type)
-print(rezka.type == HdRezkaTVSeries == HdRezkaTVSeries() == "tv_series")
+print(rezka.type == TVSeries == TVSeries() == "tv_series")
+
+print(rezka.category)
+print(rezka.category == Anime == Anime() == "anime")
 
 print( rezka.getStream()('720p') ) # if movie
 print( rezka.getStream('1', '1')('720p') )
@@ -53,10 +56,11 @@ print( dict(rezka.getSeasonStreams('1')) )
 | <a id="film-id" href="#film-id">`self.id`</a>| Film ID                  |
 | <a id="film-name" href="#film-name">`self.name`</a>| Film name          |
 | <a id="film-description" href="#film-description">`self.description`</a>| Film description |
-| <a id="film-type" href="#film-type">`self.type`</a> | `HdRezkaTVSeries` or `HdRezkaMovie`  |
-| <a id="film-thumbnail" href="#film-thumbnail">`self.thumbnail`</a>     | Film thumbnail URL|
+| <a id="film-type" href="#film-type">`self.type`</a>| [`HdRezkaFormat`](#hdrezkaformat)|
+| <a id="film-category" href="#film-category">`self.category`</a>|[`HdRezkaCategory`](#hdrezkacategory)|
+| <a id="film-thumbnail" href="#film-thumbnail">`self.thumbnail`</a>      | Film thumbnail URL|
 | <a id="film-thumbnailhq" href="#film-thumbnailhq">`self.thumbnailHQ`</a>| Film thumbnail in high quality |
-| <a id="film-rating" href="#film-rating">`self.rating`</a> |Film rating ([HdRezkaRating](#hdrezkarating)) |
+| <a id="film-rating" href="#film-rating">`self.rating`</a> |[`HdRezkaRating`](#hdrezkarating) |
 | <a id="film-otherparts" href="#film-otherparts">`self.otherParts`</a>|Other parts of this film `[{Film_name: url}]`|
 | <a id="film-translators" href="#film-translators">`self.translators`</a>|[Translators dict by id](#translators)|
 | <a id="film-translators-names" href="#film-translators-names">`self.translators_names`</a>|[Translators dict by names](#translators_names)|
@@ -112,6 +116,16 @@ print( dict(rezka.getSeasonStreams('1')) )
 	}
 ]
 ```
+
+<hr>
+
+### HdRezkaFormat
+
+Parent of classes: `TVSeries` and `Movie`
+
+### HdRezkaCategory
+
+Parent of classes: `Film`, `Series`, `Cartoon`, `Anime`
 
 <hr>
 
