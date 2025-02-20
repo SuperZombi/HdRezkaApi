@@ -9,15 +9,18 @@ import time
 from .utils.stream import HdRezkaStream
 from .utils.search import HdRezkaSearch
 from .utils.types import BeautifulSoupCustom
-from .utils.types import (HdRezkaTVSeries, HdRezkaMovie, HdRezkaRating, HdRezkaEmptyRating)
+from .utils.types import (TVSeries, Movie)
+from .utils.types import (Film, Series, Cartoon, Anime)
+from .utils.types import (HdRezkaFormat, HdRezkaCategory)
+from .utils.types import (HdRezkaRating, HdRezkaEmptyRating)
 from .utils.errors import (LoginRequiredError, LoginFailed, FetchFailed, CaptchaError, HTTP)
 
 
 class HdRezkaApi():
-	__version__ = "9.1.0"
+	__version__ = "10.0.0"
 	def __init__(self, url, proxy={}, headers={}, cookies={}):
 		self.url = url.split(".html")[0] + ".html"
-		uri = urlparse(self.url)
+		uri = urlparse(url)
 		self.origin = f'{uri.scheme}://{uri.netloc}'
 		self.proxy = proxy
 		self.cookies = {"hdmbbs": "1", **cookies}
@@ -83,11 +86,19 @@ class HdRezkaApi():
 	@cached_property
 	def type(self):
 		type_str = self.soup.find('meta', property="og:type").attrs['content']
-		if type_str == "video.tv_series":
-			return HdRezkaTVSeries()
-		elif type_str == "video.movie":
-			return HdRezkaMovie()
-		return type_str
+		if type_str == "video.tv_series": return TVSeries()
+		if type_str == "video.movie": return Movie()
+		return HdRezkaFormat(type_str)
+
+	@cached_property
+	def category(self):
+		uri = urlparse(self.url)
+		cat = uri.path.lstrip("/").split("/")[0]
+		if cat == 'films': return Film()
+		if cat == 'series': return Series()
+		if cat == 'cartoons': return Cartoon()
+		if cat == 'animation': return Anime()
+		return HdRezkaCategory(cat)
 
 	@cached_property
 	def rating(self):
@@ -127,7 +138,7 @@ class HdRezkaApi():
 			def getTranslationID(s):
 				initCDNEvents = {'video.tv_series': 'initCDNSeriesEvents',
 								 'video.movie'    : 'initCDNMoviesEvents'}
-				tmp = s.text.split(f"sof.tv.{initCDNEvents[f'video.{self.type}']}")[-1].split("{")[0]
+				tmp = s.text.split(f"sof.tv.{initCDNEvents[f'video.{self.type.name}']}")[-1].split("{")[0]
 				return int(tmp.split(",")[1].strip())
 
 			arr[getTranslationID(self.page)] = {"name": getTranslationName(self.soup), "premium": False}
@@ -194,8 +205,8 @@ class HdRezkaApi():
 
 	@cached_property
 	def seriesInfo(self):
-		if self.type != HdRezkaTVSeries:
-			raise ValueError("The `seriesInfo` attribute is only available for HdRezkaTVSeries.")
+		if self.type != TVSeries:
+			raise ValueError("The `seriesInfo` attribute is only available for TVSeries.")
 		arr = {}
 		for tr_id, tr_val in self.translators.items():
 			js = {
@@ -216,8 +227,8 @@ class HdRezkaApi():
 
 	@cached_property
 	def episodesInfo(self):
-		if self.type != HdRezkaTVSeries:
-			raise ValueError("The `episodesInfo` attribute is only available for HdRezkaTVSeries.")
+		if self.type != TVSeries:
+			raise ValueError("The `episodesInfo` attribute is only available for TVSeries.")
 		output_data = []
 		for translator_id, translator_info in self.seriesInfo.items():
 			translator_name = translator_info["translator_name"]
@@ -301,7 +312,7 @@ class HdRezkaApi():
 				return translators[index]['translator_id']
 
 
-		if self.type == HdRezkaTVSeries:
+		if self.type == TVSeries:
 			if season and episode:
 				episodes = next((s['episodes'] for s in self.episodesInfo if s['season'] == int(season)), None)
 				if not episodes:
@@ -319,7 +330,7 @@ class HdRezkaApi():
 				raise TypeError("getStream() missing one required argument (season)")
 			else:
 				raise TypeError("getStream() missing required arguments (season and episode)")
-		elif self.type == HdRezkaMovie:
+		elif self.type == Movie:
 			translators = [{'translator_id': id, 'translator_name': details['name']} for id, details in self.translators.items()]
 			tr_id = get_translator_id(translators)
 			return getStreamMovie(self, tr_id)
@@ -407,12 +418,12 @@ class HdRezkaSession:
 	def __enter__(self): return self
 	def __exit__(self, type, value, traceback): pass
 
-	def login(self, email:str, password:str):
+	def login(self, email:str, password:str, **kwargs):
 		if not self.origin: raise ValueError("For login origin is required")
-		response = requests.post(f"{self.origin}/ajax/login/",data={"login_name":email,"login_password":password},headers=self.HEADERS,proxies=self.proxy)
-		data = response.json()
-		if data['success']: self.cookies = {**self.cookies,**response.cookies.get_dict()}
-		else: raise LoginFailed(data.get("message"))
+		rezka = HdRezkaApi(self.origin,headers=self.HEADERS,proxy=self.proxy)
+		if rezka.login(email=email, password=password, **kwargs):
+			self.cookies = {**self.cookies,**rezka.cookies}
+			return True
 
 	def get(self, url, **kwargs):
 		if self.origin:

@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from functools import lru_cache, cached_property
 from urllib.parse import urlparse
-from .types import (HdRezkaType, HdRezkaTVSeries, HdRezkaMovie, HdRezkaCartoon, HdRezkaAnime)
+from .types import (HdRezkaCategory, Film, Series, Cartoon, Anime)
 from .errors import HTTP, LoginRequiredError, CaptchaError
 
 
@@ -93,16 +93,12 @@ class SearchResult:
 		image = cover.attrs['src']
 		cat = item.find(class_='cat')
 		type_ = cls.detect_type(list(filter(lambda x:x!='cat',cat['class']))) if cat else None
-		return {"title": title, "url": url, "image": image, "type": type_}
+		return {"title": title, "url": url, "image": image, "category": type_}
 
 	@staticmethod
 	def detect_type(classes):
-		if 'series' in classes:
-			return HdRezkaTVSeries()
-		elif 'films' in classes:
-			return HdRezkaMovie()
-		elif 'animation' in classes:
-			return HdRezkaAnime()
-		elif 'cartoons' in classes:
-			return HdRezkaCartoon()
-		return HdRezkaType(classes[0])
+		if 'films' in classes: return Film()
+		if 'series' in classes: return Series()
+		if 'cartoons' in classes: return Cartoon()
+		if 'animation' in classes: return Anime()
+		return HdRezkaCategory(classes[0])

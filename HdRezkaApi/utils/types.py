@@ -4,21 +4,36 @@ class BeautifulSoupCustom(BeautifulSoup):
 	def __repr__(self): return "<HTMLDocument>"
 
 class HdRezkaType():
-	def __init__(self, name):
+	def __init__(self, name, type):
 		self.name = name
+		self.type = type
 	def __str__(self):
-		return self.name
+		return f"{self.type}.{self.name}"
 	def __repr__(self): return str(self)
 	def __eq__(self, other):
 		return self.__class__ == other.__class__ or self.__class__ == other or self.name == other
 
-class HdRezkaTVSeries(HdRezkaType):
+class HdRezkaFormat(HdRezkaType):
+	def __init__(self, name):
+		super().__init__(name, "format")
+class HdRezkaCategory(HdRezkaType):
+	def __init__(self, name):
+		super().__init__(name, "category")
+
+
+class TVSeries(HdRezkaFormat):
 	def __init__(self): super().__init__("tv_series")
-class HdRezkaMovie(HdRezkaType):
+class Movie(HdRezkaFormat):
 	def __init__(self): super().__init__("movie")
-class HdRezkaCartoon(HdRezkaType):
+
+
+class Film(HdRezkaCategory):
+	def __init__(self): super().__init__("film")
+class Series(HdRezkaCategory):
+	def __init__(self): super().__init__("series")
+class Cartoon(HdRezkaCategory):
 	def __init__(self): super().__init__("cartoon")
-class HdRezkaAnime(HdRezkaType):
+class Anime(HdRezkaCategory):
 	def __init__(self): super().__init__("anime")
 
 
