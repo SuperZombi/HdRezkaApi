@@ -13,12 +13,15 @@ from .utils.types import (TVSeries, Movie)
 from .utils.types import (Film, Series, Cartoon, Anime)
 from .utils.types import (HdRezkaFormat, HdRezkaCategory)
 from .utils.types import (HdRezkaRating, HdRezkaEmptyRating)
+from .utils.types import (default_translators_priority, default_translators_non_priority)
 from .utils.errors import (LoginRequiredError, LoginFailed, FetchFailed, CaptchaError, HTTP)
 
 
 class HdRezkaApi():
 	__version__ = "10.0.0"
-	def __init__(self, url, proxy={}, headers={}, cookies={}):
+	def __init__(self, url, proxy={}, headers={}, cookies={},
+		translators_priority=None, translators_non_priority=None
+	):
 		self.url = url.split(".html")[0] + ".html"
 		uri = urlparse(url)
 		self.origin = f'{uri.scheme}://{uri.netloc}'
@@ -28,8 +31,27 @@ class HdRezkaApi():
 			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36',
 			**headers
 		}
+		self._translators_priority = translators_priority or default_translators_priority
+		self._translators_non_priority = translators_non_priority or default_translators_non_priority
+
 	def __str__(self): return f'HdRezka("{self.name}")'
 	def __repr__(self): return str(self)
+
+	@property
+	def translators_priority(self):
+		return self._translators_priority
+
+	@translators_priority.setter
+	def translators_priority(self, value):
+		self._translators_priority = value
+
+	@property
+	def translators_non_priority(self):
+		return self._translators_non_priority
+
+	@translators_non_priority.setter
+	def translators_non_priority(self, value):
+		self._translators_non_priority = value
 
 	def login(self, email:str, password:str, raise_exception=True):
 		response = requests.post(f"{self.origin}/ajax/login/",data={"login_name":email,"login_password":password},headers=self.HEADERS,proxies=self.proxy)
@@ -143,6 +165,18 @@ class HdRezkaApi():
 
 			arr[getTranslationID(self.page)] = {"name": getTranslationName(self.soup), "premium": False}
 		return arr
+
+	def sort_translators(self, translators=None, priority=None, non_priority=None):
+		prior = {}
+		for index, item in enumerate(priority or self._translators_priority or []):
+			prior[item] = index + 1
+
+		max_index = len(prior) + 1
+
+		for index, item in enumerate(non_priority or self._translators_non_priority or []):
+			prior[item] = max_index + index + 1
+
+		return dict(sorted(translators.items() or self.translators.items(), key=lambda item: prior.get(item[0], max_index)))
 
 	@cached_property
 	def translators_names(self):
@@ -260,7 +294,9 @@ class HdRezkaApi():
 					})
 		return output_data
 
-	def getStream(self, season=None, episode=None, translation=None, index=0):
+	def getStream(self, season=None, episode=None, translation=None,
+		priority=None, non_priority=None
+	):
 		def makeRequest(data):
 			r = requests.post(f"{self.origin}/ajax/get_cdn_series/", data=data, headers=self.HEADERS, proxies=self.proxy, cookies=self.cookies)
 			r = r.json()
@@ -297,9 +333,17 @@ class HdRezkaApi():
 			})
 
 		def get_translator_id(translators):
+			translators_dict = {
+				translator['translator_id']: {
+					'name': translator['translator_name'],
+					'premium': translator['premium']
+				}
+				for translator in translators
+			}
+
 			if translation:
 				if str(translation).isnumeric():
-					if any(d['translator_id'] == int(translation) for d in translators):
+					if int(translation) in translators_dict:
 						return int(translation)
 					else:
 						raise ValueError(f'Translation with code "{translation}" is not defined')
@@ -309,7 +353,9 @@ class HdRezkaApi():
 				else:
 					raise ValueError(f'Translation "{translation}" is not defined')
 			else:
-				return translators[index]['translator_id']
+				return list(
+					self.sort_translators(translators_dict, priority=priority, non_priority=non_priority
+				).keys())[0]
 
 
 		if self.type == TVSeries:
@@ -404,7 +450,9 @@ class HdRezkaApi():
 
 
 class HdRezkaSession:
-	def __init__(self, origin="", proxy={}, headers={}, cookies={}):
+	def __init__(self, origin="", proxy={}, headers={}, cookies={},
+		translators_priority=None, translators_non_priority=None
+	):
 		self.origin = None
 		if origin:
 			uri = urlparse(origin)
@@ -415,8 +463,27 @@ class HdRezkaSession:
 			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36',
 			**headers
 		}
+		self._translators_priority = translators_priority or default_translators_priority
+		self._translators_non_priority = translators_non_priority or default_translators_non_priority
+
 	def __enter__(self): return self
 	def __exit__(self, type, value, traceback): pass
+
+	@property
+	def translators_priority(self):
+		return self._translators_priority
+
+	@translators_priority.setter
+	def translators_priority(self, value):
+		self._translators_priority = value
+
+	@property
+	def translators_non_priority(self):
+		return self._translators_non_priority
+
+	@translators_non_priority.setter
+	def translators_non_priority(self, value):
+		self._translators_non_priority = value
 
 	def login(self, email:str, password:str, **kwargs):
 		if not self.origin: raise ValueError("For login origin is required")
@@ -433,6 +500,8 @@ class HdRezkaSession:
 			"proxy": self.proxy,
 			"headers": self.HEADERS,
 			"cookies": self.cookies,
+			"translators_priority": self._translators_priority,
+			"translators_non_priority": self._translators_non_priority,
 			**kwargs
 		})
 

@@ -73,3 +73,13 @@ class HdRezkaEmptyRating(HdRezkaRating):
 	def __lt__(self, other): return True if other.value else False # <
 	def __ge__(self, other): return False if other.value else True # >=
 	def __le__(self, other): return True if other.value else False # <=
+
+
+default_translators_priority = [
+	56, # Дубляж
+	105, # StudioBand
+	111, # HDrezka Studio
+]
+default_translators_non_priority = [
+	238, # Оригинал + субтитры
+]
