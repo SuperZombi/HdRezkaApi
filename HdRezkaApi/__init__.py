@@ -43,7 +43,7 @@ class HdRezkaApi():
 
 	@translators_priority.setter
 	def translators_priority(self, value):
-		self._translators_priority = value
+		self._translators_priority = value or []
 
 	@property
 	def translators_non_priority(self):
@@ -51,7 +51,7 @@ class HdRezkaApi():
 
 	@translators_non_priority.setter
 	def translators_non_priority(self, value):
-		self._translators_non_priority = value
+		self._translators_non_priority = value or []
 
 	def login(self, email:str, password:str, raise_exception=True):
 		response = requests.post(f"{self.origin}/ajax/login/",data={"login_name":email,"login_password":password},headers=self.HEADERS,proxies=self.proxy)
@@ -168,15 +168,17 @@ class HdRezkaApi():
 
 	def sort_translators(self, translators=None, priority=None, non_priority=None):
 		prior = {}
-		for index, item in enumerate(priority or self._translators_priority or []):
+		for index, item in enumerate(priority if isinstance(priority, list) else self._translators_priority or []):
 			prior[item] = index + 1
 
 		max_index = len(prior) + 1
 
-		for index, item in enumerate(non_priority or self._translators_non_priority or []):
-			prior[item] = max_index + index + 1
+		for index, item in enumerate(non_priority if isinstance(non_priority, list) else self._translators_non_priority or []):
+			if not item in prior:
+				prior[item] = max_index + index + 1
 
-		return dict(sorted(translators.items() or self.translators.items(), key=lambda item: prior.get(item[0], max_index)))
+		sorted_translators = dict(sorted(translators.items() or self.translators.items(), key=lambda item: prior.get(item[0], max_index)))
+		return sorted_translators
 
 	@cached_property
 	def translators_names(self):
@@ -475,7 +477,7 @@ class HdRezkaSession:
 
 	@translators_priority.setter
 	def translators_priority(self, value):
-		self._translators_priority = value
+		self._translators_priority = value or []
 
 	@property
 	def translators_non_priority(self):
@@ -483,7 +485,7 @@ class HdRezkaSession:
 
 	@translators_non_priority.setter
 	def translators_non_priority(self, value):
-		self._translators_non_priority = value
+		self._translators_non_priority = value or []
 
 	def login(self, email:str, password:str, **kwargs):
 		if not self.origin: raise ValueError("For login origin is required")
