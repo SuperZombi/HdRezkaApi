@@ -53,6 +53,17 @@ class HdRezkaApi():
 	def translators_non_priority(self, value):
 		self._translators_non_priority = value or []
 
+	@property
+	def ok(self):
+		try: return True if self.soup else False
+		except: return False
+
+	@property
+	def exception(self):
+		if not self.ok:
+			try: self.soup
+			except Exception as e: return e
+
 	def login(self, email:str, password:str, raise_exception=True):
 		response = requests.post(f"{self.origin}/ajax/login/",data={"login_name":email,"login_password":password},headers=self.HEADERS,proxies=self.proxy)
 		data = response.json()
@@ -498,7 +509,7 @@ class HdRezkaSession:
 		if self.origin:
 			uri = urlparse(url)
 			url = self.origin+"/"+uri.path.lstrip("/")
-		return HdRezkaApi(url, **{
+		rezka = HdRezkaApi(url, **{
 			"proxy": self.proxy,
 			"headers": self.HEADERS,
 			"cookies": self.cookies,
@@ -506,6 +517,8 @@ class HdRezkaSession:
 			"translators_non_priority": self._translators_non_priority,
 			**kwargs
 		})
+		if rezka.ok: return rezka
+		else: raise rezka.exception
 
 	def search(self, query, find_all=False):
 		if not self.origin: raise ValueError("For search origin is required")
