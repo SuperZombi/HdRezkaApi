@@ -300,6 +300,7 @@ rezka.login("your_email@gmail.com", "your_password1234")
 `HdRezkaSearch(origin, proxy, headers, cookies)(query, find_all=False)`
 ### Fast search
 ```python
+from HdRezkaApi.search import HdRezkaSearch
 results = HdRezkaSearch("https://hdrezka.ag/")("film name")
 ```
 ```
@@ -313,6 +314,7 @@ results = HdRezkaSearch("https://hdrezka.ag/")("film name")
 ```
 ### Advanced search
 ```python
+from HdRezkaApi.search import HdRezkaSearch
 results = HdRezkaSearch("https://hdrezka.ag/", cookies)("film name", find_all=True)
 for page in results:
 	for result in page:
@@ -323,13 +325,13 @@ for page in results:
 	'title': 'Film name',
 	'url': 'https://hdrezka.ag/__FILM_URL.html',
 	'image': 'https://hdrezka.ag/image.jpg',
-	'type': HdRezkaType()
+	'category': HdRezkaCategory()
 }
 ```
 
-#### HdRezkaType
+#### HdRezkaCategory
 
-`HdRezkaTVSeries`, `HdRezkaMovie`, `HdRezkaCartoon`, `HdRezkaAnime`.
+`Series`, `Film`, `Cartoon`, `Anime`.
 
 #### All pages
 ```python
@@ -337,8 +339,8 @@ print(results.all_pages)
 ```
 ```
 [
-	[ {'title', 'url', 'image', 'type'}, ...],
-	[ {'title', 'url', 'image', 'type'}, ...],
+	[ {'title', 'url', 'image', 'category'}, ...],
+	[ {'title', 'url', 'image', 'category'}, ...],
 	...
 ]
 ```
@@ -348,8 +350,8 @@ print(results.all)
 ```
 ```
 [
-	{'title', 'url', 'image', 'type'},
-	{'title', 'url', 'image', 'type'},
+	{'title', 'url', 'image', 'category'},
+	{'title', 'url', 'image', 'category'},
 	...
 ]
 ```
@@ -369,6 +371,9 @@ HdRezkaSession allows you to log in once and not send login requests every time.
 
 You can also specify origin to make requests to a same site. Origin in full urls will be ignored.<br>
 In the next example, the request will be made to the url: `"https://rezka_mirror.com/__YOUR_URL__.html"`
+```python
+from HdRezkaApi import HdRezkaSession
+```
 ```python
 with HdRezkaSession("https://rezka_mirror.com/") as session:
 	session.login("email@gmail.com", "password")
