@@ -397,7 +397,10 @@ class HdRezkaApi():
 			raise TypeError("Undefined content type")
 
 
-	def getSeasonStreams(self, season, translation=None, index=0, ignore=False, progress=None):
+	def getSeasonStreams(self, season, translation=None,
+		priority=None, non_priority=None,
+		ignore=False, progress=None
+	):
 		if not progress: progress = lambda cur, all: None
 		streams = {}
 
@@ -426,9 +429,10 @@ class HdRezkaApi():
 				else:
 					raise ValueError(f'Translation "{translation}" is not defined')
 			else:
-				return list(translators.keys())[index]
+				return list(
+					self.sort_translators(translators, priority=priority, non_priority=non_priority
+				).keys())[0]
 
-		
 		episodes = next((s['episodes'] for s in self.episodesInfo if s['season'] == int(season)), None)
 		if not episodes: raise ValueError(f'Season "{season}" is not found!')
 
