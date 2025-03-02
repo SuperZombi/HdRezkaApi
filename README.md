@@ -10,15 +10,16 @@ pip install HdRezkaApi
 ## Table of Contents:
 1. [Usage](#usage)
 2. [Film Information](#film-information)
-3. [getStream](#getstream)
-4. [getSeasonStreams](#getseasonstreams)
-5. [HdRezkaStream](#hdrezkastream)
-6. [HdRezkaStreamSubtitles](#hdrezkastreamsubtitles)
-7. [HdRezkaRating](#hdrezkarating)
-8. [Proxy](#proxy)
-9. [Cookies](#cookies)
-10. [HdRezkaSearch](#hdrezkasearch)
-11. [HdRezkaSession](#hdrezkasession)
+3. [Translators priority](#translators-priority)
+4. [getStream](#getstream)
+5. [getSeasonStreams](#getseasonstreams)
+6. [HdRezkaStream](#hdrezkastream)
+7. [HdRezkaStreamSubtitles](#hdrezkastreamsubtitles)
+8. [HdRezkaRating](#hdrezkarating)
+9. [Proxy](#proxy)
+10. [Cookies](#cookies)
+11. [HdRezkaSearch](#hdrezkasearch)
+12. [HdRezkaSession](#hdrezkasession)
 
 <hr>
 
