@@ -160,8 +160,10 @@ sort_translators(
 <hr>
 
 ### getStream
-`getStream(season, episode, translation=None, priority=None, non_priority=None)`
+```python
+getStream(season, episode, translation=None, priority=None, non_priority=None)
 ```
+```python
 getStream(
 	translation='Дубляж' or translation='56'
 )
@@ -170,16 +172,20 @@ If type is movie then there is no need to specify season and episode.
 ```python
 stream = rezka.getStream() # if movie
 ```
+#### [`priority` and `non_priority`](#translators-priority)
 <hr>
 
 ### getSeasonStreams
-`getSeasonStreams(season, translation=None, index=0, ignore=False, progress=None)`
+```python
+getSeasonStreams(season, translation=None, ignore=False, progress=None, priority=None, non_priority=None)
 ```
+```python
 getSeasonStreams(
-    translation='Дубляж' or translation='56' or index=0
-)                                               ^ this is index in translators array
+	translation='Дубляж' or translation='56'
+)
 ```
 
+#### [`priority` and `non_priority`](#translators-priority)
 #### `ignore` - ignore errors
 #### `progress` - callback function
 
@@ -387,6 +393,7 @@ with HdRezkaSession(cookies=cookies, headers=headers, proxy=proxy) as session:
 	session.headers = headers
 	session.proxy = proxy
 ```
+#### [`translators_priority`](#translators-priority)
 ```python
 with HdRezkaSession(translators_priority, translators_non_priority) as session:
 	# or inline seting up
