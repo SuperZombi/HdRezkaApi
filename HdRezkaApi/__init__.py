@@ -6,19 +6,19 @@ from functools import cached_property
 from urllib.parse import urlparse
 import time
 
-from .utils.stream import HdRezkaStream
-from .utils.search import HdRezkaSearch
-from .utils.types import BeautifulSoupCustom
-from .utils.types import (TVSeries, Movie)
-from .utils.types import (Film, Series, Cartoon, Anime)
-from .utils.types import (HdRezkaFormat, HdRezkaCategory)
-from .utils.types import (HdRezkaRating, HdRezkaEmptyRating)
-from .utils.types import (default_translators_priority, default_translators_non_priority)
-from .utils.errors import (LoginRequiredError, LoginFailed, FetchFailed, CaptchaError, HTTP)
+from .stream import HdRezkaStream
+from .search import HdRezkaSearch
+from .types import BeautifulSoupCustom
+from .types import (TVSeries, Movie)
+from .types import (Film, Series, Cartoon, Anime)
+from .types import (HdRezkaFormat, HdRezkaCategory)
+from .types import (HdRezkaRating, HdRezkaEmptyRating)
+from .types import (default_translators_priority, default_translators_non_priority)
+from .errors import (LoginRequiredError, LoginFailed, FetchFailed, CaptchaError, HTTP)
 
 
 class HdRezkaApi():
-	__version__ = "10.0.0"
+	__version__ = "11.0.0"
 	def __init__(self, url, proxy={}, headers={}, cookies={},
 		translators_priority=None, translators_non_priority=None
 	):
@@ -390,7 +390,7 @@ class HdRezkaApi():
 			else:
 				raise TypeError("getStream() missing required arguments (season and episode)")
 		elif self.type == Movie:
-			translators = [{'translator_id': id, 'translator_name': details['name']} for id, details in self.translators.items()]
+			translators = [{'translator_id': id, 'translator_name': details['name'], 'premium': details['premium']} for id, details in self.translators.items()]
 			tr_id = get_translator_id(translators)
 			return getStreamMovie(self, tr_id)
 		else:
