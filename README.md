@@ -1,6 +1,6 @@
 # HdRezkaApi
 
-<img src="https://shields.io/badge/version-v10.0.0-blue"> <a href="#donate"><img src="https://shields.io/badge/💲-Support_Project-2ea043"></a>
+<img src="https://shields.io/badge/version-v11.0.0-blue"> <a href="#donate"><img src="https://shields.io/badge/💲-Support_Project-2ea043"></a>
 
 ## Install:
 ```
@@ -10,26 +10,33 @@ pip install HdRezkaApi
 ## Table of Contents:
 1. [Usage](#usage)
 2. [Film Information](#film-information)
-3. [getStream](#getstream)
-4. [getSeasonStreams](#getseasonstreams)
-5. [HdRezkaStream](#hdrezkastream)
-6. [HdRezkaStreamSubtitles](#hdrezkastreamsubtitles)
-7. [HdRezkaRating](#hdrezkarating)
-8. [Proxy](#proxy)
-9. [Cookies](#cookies)
-10. [HdRezkaSearch](#hdrezkasearch)
-11. [HdRezkaSession](#hdrezkasession)
+3. [Translators priority](#translators-priority)
+4. [getStream](#getstream)
+5. [getSeasonStreams](#getseasonstreams)
+6. [HdRezkaStream](#hdrezkastream)
+7. [HdRezkaStreamSubtitles](#hdrezkastreamsubtitles)
+8. [HdRezkaRating](#hdrezkarating)
+9. [Proxy](#proxy)
+10. [Cookies](#cookies)
+11. [HdRezkaSearch](#hdrezkasearch)
+12. [HdRezkaSession](#hdrezkasession)
 
 <hr>
 
 ## Usage
 
 ```python
-from HdRezkaApi import *
+from HdRezkaApi import HdRezkaApi
+from HdRezkaApi.types import TVSeries, Movie
+from HdRezkaApi.types import Film, Series, Cartoon, Anime
 
 url = "https://hdrezka.ag/   __YOUR_URL__   .html"
 
 rezka = HdRezkaApi(url)
+if not rezka.ok:
+	print("Error:", str(rezka.exception))
+	raise rezka.exception
+
 print(rezka.name)
 print(rezka.thumbnail)
 print( rezka.rating.value )
@@ -129,27 +136,57 @@ Parent of classes: `Film`, `Series`, `Cartoon`, `Anime`
 
 <hr>
 
-### getStream
-`getStream(season, episode, translation=None, index=0)`
+### Translators priority
+```python
+rezka = HdRezkaApi(url, translators_priority:list, translators_non_priority:list)
+# or
+rezka.translators_priority = new_value
+rezka.translators_non_priority = new_value
 ```
+#### `translators_priority`
+Priority of translators IDs, where the further to the left, the more desirable the translation.
+
+#### `translators_non_priority`
+Priority of unwanted translator identifiers, where the further to the right, the less desirable the translation.
+
+### sort_translators
+```python
+sort_translators(
+	translators=self.translators,
+	priority=self.translators_priority,
+	non_priority=self.translators_non_priority
+)
+```
+
+<hr>
+
+### getStream
+```python
+getStream(season, episode, translation=None, priority=None, non_priority=None)
+```
+```python
 getStream(
-    translation='Дубляж' or translation='56' or index=0
-)                                               ^ this is index in translators array
+	translation='Дубляж' or translation='56'
+)
 ```
 If type is movie then there is no need to specify season and episode.
 ```python
 stream = rezka.getStream() # if movie
 ```
+#### [`priority` and `non_priority`](#translators-priority)
 <hr>
 
 ### getSeasonStreams
-`getSeasonStreams(season, translation=None, index=0, ignore=False, progress=None)`
+```python
+getSeasonStreams(season, translation=None, ignore=False, progress=None, priority=None, non_priority=None)
 ```
+```python
 getSeasonStreams(
-    translation='Дубляж' or translation='56' or index=0
-)                                               ^ this is index in translators array
+	translation='Дубляж' or translation='56'
+)
 ```
 
+#### [`priority` and `non_priority`](#translators-priority)
 #### `ignore` - ignore errors
 #### `progress` - callback function
 
@@ -263,6 +300,7 @@ rezka.login("your_email@gmail.com", "your_password1234")
 `HdRezkaSearch(origin, proxy, headers, cookies)(query, find_all=False)`
 ### Fast search
 ```python
+from HdRezkaApi.search import HdRezkaSearch
 results = HdRezkaSearch("https://hdrezka.ag/")("film name")
 ```
 ```
@@ -276,6 +314,7 @@ results = HdRezkaSearch("https://hdrezka.ag/")("film name")
 ```
 ### Advanced search
 ```python
+from HdRezkaApi.search import HdRezkaSearch
 results = HdRezkaSearch("https://hdrezka.ag/", cookies)("film name", find_all=True)
 for page in results:
 	for result in page:
@@ -286,13 +325,13 @@ for page in results:
 	'title': 'Film name',
 	'url': 'https://hdrezka.ag/__FILM_URL.html',
 	'image': 'https://hdrezka.ag/image.jpg',
-	'type': HdRezkaType()
+	'category': HdRezkaCategory()
 }
 ```
 
-#### HdRezkaType
+#### HdRezkaCategory
 
-`HdRezkaTVSeries`, `HdRezkaMovie`, `HdRezkaCartoon`, `HdRezkaAnime`.
+`Series`, `Film`, `Cartoon`, `Anime`.
 
 #### All pages
 ```python
@@ -300,8 +339,8 @@ print(results.all_pages)
 ```
 ```
 [
-	[ {'title', 'url', 'image', 'type'}, ...],
-	[ {'title', 'url', 'image', 'type'}, ...],
+	[ {'title', 'url', 'image', 'category'}, ...],
+	[ {'title', 'url', 'image', 'category'}, ...],
 	...
 ]
 ```
@@ -311,8 +350,8 @@ print(results.all)
 ```
 ```
 [
-	{'title', 'url', 'image', 'type'},
-	{'title', 'url', 'image', 'type'},
+	{'title', 'url', 'image', 'category'},
+	{'title', 'url', 'image', 'category'},
 	...
 ]
 ```
@@ -332,6 +371,9 @@ HdRezkaSession allows you to log in once and not send login requests every time.
 
 You can also specify origin to make requests to a same site. Origin in full urls will be ignored.<br>
 In the next example, the request will be made to the url: `"https://rezka_mirror.com/__YOUR_URL__.html"`
+```python
+from HdRezkaApi import HdRezkaSession
+```
 ```python
 with HdRezkaSession("https://rezka_mirror.com/") as session:
 	session.login("email@gmail.com", "password")
@@ -356,6 +398,13 @@ with HdRezkaSession(cookies=cookies, headers=headers, proxy=proxy) as session:
 	session.cookies = cookies
 	session.headers = headers
 	session.proxy = proxy
+```
+#### [`translators_priority`](#translators-priority)
+```python
+with HdRezkaSession(translators_priority, translators_non_priority) as session:
+	# or inline seting up
+	session.translators_priority = new_value
+	session.translators_non_priority = new_value
 ```
 
 ### Searching with session
