@@ -1,6 +1,6 @@
 # HdRezkaApi
 
-<img src="https://shields.io/badge/version-v10.0.0-blue"> <a href="#donate"><img src="https://shields.io/badge/💲-Support_Project-2ea043"></a>
+<img src="https://shields.io/badge/version-v11.0.0-blue"> <a href="#donate"><img src="https://shields.io/badge/💲-Support_Project-2ea043"></a>
 
 ## Install:
 ```
@@ -25,11 +25,17 @@ pip install HdRezkaApi
 ## Usage
 
 ```python
-from HdRezkaApi import *
+from HdRezkaApi import HdRezkaApi
+from HdRezkaApi.types import TVSeries, Movie
+from HdRezkaApi.types import Film, Series, Cartoon, Anime
 
 url = "https://hdrezka.ag/   __YOUR_URL__   .html"
 
 rezka = HdRezkaApi(url)
+if not rezka.ok:
+	print("Error:", str(rezka.exception))
+	raise rezka.exception
+
 print(rezka.name)
 print(rezka.thumbnail)
 print( rezka.rating.value )
@@ -129,12 +135,36 @@ Parent of classes: `Film`, `Series`, `Cartoon`, `Anime`
 
 <hr>
 
+### Translators priority
+```python
+rezka = HdRezkaApi(url, translators_priority:list, translators_non_priority:list)
+# or
+rezka.translators_priority = new_value
+rezka.translators_non_priority = new_value
+```
+#### `translators_priority`
+Priority of translators IDs, where the further to the left, the more desirable the translation.
+
+#### `translators_non_priority`
+Priority of unwanted translator identifiers, where the further to the right, the less desirable the translation.
+
+### sort_translators
+```python
+sort_translators(
+	translators=self.translators,
+	priority=self.translators_priority,
+	non_priority=self.translators_non_priority
+)
+```
+
+<hr>
+
 ### getStream
-`getStream(season, episode, translation=None, index=0)`
+`getStream(season, episode, translation=None, priority=None, non_priority=None)`
 ```
 getStream(
-    translation='Дубляж' or translation='56' or index=0
-)                                               ^ this is index in translators array
+	translation='Дубляж' or translation='56'
+)
 ```
 If type is movie then there is no need to specify season and episode.
 ```python
@@ -356,6 +386,12 @@ with HdRezkaSession(cookies=cookies, headers=headers, proxy=proxy) as session:
 	session.cookies = cookies
 	session.headers = headers
 	session.proxy = proxy
+```
+```python
+with HdRezkaSession(translators_priority, translators_non_priority) as session:
+	# or inline seting up
+	session.translators_priority = new_value
+	session.translators_non_priority = new_value
 ```
 
 ### Searching with session
