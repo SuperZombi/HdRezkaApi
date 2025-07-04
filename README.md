@@ -129,10 +129,16 @@ print( dict(rezka.getSeasonStreams('1')) )
 ### HdRezkaFormat
 
 Parent of classes: `TVSeries` and `Movie`
+```python
+rezka.type == TVSeries == TVSeries() == "tv_series"
+```
 
 ### HdRezkaCategory
 
 Parent of classes: `Film`, `Series`, `Cartoon`, `Anime`
+```python
+rezka.category == Anime == Anime() == "anime"
+```
 
 <hr>
 
