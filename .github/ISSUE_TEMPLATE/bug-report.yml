@@ -11,7 +11,7 @@ body:
       options:
         - label: I confirm that this bug is related to the **HdRezkaApi** library.
           required: true
-        - label: I confirm that I am using the **latest version** of HdRezkaApi.
+        - label: I confirm that I am using the **latest version** of <a href="https://pypi.org/project/HdRezkaApi/"><img src="https://img.shields.io/pypi/v/HdRezkaApi?label=HdRezkaApi"></a>.<br>(`pip show HdRezkaApi`)
           required: true
-        - label: I confirm that this is **not a duplicate**, and I have **searched existing issues**.
+        - label: I confirm that this is **not a duplicate**, and I have searched [**existing issues**](https://github.com/SuperZombi/HdRezkaApi/issues?q=is%3Aissue).
           required: true
