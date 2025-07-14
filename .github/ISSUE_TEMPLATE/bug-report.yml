@@ -1,0 +1,17 @@
+name: 🐞 Report a bug
+description: Report a bug or unexpected behavior
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: ✅ Confirmation Checklist
+      description: Please confirm all the statements below
+      options:
+        - label: I confirm that this bug is related to the **HdRezkaApi** library.
+          required: true
+        - label: I confirm that I am using the **latest version** of HdRezkaApi.
+          required: true
+        - label: I confirm that this is **not a duplicate**, and I have **searched existing issues**.
+          required: true
