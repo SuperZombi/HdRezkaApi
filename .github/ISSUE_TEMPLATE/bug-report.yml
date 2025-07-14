@@ -35,18 +35,15 @@ body:
         2. Open this URL...
         3. See the error...
     validations:
-      required: true
+      required: false
 
   - type: textarea
     id: code
     attributes:
       label: 📄 Code Sample (including the movie URL)
-      description: Provide a minimal reproducible code sample. Use triple backticks (```) to format it as Python code.
+      description: Provide a minimal reproducible code sample.
       render: python
-      placeholder: |
-        ```python
-        # your code here
-        ```
+      placeholder: your code here
     validations:
       required: true
 
@@ -54,12 +51,9 @@ body:
     id: logs
     attributes:
       label: 📋 Logs
-      description: Paste any relevant logs here. Format them using triple backticks.
+      description: Paste any relevant logs here.
       render: text
-      placeholder: |
-        ```
-        # logs here
-        ```
+      placeholder: logs here
     validations:
       required: true
 
