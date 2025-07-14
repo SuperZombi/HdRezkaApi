@@ -55,10 +55,19 @@ body:
     attributes:
       label: 📋 Logs
       description: Paste any relevant logs here. Format them using triple backticks.
-      render: python
+      render: text
       placeholder: |
         ```
         # logs here
         ```
     validations:
       required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 💡 Additional Information
+      description: Add any other context or screenshots that might help.
+      placeholder: Optional – screenshots, environment, OS, Python version, etc.
+    validations:
+      required: false
