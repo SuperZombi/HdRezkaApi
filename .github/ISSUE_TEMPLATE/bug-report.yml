@@ -15,3 +15,50 @@ body:
           required: true
         - label: I confirm that this is **not a duplicate**, and I have searched [**existing issues**](https://github.com/SuperZombi/HdRezkaApi/issues?q=is%3Aissue).
           required: true
+
+  - type: textarea
+    id: overview
+    attributes:
+      label: 📝 Overview
+      description: Describe the problem or unexpected behavior.
+      placeholder: A clear and concise description of what the bug is.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 🧪 Steps to Reproduce
+      description: List the steps to reproduce the issue.
+      placeholder: |
+        1. Run this code...
+        2. Open this URL...
+        3. See the error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: code
+    attributes:
+      label: 📄 Code Sample (including the movie URL)
+      description: Provide a minimal reproducible code sample. Use triple backticks (```) to format it as Python code.
+      render: python
+      placeholder: |
+        ```python
+        # your code here
+        ```
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 📋 Logs
+      description: Paste any relevant logs here. Format them using triple backticks.
+      render: python
+      placeholder: |
+        ```
+        # logs here
+        ```
+    validations:
+      required: true
