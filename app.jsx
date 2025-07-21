@@ -25,7 +25,7 @@ const App = () => {
 		<div className="container mt-4">
 			<div className="row">
 				<div className="col-md-3">
-					<Sidebar menu={menu} />
+					<Sidebar menu={menu} current={page} />
 				</div>
 				<div className="col-md-9">
 					<Content page={page} anchor={anchor} />
