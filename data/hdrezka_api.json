@@ -1,0 +1,183 @@
+{
+    "title": "HdRezkaApi",
+    "description": "Main interface class used to interact with `hdrezka`. Also supports mirrors.",
+    "icon": "fa-plug",
+    "sections": [
+        {
+            "title": "Constructor",
+            "description": "Create a new instance of `HdRezkaApi` for a given URL.",
+            "items": [
+                {
+                    "title": "url",
+                    "path": "url",
+                    "type": "str",
+                    "description": "A link to a Rezka page."
+                },
+                {
+                    "title": "proxy",
+                    "path": "proxy",
+                    "type": "dict",
+                    "description": "Optional proxy settings passed to `requests`."
+                },
+                {
+                    "title": "headers",
+                    "path": "headers",
+                    "type": "dict",
+                    "description": "Optional custom headers (e.g., custom User-Agent)."
+                },
+                {
+                    "title": "cookies",
+                    "path": "cookies",
+                    "type": "dict",
+                    "description": "Optional additional cookies."
+                },
+                {
+                    "title": "translators_priority",
+                    "path": "translators_priority",
+                    "type": "list[int]",
+                    "description": "List of preferred translator IDs (sorted by priority)."
+                },
+                {
+                    "title": "translators_non_priority",
+                    "path": "translators_non_priority",
+                    "type": "list[int]",
+                    "description": "List of translators IDs to be excluded unless no other match."
+                }
+            ]
+        },
+        {
+            "title": "Properties",
+            "description": "[<button class='btn btn-outline-primary'>Film Info</button>](#/film)",
+            "items": [
+                {
+                    "title": "ok",
+                    "path": "ok",
+                    "type": "bool",
+                    "description": "True if the page loaded successfully."
+                },
+                {
+                    "title": "exception",
+                    "path": "exception",
+                    "type": "Exception | None",
+                    "description": "Exception raised while loading the page (if any)."
+                },
+                {
+                    "title": "translators_priority",
+                    "type": "list[int]",
+                    "description": "Current list of preferred translators (getter/setter)."
+                },
+                {
+                    "title": "translators_non_priority",
+                    "type": "list[int]",
+                    "description": "Current list of translators to avoid (getter/setter)."
+                }
+            ]
+        },
+        { "title": "Methods" },
+        {
+            "title": "getStream",
+            "path": "getStream",
+            "type": "HdRezkaStream",
+            "description": "Fetch a single stream object for a given season/episode (series) or for the entire movie.",
+            "items": [
+                {
+                    "title": "season",
+                    "path": "season",
+                    "type": "int",
+                    "description": "Season number (for TVSeries only)."
+                },
+                {
+                    "title": "episode",
+                    "path": "episode",
+                    "type": "int",
+                    "description": "Episode number (for TVSeries only)."
+                },
+                {
+                    "title": "translation",
+                    "path": "translation",
+                    "type": "str|int",
+                    "description": "Translator name or ID (optional)."
+                },
+                {
+                    "title": "priority",
+                    "path": "priority",
+                    "type": "list[int]",
+                    "description": "Override the default priority list (optional)."
+                },
+                {
+                    "title": "non_priority",
+                    "path": "non_priority",
+                    "type": "list[int]",
+                    "description": "Override the non-priority list (optional)."
+                },
+                {
+                    "title": "Get Film",
+                    "path": "get_film",
+                    "code": "from HdRezkaApi import HdRezkaApi\nrezka = HdRezkaApi('https://hdrezka.ag/films/thriller/471-illyuziya-obmana-2013-latest.html')\nstream = rezka.getStream(translation=56) # Дубляж",
+                    "lang": "python",
+                    "output": "<HdRezkaStream> : ['360p', '480p', '720p', '1080p', '1080p Ultra']"
+                },
+                {
+                    "title": "Get Series",
+                    "path": "get_series",
+                    "code": "from HdRezkaApi import HdRezkaApi\nrezka = HdRezkaApi('https://hdrezka.ag/series/thriller/47-sherlok-2010.html')\nstream = rezka.getStream(season=1, episode=2)",
+                    "lang": "python",
+                    "output": "<HdRezkaStream> : ['360p', '480p', '720p', '1080p', '1080p Ultra']"
+                }
+            ]
+        },
+        {
+            "title": "getSeasonStreams",
+            "path": "getSeasonStreams",
+            "type": "generator",
+            "description": "Yield all episodes in a season with progress and error handling (for TVSeries only).",
+            "items": [
+                {
+                    "title": "season",
+                    "path": "season",
+                    "type": "int",
+                    "description": "Season number."
+                },
+                {
+                    "title": "translation",
+                    "path": "translation",
+                    "type": "str|int",
+                    "description": "Translator name or ID (optional)."
+                },
+                {
+                    "title": "priority",
+                    "path": "priority",
+                    "type": "list[int]",
+                    "description": "Override the default priority list (optional)."
+                },
+                {
+                    "title": "non_priority",
+                    "path": "non_priority",
+                    "type": "list[int]",
+                    "description": "Override the non-priority list (optional)."
+                },
+                {
+                    "title": "ignore",
+                    "type": "bool",
+                    "description": "Skip errors silently (default False)."
+                },
+                {
+                    "title": "progress",
+                    "type": "function",
+                    "description": "Function called on progress updates: `progress(current, total)`."
+                },
+                {
+                    "title": "Example",
+                    "path": "getSeasonStreams_example",
+                    "code": "from HdRezkaApi import HdRezkaApi\nrezka = HdRezkaApi('https://hdrezka.ag/series/thriller/47-sherlok-2010.html')\n\ndef progress(current, total):\n    percent = round(current * 100 / total)\n    print(f'{percent}%: {current}/{total}')\n\nprint(\n    dict(\n        rezka.getSeasonStreams(season=1, ignore=True, progress=progress)\n    )\n)",
+                    "lang": "python",
+                    "output": "'0% 0/3'\n'33% 1/3'\n'67% 2/3'\n'100% 3/3' ''\n{1: <HdRezkaStream(season:1, episode:1)>, 2: <HdRezkaStream(season:1, episode:2)>, 3: <HdRezkaStream(season:1, episode:3)>}"
+                },
+                {
+                    "code": "from HdRezkaApi import HdRezkaApi\nrezka = HdRezkaApi('https://hdrezka.ag/series/thriller/47-sherlok-2010.html')\nfor i, stream in rezka.getSeasonStreams('1'):\n    print(stream)",
+                    "lang": "python"
+                }
+            ]
+        }
+    ]
+}

@@ -4,7 +4,7 @@ const Text = ({ children, className = "" }) => {
 		<div
 			className={className}
 			dangerouslySetInnerHTML={{
-				__html: marked.parse(children)
+				__html: marked.parseInline(children)
 			}}
 		/>
 	)

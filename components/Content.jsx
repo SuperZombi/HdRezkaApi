@@ -53,13 +53,14 @@ const Section = ({data, basepath, anchor}) => {
 			<hr/>
 			<h3 className="my-3">
 				{data.path ? (
-					<a href={link} className="text-decoration-none text-reset d-flex align-items-center">
+					<a href={link} className="text-decoration-none text-reset d-inline-flex align-items-center">
 						<i className="fa-solid fa-link me-1" style={{fontSize: "0.75em"}}></i>
 						<span>{data.title}</span>
 					</a>
 				) : data.title}
+				{data.type ? <TypeBadge>{data.type}</TypeBadge> : null}
 			</h3>
-			<Text>{data.description}</Text>
+			<Text className="mb-3">{data.description}</Text>
 			{data.items?.map((item, i) => (
 				<Attribute key={i} data={item} basepath={basepath} />
 			))}
@@ -69,11 +70,6 @@ const Section = ({data, basepath, anchor}) => {
 
 const Attribute = ({data, basepath}) => {
 	const link = `#/${basepath}.${data.path}`
-	const localTypes = {
-		"HdRezkaFormat": "#/types.hdrezkaformat",
-		"HdRezkaCategory": "#/types.hdrezkacategory",
-		"HdRezkaRating": "#/types.hdrezkarating"
-	}
 
 	function copyLink(){
 		copyText(new URL(link, window.location.href).href)
@@ -93,20 +89,12 @@ const Attribute = ({data, basepath}) => {
 					) : (
 						<code className="text-reset">{data.title}</code>
 					)}
-					{data.type ? (
-						<a
-							className="badge rounded-pill text-bg-secondary font-monospace text-decoration-none ms-2"
-							style={{fontSize: "0.75rem", verticalAlign: "middle"}}
-							href={Object.keys(localTypes).includes(data.type) ? localTypes[data.type] : null}
-						>
-							{data.type}
-						</a>
-					) : null}
+					{data.type ? <TypeBadge>{data.type}</TypeBadge> : null}
 				</h5>
 				<div className="card-text">
-					{data.description ? data.description : null}
+					{data.description ? <Text>{data.description}</Text> : null}
 					{data.code ? (
-						<div className="position-relative">
+						<div className="position-relative mt-2">
 							<Code lang={data.lang}>{data.code}</Code>
 							{data.lang == "python" ? (
 								<button className="btn btn-sm btn-outline-success position-absolute"
@@ -132,6 +120,24 @@ const Attribute = ({data, basepath}) => {
 				</div>
 			</div>
 		</div>
+	)
+}
+
+const TypeBadge = ({children}) => {
+	const localTypes = {
+		"HdRezkaFormat": "#/types.hdrezkaformat",
+		"HdRezkaCategory": "#/types.hdrezkacategory",
+		"HdRezkaRating": "#/types.hdrezkarating",
+		"HdRezkaStream": "#/stream",
+	}
+	return (
+		<a
+			className="badge rounded-pill text-bg-secondary font-monospace text-decoration-none ms-2"
+			style={{fontSize: "0.75rem", verticalAlign: "middle"}}
+			href={Object.keys(localTypes).includes(children) ? localTypes[children] : null}
+		>
+			{children}
+		</a>
 	)
 }
 
