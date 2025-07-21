@@ -17,7 +17,9 @@
 					"title": "proxy",
 					"path": "proxy",
 					"type": "dict",
-					"description": "Optional proxy settings passed to `requests`."
+					"description": "Optional proxy settings passed to `requests`.",
+					"code": "rezka = HdRezkaApi(url, proxy={'http': 'http://192.168.0.1:80'})",
+					"lang": "python"
 				},
 				{
 					"title": "headers",
@@ -29,7 +31,9 @@
 					"title": "cookies",
 					"path": "cookies",
 					"type": "dict",
-					"description": "Optional additional cookies."
+					"description": "Optional additional cookies.",
+					"code": "rezka = HdRezkaApi(url, cookies={'dle_user_id': user_id, 'dle_password': password_hash})\nrezka = HdRezkaApi(url, cookies=HdRezkaApi.make_cookies(user_id, password_hash))",
+					"lang": "python"
 				},
 				{
 					"title": "translators_priority",
@@ -60,6 +64,10 @@
 					"path": "exception",
 					"type": "Exception | None",
 					"description": "Exception raised while loading the page (if any)."
+				},
+				{
+					"code": "rezka = HdRezkaApi(url)\nif not rezka.ok:\n    print('Error:', str(rezka.exception))\n    raise rezka.exception",
+					"lang": "python"
 				},
 				{
 					"title": "translators_priority",
