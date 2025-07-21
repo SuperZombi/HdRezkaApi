@@ -3,6 +3,7 @@ const { useState, useEffect } = React
 const App = () => {
 	const [menu, setMenu] = useState([])
 	const [page, setPage] = useState("index")
+	const [anchor, setAnchor] = useState()
 
 	useEffect(() => {
 		fetch("data/menu.json")
@@ -11,7 +12,9 @@ const App = () => {
 
 		const updatePage = () => {
 			const hash = window.location.hash.replace("#/", "");
-			setPage(hash || "index");
+			const basepage = hash.split(".")
+			setPage(basepage[0] || "index")
+			setAnchor(basepage[1])
 		}
 		window.addEventListener("hashchange", updatePage);
 		updatePage();
@@ -25,7 +28,7 @@ const App = () => {
 					<Sidebar menu={menu} />
 				</div>
 				<div className="col-md-9">
-					<Content page={page} />
+					<Content page={page} anchor={anchor} />
 				</div>
 			</div>
 		</div>
@@ -33,3 +36,8 @@ const App = () => {
 }
 
 ReactDOM.createRoot(document.getElementById("root")).render(<App />)
+const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+document.documentElement.setAttribute("data-bs-theme", prefersDark ? "dark" : "light")
+document.querySelector("#hljs-theme").href = `https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/${
+	prefersDark ? "github-dark-dimmed" : "vs"
+}.min.css`

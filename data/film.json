@@ -1,106 +1,119 @@
 {
-    "title": "Film Information",
-    "description": "After creating an instance of `HdRezkaApi`, you can access various properties of the film.",
-    "icon": "fa-film",
-    "sections": [
-        {
-            "title": "Attributes",
-            "items": [
-                {
-                    "name": "id",
-                    "type": "int",
-                    "description": "Film ID"
-                },
-                {
-                    "name": "name",
-                    "type": "str",
-                    "description": "Film name"
-                },
-                {
-                    "name": "description",
-                    "type": "str",
-                    "description": "Film description"
-                },
-                {
-                    "name": "thumbnail",
-                    "type": "str",
-                    "description": "Film thumbnail (URL)"
-                },
-                {
-                    "name": "thumbnailHQ",
-                    "type": "str",
-                    "description": "High quality thumbnail (URL)"
-                },
-                {
-                    "name": "type",
-                    "type": "HdRezkaFormat",
-                    "description": "Film format"
-                },
-                {
-                    "name": "category",
-                    "type": "HdRezkaCategory",
-                    "description": "Film category"
-                },
-                {
-                    "name": "rating",
-                    "type": "HdRezkaRating",
-                    "description": "Film rating"
-                },
-                {
-                    "name": "translators",
-                    "type": "dict",
-                    "description": "Translators by ID",
-                    "code": "{translator_id: {name: translator_name, premium: bool}}",
-                    "language": "javascript"
-                },
-                {
-                    "name": "translators_names",
-                    "type": "dict",
-                    "description": "Translators by name",
-                    "code": "{translator_name: {id: translator_id, premium: bool}}",
-                    "language": "javascript"
-                },
-                {
-                    "name": "seriesInfo",
-                    "type": "dict",
-                    "description": "Series episodes and seasons",
-                    "code": "{translator_id: {translator_name, seasons: {1, 2}, episodes: {1: {1, 2, 3}, 2: {1, 2, 3}}}}",
-                    "language": "javascript"
-                },
-                {
-                    "name": "episodesInfo",
-                    "type": "list",
-                    "description": "Full episode map",
-                    "code": "[{season: 1, season_text, episodes: [{episode: 1, episode_text,translations: [{translator_id, translator_name, premium}]}]}]",
-                    "language": "javascript"
-                },
-                {
-                    "name": "otherParts",
-                    "type": "list",
-                    "description": "Other parts of the movie",
-                    "code": "[{film_name: url}]",
-                    "language": "javascript"
-                }
-            ]
-        },
-        {
-            "title": "Usage Examples",
-            "description": "Basic usage of HdRezkaApi",
-            "items": [
-                {
-                    "title": "Basic Info",
-                    "description": "Get basic film metadata",
-                    "code": "rezka = HdRezkaApi('...')\nprint(rezka.name)",
-                    "language": "python",
-                    "output": "Now You See Me"
-                },
-                {
-                    "title": "Access translators",
-                    "code": "print(rezka.translators)",
-                    "language": "python",
-                    "output": "{56: {'name': 'LostFilm', 'premium': False}}"
-                }
-            ]
-        }
-    ]
+	"title": "Film Information",
+	"description": "After creating an instance of `HdRezkaApi`, you can access various properties of the film.",
+	"icon": "fa-film",
+	"sections": [
+		{
+			"title": "Attributes",
+			"items": [
+				{
+					"title": "id",
+					"path": "id",
+					"type": "int",
+					"description": "Film ID"
+				},
+				{
+					"title": "name",
+					"path": "name",
+					"type": "str",
+					"description": "Film name"
+				},
+				{
+					"title": "description",
+					"path": "description",
+					"type": "str",
+					"description": "Film description"
+				},
+				{
+					"title": "thumbnail",
+					"path": "thumbnail",
+					"type": "str",
+					"description": "Film thumbnail (URL)"
+				},
+				{
+					"title": "thumbnailHQ",
+					"path": "thumbnailHQ",
+					"type": "str",
+					"description": "High quality thumbnail (URL)"
+				},
+				{
+					"title": "type",
+					"path": "type",
+					"type": "HdRezkaFormat",
+					"description": "Film format"
+				},
+				{
+					"title": "category",
+					"path": "category",
+					"type": "HdRezkaCategory",
+					"description": "Film category"
+				},
+				{
+					"title": "rating",
+					"path": "rating",
+					"type": "HdRezkaRating",
+					"description": "Film rating"
+				},
+				{
+					"title": "translators",
+					"path": "translators",
+					"type": "dict",
+					"description": "Translators by ID",
+					"code": "{translator_id: {name: translator_name, premium: bool}}",
+					"lang": "javascript"
+				},
+				{
+					"title": "translators_names",
+					"path": "translators_names",
+					"type": "dict",
+					"description": "Translators by name",
+					"code": "{translator_name: {id: translator_id, premium: bool}}",
+					"lang": "javascript"
+				},
+				{
+					"title": "seriesInfo",
+					"path": "seriesInfo",
+					"type": "dict",
+					"description": "Series episodes and seasons",
+					"code": "{translator_id: {translator_name, seasons: {1, 2}, episodes: {1: {1, 2, 3}, 2: {1, 2, 3}}}}",
+					"lang": "javascript"
+				},
+				{
+					"title": "episodesInfo",
+					"path": "episodesInfo",
+					"type": "list",
+					"description": "Full episode map",
+					"code": "[{season: 1, season_text, episodes: [{episode: 1, episode_text,translations: [{translator_id, translator_name, premium}]}]}]",
+					"lang": "javascript"
+				},
+				{
+					"title": "otherParts",
+					"path": "otherParts",
+					"type": "list",
+					"description": "Other parts of the movie",
+					"code": "[{film_name: url}]",
+					"lang": "javascript"
+				}
+			]
+		},
+		{
+			"title": "Usage Examples",
+			"items": [
+				{
+					"title": "Film",
+					"path": "usage_film",
+					"code": "from HdRezkaApi import HdRezkaApi\n\nurl = 'https://hdrezka.ag/films/thriller/471-illyuziya-obmana-2013-latest.html'\nrezka = HdRezkaApi(url)\n\nprint('id:', rezka.id)\nprint('name:', rezka.name)\nprint('description:', rezka.description)\nprint('thumbnail:', rezka.thumbnail)\nprint('thumbnailHQ:', rezka.thumbnailHQ)\nprint('type:', rezka.type)\nprint('category:', rezka.category)\nprint('rating:', rezka.rating)\nprint('translators:', rezka.translators)\nprint('translators_names:', rezka.translators_names)\nprint('otherParts:', rezka.otherParts)",
+					"lang": "python",
+					"output": "id: 471\nname: 'Иллюзия обмана'\ndescription: 'Джей, Хенли, Джек и Мерритт – иллюзионисты, которые однажды объединяются в одну команду...'\nthumbnail: 'https://static.hdrezka.ac/i/2021/1/4/lb3ed8109516bip44m28i.jpeg'\nthumbnailHQ: 'https://static.hdrezka.ac/i/2021/1/4/n55ee625ada86jd77m21f.jpeg'\ntype: format.movie\ncategory: category.film\nrating: 9.14 (6161)\ntranslators: {56: {'name': 'Дубляж (реж. версия)', 'premium': False}, 53: {'name': 'Гаврилов (реж. версия)', 'premium': False}, 63: {'name': 'Сербин (реж. версия)', 'premium': False}, 253: {'name': 'Володарский (реж. версия)', 'premium': False}, 358: {'name': 'Украинский дубляж', 'premium': False}, 393: {'name': 'Украинский (ICTV)', 'premium': False}, 581: {'name': 'Грузинский двухголосый (реж. версия)', 'premium': False}, 238: {'name': 'Оригинал (+субтитры) (реж.)', 'premium': False}}\ntranslators_names: {'Дубляж (реж. версия)': {'id': 56, 'premium': False}, 'Гаврилов (реж. версия)': {'id': 53, 'premium': False}, 'Сербин (реж. версия)': {'id': 63, 'premium': False}, 'Володарский (реж. версия)': {'id': 253, 'premium': False}, 'Украинский дубляж': {'id': 358, 'premium': False}, 'Украинский (ICTV)': {'id': 393, 'premium': False}, 'Грузинский двухголосый (реж. версия)': {'id': 581, 'premium': False}, 'Оригинал (+субтитры) (реж.)': {'id': 238, 'premium': False}}\notherParts: [{'Иллюзия обмана 3': 'https://hdrezka.ag/films/thriller/79186-illyuziya-obmana-3-2025-latest.html'}, {'Иллюзия обмана 2': 'https://hdrezka.ag/films/action/13998-illyuziya-obmana-2-2016-latest.html'}, {'Иллюзия обмана': 'https://hdrezka.ag/films/thriller/471-illyuziya-obmana-2013-latest.html'}]"
+				},
+				{
+					"title": "Series",
+					"path": "usage_series",
+					"code": "from HdRezkaApi import HdRezkaApi\n\nurl = 'https://hdrezka.ag/series/thriller/47-sherlok-2010.html'\nrezka = HdRezkaApi(url)\n\nprint('id:', rezka.id)\nprint('name:', rezka.name)\nprint('description:', rezka.description)\nprint('thumbnail:', rezka.thumbnail)\nprint('thumbnailHQ:', rezka.thumbnailHQ)\nprint('type:', rezka.type)\nprint('category:', rezka.category)\nprint('rating:', rezka.rating)\nprint('translators:', rezka.translators)\nprint('translators_names:', rezka.translators_names)\nprint('seriesInfo:', rezka.seriesInfo)\nprint('episodesInfo:', rezka.episodesInfo)",
+					"lang": "python",
+					"output": "id: 47\nname: 'Шерлок'\ndescription: 'Вольная интерпретация цикла культовых рассказов о гениальном британском сыщике...'\nthumbnail: 'https://static.hdrezka.ac/i/2020/9/16/t6394529ca503jb40n92m.jpeg'\nthumbnailHQ: 'https://static.hdrezka.ac/i/2020/9/16/r3424b6256c41oh66k87k.jpeg'\ntype: format.tv_series\ncategory: category.series\nrating: 9.25 (63549)\ntranslators: {56: {'name': 'Дубляж', 'premium': False}, 358: {'name': 'Украинский дубляж', 'premium': False}, 238: {'name': 'Оригинал (+субтитры)', 'premium': False}}\ntranslators_names: {'Дубляж': {'id': 56, 'premium': False}, 'Украинский дубляж': {'id': 358, 'premium': False}, 'Оригинал (+субтитры)': {'id': 238, 'premium': False}}\nseriesInfo: {56: {'translator_name': 'Дубляж', 'premium': False, 'seasons': {1: 'Сезон 1', 2: 'Сезон 2', 3: 'Сезон 3', 4: 'Сезон 4'}, 'episodes': {1: {1: 'Серия 1', 2: 'Серия 2', 3: 'Серия 3'}, 2: {1: 'Серия 1', 2: 'Серия 2', 3: 'Серия 3'}, 3: {1: 'Серия 1', 2: 'Серия 2', 3: 'Серия 3'}, 4: {0: 'Серия 0', 1: 'Серия 1', 2: 'Серия 2', 3: 'Серия 3'}}}, 358: {'translator_name': 'Украинский дубляж', 'premium': False, 'seasons': {1: 'Сезон 1', 2: 'Сезон 2', 3: 'Сезон 3', 4: 'Сезон 4'}, 'episodes': {1: {1: 'Серия 1', 2: 'Серия 2', 3: 'Серия 3'}, 2: {1: 'Серия 1', 2: 'Серия 2', 3: 'Серия 3'}, 3: {1: 'Серия 1', 2: 'Серия 2', 3: 'Серия 3'}, 4: {0: 'Серия 0', 1: 'Серия 1', 2: 'Серия 2', 3: 'Серия 3'}}}, 238: {'translator_name': 'Оригинал (+субтитры)', 'premium': False, 'seasons': {1: 'Сезон 1', 2: 'Сезон 2', 3: 'Сезон 3', 4: 'Сезон 4'}, 'episodes': {1: {1: 'Серия 1', 2: 'Серия 2', 3: 'Серия 3'}, 2: {1: 'Серия 1', 2: 'Серия 2', 3: 'Серия 3'}, 3: {1: 'Серия 1', 2: 'Серия 2', 3: 'Серия 3'}, 4: {0: 'Серия 0', 1: 'Серия 1', 2: 'Серия 2', 3: 'Серия 3'}}}}\nepisodesInfo: [{'season': 1, 'season_text': 'Сезон 1', 'episodes': [{'episode': 1, 'episode_text': 'Серия 1', 'translations': [{'translator_id': 56, 'translator_name': 'Дубляж', 'premium': False}, {'translator_id': 358, 'translator_name': 'Украинский дубляж', 'premium': False}, {'translator_id': 238, 'translator_name': 'Оригинал (+субтитры)', 'premium': False}]}, {'episode': 2, 'episode_text': 'Серия 2', 'translations': [{'translator_id': 56, 'translator_name': 'Дубляж', 'premium': False}, {'translator_id': 358, 'translator_name': 'Украинский дубляж', 'premium': False}, {'translator_id': 238, 'translator_name': 'Оригинал (+субтитры)', 'premium': False}]}, {'episode': 3, 'episode_text': 'Серия 3', 'translations': [{'translator_id': 56, 'translator_name': 'Дубляж', 'premium': False}, {'translator_id': 358, 'translator_name': 'Украинский дубляж', 'premium': False}, {'translator_id': 238, 'translator_name': 'Оригинал (+субтитры)', 'premium': False}]}]}, {'season': 2, 'season_text': 'Сезон 2', 'episodes': [{'episode': 1, 'episode_text': 'Серия 1', 'translations': [{'translator_id': 56, 'translator_name': 'Дубляж', 'premium': False}, {'translator_id': 358, 'translator_name': 'Украинский дубляж', 'premium': False}, {'translator_id': 238, 'translator_name': 'Оригинал (+субтитры)', 'premium': False}]}, {'episode': 2, 'episode_text': 'Серия 2', 'translations': [{'translator_id': 56, 'translator_name': 'Дубляж', 'premium': False}, {'translator_id': 358, 'translator_name': 'Украинский дубляж', 'premium': False}, {'translator_id': 238, 'translator_name': 'Оригинал (+субтитры)', 'premium': False}]}, {'episode': 3, 'episode_text': 'Серия 3', 'translations': [{'translator_id': 56, 'translator_name': 'Дубляж', 'premium': False}, {'translator_id': 358, 'translator_name': 'Украинский дубляж', 'premium': False}, {'translator_id': 238, 'translator_name': 'Оригинал (+субтитры)', 'premium': False}]}]}, {'season': 3, 'season_text': 'Сезон 3', 'episodes': [{'episode': 1, 'episode_text': 'Серия 1', 'translations': [{'translator_id': 56, 'translator_name': 'Дубляж', 'premium': False}, {'translator_id': 358, 'translator_name': 'Украинский дубляж', 'premium': False}, {'translator_id': 238, 'translator_name': 'Оригинал (+субтитры)', 'premium': False}]}, {'episode': 2, 'episode_text': 'Серия 2', 'translations': [{'translator_id': 56, 'translator_name': 'Дубляж', 'premium': False}, {'translator_id': 358, 'translator_name': 'Украинский дубляж', 'premium': False}, {'translator_id': 238, 'translator_name': 'Оригинал (+субтитры)', 'premium': False}]}, {'episode': 3, 'episode_text': 'Серия 3', 'translations': [{'translator_id': 56, 'translator_name': 'Дубляж', 'premium': False}, {'translator_id': 358, 'translator_name': 'Украинский дубляж', 'premium': False}, {'translator_id': 238, 'translator_name': 'Оригинал (+субтитры)', 'premium': False}]}]}, {'season': 4, 'season_text': 'Сезон 4', 'episodes': [{'episode': 0, 'episode_text': 'Серия 0', 'translations': [{'translator_id': 56, 'translator_name': 'Дубляж', 'premium': False}, {'translator_id': 358, 'translator_name': 'Украинский дубляж', 'premium': False}, {'translator_id': 238, 'translator_name': 'Оригинал (+субтитры)', 'premium': False}]}, {'episode': 1, 'episode_text': 'Серия 1', 'translations': [{'translator_id': 56, 'translator_name': 'Дубляж', 'premium': False}, {'translator_id': 358, 'translator_name': 'Украинский дубляж', 'premium': False}, {'translator_id': 238, 'translator_name': 'Оригинал (+субтитры)', 'premium': False}]}, {'episode': 2, 'episode_text': 'Серия 2', 'translations': [{'translator_id': 56, 'translator_name': 'Дубляж', 'premium': False}, {'translator_id': 358, 'translator_name': 'Украинский дубляж', 'premium': False}, {'translator_id': 238, 'translator_name': 'Оригинал (+субтитры)', 'premium': False}]}, {'episode': 3, 'episode_text': 'Серия 3', 'translations': [{'translator_id': 56, 'translator_name': 'Дубляж', 'premium': False}, {'translator_id': 358, 'translator_name': 'Украинский дубляж', 'premium': False}, {'translator_id': 238, 'translator_name': 'Оригинал (+субтитры)', 'premium': False}]}]}]"
+				}
+			]
+		}
+	]
 }

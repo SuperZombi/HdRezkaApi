@@ -1,6 +1,8 @@
-const Content = ({ page }) => {
+const Content = ({ page, anchor }) => {
 	const [data, setData] = React.useState(null)
 	const [status, setStatus] = React.useState(200)
+
+	document.title = "HdRezkaApi Docs";
 
 	React.useEffect(()=>{
 		setData(null)
@@ -17,6 +19,8 @@ const Content = ({ page }) => {
 	if (status != 200) return <NotFound/>
 	if (!data) return <Loading/>;
 
+	document.title = `${data.title} • HdRezkaApi`;
+
 	return (
 		<div>
 			<h1 className="mb-3">
@@ -24,12 +28,101 @@ const Content = ({ page }) => {
 				{data.title}
 			</h1>
 			<Text>{data.description}</Text>
-			<Code lang="javascript">
-				{`{translator_id: {translator_name, seasons: {1, 2}, episodes: {1: {1, 2, 3}, 2: {1, 2, 3}}}}`}
-			</Code>
-			<Code lang="python">
-				{`rezka = HdRezkaApi('...')\nprint(rezka.name)`}
-			</Code>
+			{data.sections?.map((section, i) => (
+				<Section key={i} data={section} basepath={page} anchor={anchor} />
+			))}
 		</div>
 	)
+}
+
+const Section = ({data, basepath, anchor}) => {
+	React.useEffect(()=>{
+		if (anchor) {
+			const el = document.querySelector(`[href="#/${basepath}.${anchor}"]`)
+			if (el) {
+				const target = el.closest(".card") || el
+				el.scrollIntoView({ behavior: "smooth" })
+			}
+		}
+	}, [anchor])
+
+	return (
+		<div>
+			<hr/>
+			<h3 className="my-3">{data.title}</h3>
+			{data.items?.map((item, i) => (
+				<Attribute key={i} data={item} basepath={basepath} />
+			))}
+		</div>
+	)
+}
+
+const Attribute = ({data, basepath}) => {
+	const link = `#/${basepath}.${data.path}`
+
+	function copyLink(){
+		copyText(new URL(link, window.location.href).href)
+	}
+	return (
+		<div className="card mb-3">
+			<div className="card-body">
+				<h5 className="card-title">
+					{data.path ? (
+						<a href={link}
+							className="text-decoration-none text-reset"
+							onClick={copyLink}
+						>
+							<i className="fa-solid fa-link me-1" style={{fontSize: "0.75em"}}></i>
+							<code>{data.title}</code>
+						</a>
+					) : (
+						<code className="text-reset">{data.title}</code>
+					)}
+					{data.type ? (
+						<span
+							className="badge rounded-pill text-bg-secondary font-monospace ms-2"
+							style={{fontSize: "0.75rem", verticalAlign: "middle"}}>
+							{data.type}
+						</span>
+					) : null}
+				</h5>
+				<div className="card-text">
+					{data.description ? data.description : null}
+					{data.code ? (
+						<div className="position-relative">
+							<Code lang={data.lang}>{data.code}</Code>
+							{data.lang == "python" ? (
+								<button className="btn btn-sm btn-outline-success position-absolute"
+									style={{top: "5px", right: "5px"}}
+									onClick={_=>copyText(data.code)}
+								>
+									<i className="fa-solid fa-clone"></i>
+								</button>
+							) : null}
+						</div>
+					) : null}
+					{data.output ? (
+						<details className="mt-2">
+							<summary className="btn btn-sm btn-outline-success">
+								<i className="fas fa-play"></i> Execute
+							</summary>
+							<div className="output-box border rounded bg-light p-2 mt-3">
+								<strong>Output:</strong>
+								<Code lang="javascript">{data.output}</Code>
+							</div>
+						</details>
+					) : null}
+				</div>
+			</div>
+		</div>
+	)
+}
+
+function copyText(text) {
+	const textArea = document.createElement("textarea");
+	textArea.value = text;
+	document.body.appendChild(textArea);
+	textArea.select();
+	document.execCommand('copy');
+	document.body.removeChild(textArea);
 }

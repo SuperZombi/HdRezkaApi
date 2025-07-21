@@ -20,9 +20,9 @@ const Code = ({ children, lang = "plaintext", className = "" }) => {
 	}, [children, lang]);
 
 	return (
-		<pre className={`mb-2 ${className}`}>
+		<pre className={`mb-0 ${className}`}>
 			<code ref={ref} className={`language-${lang}`}>
-				{js_beautify(children)}
+				{lang=="javascript" ? js_beautify(children, {"brace_style": "expand"}) : children}
 			</code>
 		</pre>
 	)
