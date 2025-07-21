@@ -1,0 +1,16 @@
+{
+	"title": "HdRezkaApi Documentation",
+	"description": "[![](https://img.shields.io/pypi/v/HdRezkaApi)](https://pypi.org/project/HdRezkaApi/)",
+	"icon": "fa-home",
+	"sections": [
+		{
+			"title": "Install",
+			"items": [
+				{
+					"code": "pip install HdRezkaApi",
+					"lang": "python"
+				}
+			]
+		}
+	]
+}

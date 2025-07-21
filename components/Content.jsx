@@ -58,6 +58,7 @@ const Section = ({data, basepath, anchor}) => {
 						<span>{data.title}</span>
 					</a>
 				) : data.title}
+				{data.icon && <i className={`fas ${data.icon} ms-2`} style={{verticalAlign: "middle"}}></i>}
 				{data.type ? <TypeBadge>{data.type}</TypeBadge> : null}
 			</h3>
 			<Text className="mb-3">{data.description}</Text>

@@ -1,7 +1,7 @@
 [
-    { "title": "Introduction", "path": "index", "icon": "fa-home" },
-    { "title": "Film Info", "path": "film", "icon": "fa-film" },
-    { "title": "HdRezkaApi", "path": "hdrezka_api", "icon": "fa-plug"},
-    { "title": "Types", "path": "types", "icon": "fa-tags" },
-    { "title": "Stream", "path": "stream", "icon": "fa-video" }
+	{ "title": "Introduction", "path": "index", "icon": "fa-home" },
+	{ "title": "Film Info", "path": "film", "icon": "fa-film" },
+	{ "title": "HdRezkaApi", "path": "hdrezka_api", "icon": "fa-plug"},
+	{ "title": "Types", "path": "types", "icon": "fa-tags" },
+	{ "title": "Stream", "path": "stream", "icon": "fa-video" }
 ]
