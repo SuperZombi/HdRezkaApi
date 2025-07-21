@@ -106,7 +106,7 @@ const Attribute = ({data, basepath}) => {
 							<summary className="btn btn-sm btn-outline-success">
 								<i className="fas fa-play"></i> Execute
 							</summary>
-							<div className="output-box border rounded bg-light p-2 mt-3">
+							<div className="output-box border rounded p-2 mt-3">
 								<strong>Output:</strong>
 								<Code lang="javascript">{data.output}</Code>
 							</div>

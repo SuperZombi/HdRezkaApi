@@ -22,7 +22,7 @@ const Code = ({ children, lang = "plaintext", className = "" }) => {
 	return (
 		<pre className={`mb-0 ${className}`}>
 			<code ref={ref} className={`language-${lang}`}>
-				{lang=="javascript" ? js_beautify(children, {"brace_style": "expand"}) : children}
+				{lang=="javascript" ? js_beautify(children, {"keep_array_indentation": true}) : children}
 			</code>
 		</pre>
 	)
