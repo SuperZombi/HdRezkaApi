@@ -1,0 +1,112 @@
+{
+	"title": "Authentication",
+	"description": "HdRezkaApi supports optional user login via email and password.",
+	"icon": "fa-key",
+	"sections": [
+		{
+			"title": "HdRezkaApi.login",
+			"path": "login_base",
+			"type": "bool",
+			"description": "Return True on success and raise Exception on fail.",
+			"items": [
+				{
+					"title": "email",
+					"type": "str"
+				},
+				{
+					"title": "password",
+					"type": "str"
+				},
+				{
+					"title": "raise_exception",
+					"type": "bool",
+					"description": "Raise `LoginFailed` exception if login fails (default: True)."
+				},
+				{
+					"code": "rezka = HdRezkaApi(url)\nrezka.login('your_email@gmail.com', 'your_password1234')",
+					"lang": "python"
+				},
+				{
+					"code": "rezka = HdRezkaApi(url)\nif not rezka.login('your_email@gmail.com', 'your_password1234', raise_exception=False):\n    print('Login failed')",
+					"lang": "python"
+				}
+			]
+		},
+		{
+			"title": "HdRezkaSession",
+			"path": "constructor",
+			"description": "Context manager wrapper for reusing headers, proxies, cookies, and translator preferences across multiple pages.",
+			"items": [
+				{
+					"title": "origin",
+					"type": "str",
+					"description": "Base domain (e.g. `https://rezka.ag`) to use in login and relative URL resolving."
+				},
+				{
+					"title": "proxy",
+					"type": "dict",
+					"description": "Optional proxy for all requests"
+				},
+				{
+					"title": "headers",
+					"type": "dict",
+					"description": "Additional HTTP headers"
+				},
+				{
+					"title": "cookies",
+					"type": "dict",
+					"description": "Initial cookies"
+				},
+				{
+					"title": "translators_priority",
+					"type": "list[int]",
+					"description": "Preferred translator IDs"
+				},
+				{
+					"title": "translators_non_priority",
+					"type": "list[int]",
+					"description": "Unwanted translator IDs"
+				}
+			]
+		},
+		{
+			"title": "Methods",
+			"items": [
+				{
+					"title": "login(email, password)",
+					"path": "login",
+					"description": "Attempts to login using stored `origin`. Sets `cookies` if successful. [More](#/session.login_base)",
+					"code": "from HdRezkaApi import HdRezkaSession\n\nwith HdRezkaSession('https://rezka.ag/') as session:\n    session.login('email@gmail.com', 'password')",
+					"lang": "python"
+				},
+				{
+					"title": "get(url)",
+					"path": "get",
+					"description": "Creates an `HdRezkaApi` object for the provided URL, with session settings.",
+					"code": "from HdRezkaApi import HdRezkaSession\n\nwith HdRezkaSession('https://rezka.ag/') as session:\n    rezka = session.get('https://hdrezka.ag/series/thriller/47-sherlok-2010.html')\n    print(rezka.name)",
+					"lang": "python"
+				}
+			]
+		},
+		{
+			"title": "Examples",
+			"path": "examples",
+			"items": [
+				{
+					"description": "You can specify origin to make requests to a same site.<br><br>In the next example, the request will be made to the url: `https://rezka_mirror.com/__YOUR_URL__.html`",
+					"code": "from HdRezkaApi import HdRezkaSession\n\nwith HdRezkaSession('https://rezka_mirror.com/') as session:\n    rezka = session.get('https://hdrezka.ag/__URL_PATH__.html')\n    rezka = session.get('__URL_PATH__.html')",
+					"lang": "python"
+				},
+				{
+					"description": "You can do not specify origin and then requests will be made to the URL you specified.<br><br>But then you won't be able to use `login()`.",
+					"code": "from HdRezkaApi import HdRezkaSession\n\nwith HdRezkaSession() as session:\n    rezka = session.get('https://hdrezka.ag/__URL_PATH__.html')",
+					"lang": "python"
+				},
+				{
+					"code": "with HdRezkaSession(cookies=cookies, headers=headers, proxy=proxy) as session:",
+					"lang": "python"
+				}
+			]
+		}
+	]
+}
