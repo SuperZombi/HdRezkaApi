@@ -129,6 +129,7 @@ const TypeBadge = ({children}) => {
 		"HdRezkaCategory": "#/types.hdrezkacategory",
 		"HdRezkaRating": "#/types.hdrezkarating",
 		"HdRezkaStream": "#/stream",
+		"HdRezkaStreamSubtitles": "#/stream.subtitles",
 	}
 	return (
 		<a

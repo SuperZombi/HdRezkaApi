@@ -1,0 +1,95 @@
+{
+    "title": "HdRezkaStream",
+    "description": "Stream object returned by `getStream()` and `getSeasonStreams()`.",
+    "icon": "fa-film",
+    "sections": [
+        {
+            "title": "HdRezkaStream",
+            "description": "Represents the video stream with access to video URLs, subtitles, and metadata.",
+            "items": [
+                {
+                    "title": "videos",
+                    "path": "videos",
+                    "type": "dict[str, list[str]]",
+                    "description": "A dictionary where each key is a resolution string (e.g. '720p') and the value is a list of URLs for that quality.",
+                    "output": "{'360p': ['https://sambray.org/...mp4', 'https://stream.voidboost.cc/...mp4'],'480p': ['https://sambray.org/...mp4', 'https://stream.voidboost.cc/...mp4'],'720p': ['https://sambray.org/...mp4', 'https://stream.voidboost.cc/...mp4']}",
+                    "code": "stream = rezka.getStream(1, 5)\nstream.videos",
+                    "lang": "python"
+                },
+                {
+                    "title": "name",
+                    "path": "name",
+                    "type": "str",
+                    "description": "Name of the film or series."
+                },
+                {
+                    "title": "translator_id",
+                    "path": "translator_id",
+                    "type": "int",
+                    "description": "ID of the translator used for the stream."
+                },
+                {
+                    "title": "season",
+                    "path": "season",
+                    "type": "int | None",
+                    "description": "Season number (for TVSeries), or None for films."
+                },
+                {
+                    "title": "episode",
+                    "path": "episode",
+                    "type": "int | None",
+                    "description": "Episode number (for TVSeries), or None for films."
+                },
+                {
+                    "title": "subtitles",
+                    "path": "stream_subtitles",
+                    "type": "HdRezkaStreamSubtitles",
+                    "description": "Object that contains subtitles data and access methods."
+                },
+                {
+                    "title": "HdRezkaStream(resolution)",
+                    "path": "call",
+                    "type": "list",
+                    "description": "Calling the stream with a resolution string or number returns the stream URL for that quality.",
+                    "code": "stream = rezka.getStream(1, 5)\n\nstream('720p')\nstream('Ultra')\nstream(1080)",
+                    "lang": "python",
+                    "output": "['https://sambray.org/...mp4', 'https://stream.voidboost.cc/...mp4']"
+                }
+            ]
+        },
+        {
+            "title": "HdRezkaStreamSubtitles",
+            "path": "subtitles",
+            "description": "Represents the subtitle collection attached to a stream.",
+            "items": [
+                {
+                    "title": "subtitles",
+                    "path": "subtitles_all",
+                    "type": "dict[str, dict]",
+                    "description": "Dictionary where keys are language codes (e.g. 'en', 'ru'), and values contain title and link.",
+                    "code": "stream = rezka.getStream(1, 5)\nstream.subtitles.subtitles",
+                    "lang": "python",
+                    "output": "{'en': {'title': 'English', 'link': 'https:/...vtt'}, 'ru': {'title': 'Русский', 'link': 'https:/...vtt'}}"
+                },
+                {
+                    "title": "keys",
+                    "path": "subtitles_keys",
+                    "type": "list[str]",
+                    "description": "List of available subtitle language codes.",
+                    "code": "stream = rezka.getStream(1, 5)\nstream.subtitles.keys",
+                    "lang": "python",
+                    "output": "['en', 'ru']"
+                },
+                {
+                    "title": "HdRezkaStreamSubtitles(id)",
+                    "path": "subtitles_call",
+                    "type": "str",
+                    "description": "Returns the URL for a subtitle track, by language code, title, or index.",
+                    "code": "stream = rezka.getStream(1, 5)\nstream.subtitles('en')\nstream.subtitles('English')\nstream.subtitles(0)",
+                    "lang": "python",
+                    "output": "'https:/...vtt'"
+                }
+            ]
+        }
+    ]
+}
