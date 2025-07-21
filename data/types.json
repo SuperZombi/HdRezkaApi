@@ -1,0 +1,86 @@
+{
+    "title": "HdRezka Types",
+    "description": "Various internal types used by `HdRezkaApi` to represent content formats, categories, and ratings.",
+    "icon": "fa-tags",
+    "sections": [
+        {
+            "title": "HdRezkaFormat",
+            "path": "hdrezkaformat",
+            "items": [
+                {
+                    "title": "TVSeries",
+                    "type": "HdRezkaFormat",
+                    "path": "format_tvseries",
+                    "description": "Represents serialized content, such as TV shows or anime series."
+                },
+                {
+                    "title": "Movie",
+                    "type": "HdRezkaFormat",
+                    "path": "format_movie",
+                    "description": "Represents standalone film content."
+                },
+                {
+                    "code": "from HdRezkaApi import HdRezkaApi\nfrom HdRezkaApi.types import TVSeries, Movie\n\nurl = 'https://hdrezka.ag/series/thriller/47-sherlok-2010.html'\nrezka = HdRezkaApi(url)\n\nprint(rezka.type)\nrezka.type == TVSeries == TVSeries() == 'tv_series'",
+                    "lang": "python",
+                    "output": "format.tv_series"
+                }
+            ]
+        },
+        {
+            "title": "HdRezkaCategory",
+            "path": "hdrezkacategory",
+            "items": [
+                {
+                    "title": "Film",
+                    "type": "HdRezkaCategory",
+                    "path": "category_film",
+                    "description": "Live-action movies."
+                },
+                {
+                    "title": "Series",
+                    "type": "HdRezkaCategory",
+                    "path": "category_series",
+                    "description": "TV series."
+                },
+                {
+                    "title": "Cartoon",
+                    "type": "HdRezkaCategory",
+                    "path": "category_cartoon",
+                    "description": "Western-style animated content."
+                },
+                {
+                    "title": "Anime",
+                    "type": "HdRezkaCategory",
+                    "path": "category_anime",
+                    "description": "Japanese-style animated content."
+                },
+                {
+                    "code": "from HdRezkaApi import HdRezkaApi\nfrom HdRezkaApi.types import Film, Series, Cartoon, Anime\n\nurl = 'https://hdrezka.ag/animation/drama/24892-forma-golosa-2016.html'\nrezka = HdRezkaApi(url)\n\nprint(rezka.category)\nrezka.category == Anime == Anime() == 'anime'",
+                    "lang": "python",
+                    "output": "category.anime"
+                }
+            ]
+        },
+        {
+            "title": "HdRezkaRating",
+            "path": "hdrezkarating",
+            "items": [
+                {
+                    "title": "value",
+                    "path": "rating_value",
+                    "type": "float"
+                },
+                {
+                    "title": "votes",
+                    "path": "rating_votes",
+                    "type": "int"
+                },
+                {
+                    "code": "from HdRezkaApi import HdRezkaApi\n\nurl = 'https://hdrezka.ag/series/thriller/47-sherlok-2010.html'\nrezka = HdRezkaApi(url)\n\nprint(rezka.rating)\n\nprint(rezka.rating.value)\nprint(float(rezka.rating))\nprint(int(rezka.rating))\n\nprint(rezka.rating.votes)",
+                    "lang": "python",
+                    "output": "9.25 (63549)\n9.25\n9.25\n9\n63549"
+                }
+            ]
+        }
+    ]
+}

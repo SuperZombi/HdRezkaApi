@@ -36,6 +36,8 @@ const Content = ({ page, anchor }) => {
 }
 
 const Section = ({data, basepath, anchor}) => {
+	const link = `#/${basepath}.${data.path}`
+
 	React.useEffect(()=>{
 		if (anchor) {
 			const el = document.querySelector(`[href="#/${basepath}.${anchor}"]`)
@@ -49,7 +51,15 @@ const Section = ({data, basepath, anchor}) => {
 	return (
 		<div>
 			<hr/>
-			<h3 className="my-3">{data.title}</h3>
+			<h3 className="my-3">
+				{data.path ? (
+					<a href={link} className="text-decoration-none text-reset d-flex align-items-center">
+						<i className="fa-solid fa-link me-1" style={{fontSize: "0.75em"}}></i>
+						<span>{data.title}</span>
+					</a>
+				) : data.title}
+			</h3>
+			<Text>{data.description}</Text>
 			{data.items?.map((item, i) => (
 				<Attribute key={i} data={item} basepath={basepath} />
 			))}
@@ -59,6 +69,11 @@ const Section = ({data, basepath, anchor}) => {
 
 const Attribute = ({data, basepath}) => {
 	const link = `#/${basepath}.${data.path}`
+	const localTypes = {
+		"HdRezkaFormat": "#/types.hdrezkaformat",
+		"HdRezkaCategory": "#/types.hdrezkacategory",
+		"HdRezkaRating": "#/types.hdrezkarating"
+	}
 
 	function copyLink(){
 		copyText(new URL(link, window.location.href).href)
@@ -79,11 +94,13 @@ const Attribute = ({data, basepath}) => {
 						<code className="text-reset">{data.title}</code>
 					)}
 					{data.type ? (
-						<span
-							className="badge rounded-pill text-bg-secondary font-monospace ms-2"
-							style={{fontSize: "0.75rem", verticalAlign: "middle"}}>
+						<a
+							className="badge rounded-pill text-bg-secondary font-monospace text-decoration-none ms-2"
+							style={{fontSize: "0.75rem", verticalAlign: "middle"}}
+							href={Object.keys(localTypes).includes(data.type) ? localTypes[data.type] : null}
+						>
 							{data.type}
-						</span>
+						</a>
 					) : null}
 				</h5>
 				<div className="card-text">
@@ -106,7 +123,7 @@ const Attribute = ({data, basepath}) => {
 							<summary className="btn btn-sm btn-outline-success">
 								<i className="fas fa-play"></i> Execute
 							</summary>
-							<div className="output-box border rounded p-2 mt-3">
+							<div className="output-box border rounded p-2 mt-2">
 								<strong>Output:</strong>
 								<Code lang="javascript">{data.output}</Code>
 							</div>
