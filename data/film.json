@@ -1,0 +1,106 @@
+{
+    "title": "Film Information",
+    "description": "After creating an instance of `HdRezkaApi`, you can access various properties of the film.",
+    "icon": "fa-film",
+    "sections": [
+        {
+            "title": "Attributes",
+            "items": [
+                {
+                    "name": "id",
+                    "type": "int",
+                    "description": "Film ID"
+                },
+                {
+                    "name": "name",
+                    "type": "str",
+                    "description": "Film name"
+                },
+                {
+                    "name": "description",
+                    "type": "str",
+                    "description": "Film description"
+                },
+                {
+                    "name": "thumbnail",
+                    "type": "str",
+                    "description": "Film thumbnail (URL)"
+                },
+                {
+                    "name": "thumbnailHQ",
+                    "type": "str",
+                    "description": "High quality thumbnail (URL)"
+                },
+                {
+                    "name": "type",
+                    "type": "HdRezkaFormat",
+                    "description": "Film format"
+                },
+                {
+                    "name": "category",
+                    "type": "HdRezkaCategory",
+                    "description": "Film category"
+                },
+                {
+                    "name": "rating",
+                    "type": "HdRezkaRating",
+                    "description": "Film rating"
+                },
+                {
+                    "name": "translators",
+                    "type": "dict",
+                    "description": "Translators by ID",
+                    "code": "{translator_id: {name: translator_name, premium: bool}}",
+                    "language": "javascript"
+                },
+                {
+                    "name": "translators_names",
+                    "type": "dict",
+                    "description": "Translators by name",
+                    "code": "{translator_name: {id: translator_id, premium: bool}}",
+                    "language": "javascript"
+                },
+                {
+                    "name": "seriesInfo",
+                    "type": "dict",
+                    "description": "Series episodes and seasons",
+                    "code": "{translator_id: {translator_name, seasons: {1, 2}, episodes: {1: {1, 2, 3}, 2: {1, 2, 3}}}}",
+                    "language": "javascript"
+                },
+                {
+                    "name": "episodesInfo",
+                    "type": "list",
+                    "description": "Full episode map",
+                    "code": "[{season: 1, season_text, episodes: [{episode: 1, episode_text,translations: [{translator_id, translator_name, premium}]}]}]",
+                    "language": "javascript"
+                },
+                {
+                    "name": "otherParts",
+                    "type": "list",
+                    "description": "Other parts of the movie",
+                    "code": "[{film_name: url}]",
+                    "language": "javascript"
+                }
+            ]
+        },
+        {
+            "title": "Usage Examples",
+            "description": "Basic usage of HdRezkaApi",
+            "items": [
+                {
+                    "title": "Basic Info",
+                    "description": "Get basic film metadata",
+                    "code": "rezka = HdRezkaApi('...')\nprint(rezka.name)",
+                    "language": "python",
+                    "output": "Now You See Me"
+                },
+                {
+                    "title": "Access translators",
+                    "code": "print(rezka.translators)",
+                    "language": "python",
+                    "output": "{56: {'name': 'LostFilm', 'premium': False}}"
+                }
+            ]
+        }
+    ]
+}

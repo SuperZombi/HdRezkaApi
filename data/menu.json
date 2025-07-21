@@ -1,0 +1,6 @@
+[
+    { "title": "Introduction", "path": "index", "icon": "fa-home" },
+    { "title": "Film Info", "path": "film", "icon": "fa-film" },
+    { "title": "Search", "path": "search", "icon": "fa-search" },
+    { "title": "Stream", "path": "stream", "icon": "fa-video" }
+]
