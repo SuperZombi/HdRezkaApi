@@ -1,6 +1,6 @@
 const Sidebar = ({ menu, current }) => {
 	return (
-		<div className="list-group mb-3 position-sticky" style={{top: "1rem"}}>
+		<div className="list-group mb-4 position-sticky" style={{top: "1rem"}}>
 			{menu.map((item, index) => (
 				<a
 					key={index}

@@ -40,10 +40,15 @@ const Section = ({data, basepath, anchor}) => {
 
 	React.useEffect(()=>{
 		if (anchor) {
-			const el = document.querySelector(`[href="#/${basepath}.${anchor}"]`)
+			const el = document.querySelector(`[href="#/${basepath}.${anchor}"]:not(.badge)`)
 			if (el) {
-				const target = el.closest(".card") || el
-				el.scrollIntoView({ behavior: "smooth" })
+				const target = el.closest(".card") || el.closest("h3") || el
+				target.scrollIntoView({ behavior: "smooth" })
+				target.classList.add("highlight")
+				const timeout = setTimeout(_=>{
+					target.classList.remove("highlight")
+				}, 2000)
+				return () => clearTimeout(timeout)
 			}
 		}
 	}, [anchor])
@@ -131,6 +136,7 @@ const TypeBadge = ({children}) => {
 		"HdRezkaRating": "#/types.hdrezkarating",
 		"HdRezkaStream": "#/stream",
 		"HdRezkaStreamSubtitles": "#/stream.subtitles",
+		"SearchResult": "#/search.result",
 	}
 	return (
 		<a

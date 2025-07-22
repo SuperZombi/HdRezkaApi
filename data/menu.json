@@ -5,5 +5,5 @@
 	{ "title": "Types", "path": "types", "icon": "fa-tags" },
 	{ "title": "Stream", "path": "stream", "icon": "fa-video" },
 	{ "title": "Session", "path": "session", "icon": "fa-key" },
-	{ "title": "Search", "path": "search", "icon": "fa-search" }
+	{ "title": "Search", "path": "search", "icon": "fa-magnifying-glass" }
 ]
