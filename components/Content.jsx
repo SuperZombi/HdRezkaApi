@@ -50,7 +50,7 @@ const Section = ({data, basepath, anchor}) => {
 
 				let elementPosition = target.getBoundingClientRect().top;
 				let offsetPosition = elementPosition - target.offsetHeight / 2
-				document.documentElement.scrollBy({top: offsetPosition});
+				document.documentElement.scrollBy({top: offsetPosition - 16});
 
 				target.classList.add("highlight")
 				setTimeout(_=>{
@@ -63,7 +63,12 @@ const Section = ({data, basepath, anchor}) => {
 	return (
 		<div>
 			<hr/>
-			<h3 className="my-2 pb-2 position-sticky z-2 top-0 bg-body">
+			<h3 className="pt-2 pb-3 position-sticky z-2 top-0"
+				style={{
+					backgroundColor: "rgba(var(--bs-body-bg-rgb), 0.6)",
+					backdropFilter: "blur(1px)"
+				}}
+			>
 				{data.path ? (
 					<a href={link} className="text-decoration-none text-reset d-inline-flex align-items-center">
 						<i className="fa-solid fa-link me-1" style={{fontSize: "0.75em"}}></i>
