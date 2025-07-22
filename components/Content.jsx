@@ -23,6 +23,10 @@ const Content = ({ page, anchor }) => {
 
 	return (
 		<div>
+			{data.big_icon && <img src={data.big_icon}
+				className="float-end"
+				style={{height: "64px"}}
+			/>}
 			<h1 className="mb-3">
 				{data.icon && <i className={`fas ${data.icon} me-2`}></i>}
 				{data.title}
@@ -59,7 +63,7 @@ const Section = ({data, basepath, anchor}) => {
 	return (
 		<div>
 			<hr/>
-			<h3 className="my-2 pb-2 position-sticky z-1 top-0 bg-body">
+			<h3 className="my-2 pb-2 position-sticky z-2 top-0 bg-body">
 				{data.path ? (
 					<a href={link} className="text-decoration-none text-reset d-inline-flex align-items-center">
 						<i className="fa-solid fa-link me-1" style={{fontSize: "0.75em"}}></i>
