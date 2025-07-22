@@ -55,7 +55,7 @@ const Section = ({data, basepath, anchor}) => {
 				target.classList.add("highlight")
 				setTimeout(_=>{
 					target.classList.remove("highlight")
-				}, 1000)
+				}, 1500)
 			}
 		}
 	}, [anchor])
