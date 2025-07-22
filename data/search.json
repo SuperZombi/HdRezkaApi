@@ -3,100 +3,100 @@
 	"icon": "fa-magnifying-glass",
 	"sections": [
 		{
-            "title": "HdRezkaSearch",
-            "description": "Entry point for search. Create an instance with site origin and call it as a function.",
-            "items": [
-                {
-                    "title": "HdRezkaSearch(origin, proxy, headers, cookies)"
-                },
-                {
-                    "title": "search(query, find_all=False)",
-                    "description": "Performs search. Returns either a fast result list or full paginated results."
-                }
-            ]
-        },
+			"title": "HdRezkaSearch",
+			"description": "Entry point for search. Create an instance with site origin and call it as a function.",
+			"items": [
+				{
+					"title": "HdRezkaSearch(origin, proxy, headers, cookies)"
+				},
+				{
+					"title": "search(query, find_all=False)",
+					"description": "Performs search. Returns either a fast result list or full paginated results."
+				}
+			]
+		},
 		{
-            "title": "Fast search",
-            "path": "fast",
-            "type": "list[dict]",
-            "items": [
-                {
-                	"code": "from HdRezkaApi import HdRezkaSearch\n\nresults = HdRezkaSearch('https://hdrezka.ag/')('Шерлок')",
-                	"lang": "python",
-                	"output": "[{'title': 'Шерлок', 'url': 'https://hdrezka.ag/series/thriller/47-sherlok-2010.html', 'rating': 8.85}, {'title': 'Шерлок: Дело зла', 'url': 'https://hdrezka.ag/films/detective/77881-sherlok-delo-zla-2002.html', 'rating': 6.33}, {'title': 'Шерлок Холмс: Игра теней', 'url': 'https://hdrezka.ag/films/action/257-sherlok-holms-igra-teney-2011-latest.html', 'rating': 7.85}, {'title': 'Шерлок Холмс и секретное оружие', 'url': 'https://hdrezka.ag/films/drama/39594-sherlok-holms-i-sekretnoe-oruzhie-1942.html', 'rating': 6.35}]"
-                }
-            ]
-        },
+			"title": "Fast search",
+			"path": "fast",
+			"type": "list[dict]",
+			"items": [
+				{
+					"code": "from HdRezkaApi import HdRezkaSearch\n\nresults = HdRezkaSearch('https://hdrezka.ag/')('Шерлок')",
+					"lang": "python",
+					"output": "[{'title': 'Шерлок', 'url': 'https://hdrezka.ag/series/thriller/47-sherlok-2010.html', 'rating': 8.85}, {'title': 'Шерлок: Дело зла', 'url': 'https://hdrezka.ag/films/detective/77881-sherlok-delo-zla-2002.html', 'rating': 6.33}, {'title': 'Шерлок Холмс: Игра теней', 'url': 'https://hdrezka.ag/films/action/257-sherlok-holms-igra-teney-2011-latest.html', 'rating': 7.85}, {'title': 'Шерлок Холмс и секретное оружие', 'url': 'https://hdrezka.ag/films/drama/39594-sherlok-holms-i-sekretnoe-oruzhie-1942.html', 'rating': 6.35}]"
+				}
+			]
+		},
 		{
-            "title": "Advanced search",
-            "path": "advanced",
-            "type": "SearchResult",
-            "description": "An iterable object with multiple pages.",
-            "items": [
-            	{
-            		"title": "SearchResult",
-            		"type": "HdRezkaCategory",
-            		"path": "result",
-            		"code": "{'title': 'Film name','url': 'https://hdrezka.ag/FILM_URL.html','image': 'https://hdrezka.ag/image.jpg','category': HdRezkaCategory()}",
-            		"lang": "javascript"
-            	},
-                {
-                	"title": "Iteration",
-                	"path": "iter",
-                	"code": "from HdRezkaApi import HdRezkaSearch\n\nresults = HdRezkaSearch('https://hdrezka.ag/')('Шерлок', find_all=True)\nfor page in results:\n    for result in page:\n        print(result)",
-                	"lang": "python",
-                	"output": "{'title': 'Шерлок', 'url': 'https://hdrezka.ag/series/thriller/47-sherlok-2010.html', 'image': 'https://static.hdrezka.ac/i/2020/9/16/i36f220b638a6zm59s76x.jpeg', 'category': category.series}{'title': 'Шерлок: Дело зла', 'url': 'https://hdrezka.ag/films/detective/77881-sherlok-delo-zla-2002.html', 'image': 'https://static.hdrezka.ac/i/2025/6/17/t079a4738c5c9lf21v93b.jpg', 'category': category.film}{'title': 'Шерлок Холмс: Игра теней', 'url': 'https://hdrezka.ag/films/action/257-sherlok-holms-igra-teney-2011-latest.html', 'image': 'https://static.hdrezka.ac/i/2025/5/30/t4924688d40ccgf68y84w.jpeg', 'category': category.film}{'title': 'Шерлок Холмс и секретное оружие', 'url': 'https://hdrezka.ag/films/drama/39594-sherlok-holms-i-sekretnoe-oruzhie-1942.html', 'image': 'https://static.hdrezka.ac/i/2025/6/26/d65d67cee7555tc62e73o.jpg', 'category': category.film}{'title': 'Шерлок младший', 'url': 'https://hdrezka.ag/films/comedy/39927-sherlok-mladshiy-1924.html', 'image': 'https://static.hdrezka.ac/i/2021/6/12/efded9ca8d30fes23t34s.jpg', 'category': category.film}{'title': 'Шерлок Холмс перед лицом смерти', 'url': 'https://hdrezka.ag/films/drama/39948-sherlok-holms-pered-licom-smerti-1943.html', 'image': 'https://static.hdrezka.ac/i/2021/6/14/nee45003c4243hd89g46m.jpg', 'category': category.film}{'title': 'Шерлок Холмс: Прелюдия к убийству', 'url': 'https://hdrezka.ag/films/crime/41081-sherlok-holms-prelyudiya-k-ubiystvu-1946.html', 'image': 'https://static.hdrezka.ac/i/2021/8/4/t7557a50d61dexc46h17z.jpg', 'category': category.film}{'title': 'Шерлок Холмс в Нью-Йорке', 'url': 'https://hdrezka.ag/films/detective/65868-sherlok-holms-v-nyu-yorke-1976.html', 'image': 'https://static.hdrezka.ac/i/2025/6/26/mca48a8da9a75fj83s51g.jpg', 'category': category.film}{'title': 'Шерлок Холмс и смертоносное ожерелье', 'url': 'https://hdrezka.ag/films/thriller/66474-sherlok-holms-i-smertonosnoe-ozherele-1962.html', 'image': 'https://static.hdrezka.ac/i/2024/1/24/d003f1ad7295dpw81v35w.jpg', 'category': category.film}{'title': 'Шерлок Холмс: Происшествие у водопада Виктория', 'url': 'https://hdrezka.ag/films/detective/66497-sherlok-holms-proisshestvie-u-vodopada-viktoriya-1992.html', 'image': 'https://static.hdrezka.ac/i/2024/1/25/o253eca92fe66dz73c61u.jpg', 'category': category.film}"
-                },
-                {
-                	"title": "All pages",
-                	"path": "all_pages",
-                	"code": "from HdRezkaApi import HdRezkaSearch\n\nresults = HdRezkaSearch('https://hdrezka.ag/')('Шерлок', find_all=True)\nprint(results.all_pages)",
-                	"lang": "python",
-                	"output": "[[{'title': 'Шерлок', 'url': 'https://hdrezka.ag/series/thriller/47-sherlok-2010.html', 'image': 'https://static.hdrezka.ac/i/2020/9/16/i36f220b638a6zm59s76x.jpeg', 'category': category.series}, {'title': 'Шерлок: Дело зла', 'url': 'https://hdrezka.ag/films/detective/77881-sherlok-delo-zla-2002.html', 'image': 'https://static.hdrezka.ac/i/2025/6/17/t079a4738c5c9lf21v93b.jpg', 'category': category.film}, ...],[{'title': 'Шерлок Холмс: Игра теней', 'url': 'https://hdrezka.ag/films/action/257-sherlok-holms-igra-teney-2011-latest.html', 'image': 'https://static.hdrezka.ac/i/2025/5/30/t4924688d40ccgf68y84w.jpeg', 'category': category.film}, {'title': 'Шерлок Холмс и секретное оружие', 'url': 'https://hdrezka.ag/films/drama/39594-sherlok-holms-i-sekretnoe-oruzhie-1942.html', 'image': 'https://static.hdrezka.ac/i/2025/6/26/d65d67cee7555tc62e73o.jpg', 'category': category.film}, ...], ...]"
-                },
-                {
-                	"title": "All pages format:",
-                	"code": "[\n    [ {'title', 'url', 'image', 'category'}, ...],\n    [ {'title', 'url', 'image', 'category'}, ...],\n    ...\n]"
-                },
-                {
-                	"title": "Flatten results",
-                	"path": "flatten",
-                	"code": "from HdRezkaApi import HdRezkaSearch\n\nresults = HdRezkaSearch('https://hdrezka.ag/')('Шерлок', find_all=True)\nprint(results.all)",
-                	"lang": "python",
-                	"output": "[{'title': 'Шерлок', 'url': 'https://hdrezka.ag/series/thriller/47-sherlok-2010.html', 'image': 'https://static.hdrezka.ac/i/2020/9/16/i36f220b638a6zm59s76x.jpeg', 'category': category.series}, {'title': 'Шерлок: Дело зла', 'url': 'https://hdrezka.ag/films/detective/77881-sherlok-delo-zla-2002.html', 'image': 'https://static.hdrezka.ac/i/2025/6/17/t079a4738c5c9lf21v93b.jpg', 'category': category.film}, {'title': 'Шерлок Холмс: Игра теней', 'url': 'https://hdrezka.ag/films/action/257-sherlok-holms-igra-teney-2011-latest.html', 'image': 'https://static.hdrezka.ac/i/2025/5/30/t4924688d40ccgf68y84w.jpeg', 'category': category.film}, {'title': 'Шерлок Холмс и секретное оружие', 'url': 'https://hdrezka.ag/films/drama/39594-sherlok-holms-i-sekretnoe-oruzhie-1942.html', 'image': 'https://static.hdrezka.ac/i/2025/6/26/d65d67cee7555tc62e73o.jpg', 'category': category.film}, {'title': 'Шерлок младший', 'url': 'https://hdrezka.ag/films/comedy/39927-sherlok-mladshiy-1924.html', 'image': 'https://static.hdrezka.ac/i/2021/6/12/efded9ca8d30fes23t34s.jpg', 'category': category.film}, {'title': 'Шерлок Холмс перед лицом смерти', 'url': 'https://hdrezka.ag/films/drama/39948-sherlok-holms-pered-licom-smerti-1943.html', 'image': 'https://static.hdrezka.ac/i/2021/6/14/nee45003c4243hd89g46m.jpg', 'category': category.film}, {'title': 'Шерлок Холмс: Прелюдия к убийству', 'url': 'https://hdrezka.ag/films/crime/41081-sherlok-holms-prelyudiya-k-ubiystvu-1946.html', 'image': 'https://static.hdrezka.ac/i/2021/8/4/t7557a50d61dexc46h17z.jpg', 'category': category.film}, {'title': 'Шерлок Холмс и дело о шелковом чулке', 'url': 'https://hdrezka.ag/films/detective/52868-sherlok-holms-i-delo-o-shelkovom-chulke-2004.html', 'image': 'https://static.hdrezka.ac/i/2025/6/26/t322d636eec00sv75b12t.jpg', 'category': category.film}, {'title': 'Шерлок Холмс: Занятия в алом', 'url': 'https://hdrezka.ag/films/thriller/64870-sherlok-holms-zanyatiya-v-alom-1933.html', 'image': 'https://static.hdrezka.ac/i/2023/12/6/sb6c8d2676419sb22l91a.jpg', 'category': category.film}, {'title': 'Шерлок Холмс в Нью-Йорке', 'url': 'https://hdrezka.ag/films/detective/65868-sherlok-holms-v-nyu-yorke-1976.html', 'image': 'https://static.hdrezka.ac/i/2025/6/26/mca48a8da9a75fj83s51g.jpg', 'category': category.film}, {'title': 'Шерлок Холмс и смертоносное ожерелье', 'url': 'https://hdrezka.ag/films/thriller/66474-sherlok-holms-i-smertonosnoe-ozherele-1962.html', 'image': 'https://static.hdrezka.ac/i/2024/1/24/d003f1ad7295dpw81v35w.jpg', 'category': category.film}, {'title': 'Шерлок Холмс: Происшествие у водопада Виктория', 'url': 'https://hdrezka.ag/films/detective/66497-sherlok-holms-proisshestvie-u-vodopada-viktoriya-1992.html', 'image': 'https://static.hdrezka.ac/i/2024/1/25/o253eca92fe66dz73c61u.jpg', 'category': category.film}, ...]"
-                },
-                {
-                	"title": "Flatten format:",
-                	"code": "[\n    {'title', 'url', 'image', 'category'},\n    {'title', 'url', 'image', 'category'},\n    ...\n]"
-                },
-                {
-                	"title": "Specific page",
-                	"path": "specific_page",
-                	"code": "from HdRezkaApi import HdRezkaSearch\n\nresults = HdRezkaSearch('https://hdrezka.ag/')('Шерлок', find_all=True)\nprint(results.get_page(2)) # page number\n# or\nprint(results[1]) # index",
-                	"lang": "python",
-                	"output": "[{'title': 'Частная жизнь Шерлока Холмса', 'url': 'https://hdrezka.ag/films/adventures/66499-chastnaya-zhizn-sherloka-holmsa-1970.html', 'image': 'https://static.hdrezka.ac/i/2024/1/25/udfee37f47678jw22q90m.jpg', 'category': category.film}, {'title': 'Соперники Шерлока Холмса', 'url': 'https://hdrezka.ag/series/detective/66626-soperniki-sherloka-holmsa-1971.html', 'image': 'https://static.hdrezka.ac/i/2024/1/30/q97c51e789a04qf21g96r.jpg', 'category': category.series}, {'title': 'Шерлок', 'url': 'https://hdrezka.ag/series/detective/72782-sherlok-2019.html', 'image': 'https://static.hdrezka.ac/i/2024/8/4/f232ea0467a8cyb61m41i.jpg', 'category': category.series}, {'title': 'Шерлок Холмс', 'url': 'https://hdrezka.ag/films/action/256-sherlok-holms-2009-latest.html', 'image': 'https://static.hdrezka.ac/i/2025/5/30/a45a034185dc0vm55z42b.jpeg', 'category': category.film}, {'title': 'Шерлок Холмс', 'url': 'https://hdrezka.ag/series/thriller/14830-sherlok-holms-2013.html', 'image': 'https://static.hdrezka.ac/i/2016/6/1/z5da64fba1bdagp78k54y.jpg', 'category': category.series}, {'title': 'Шерлок Гномс', 'url': 'https://hdrezka.ag/cartoons/fantasy/27439-sherlok-gnoms-2018.html', 'image': 'https://static.hdrezka.ac/i/2020/12/26/n1cb181837cacgo29o30c.jpg', 'category': category.cartoon}]"
-                }
-            ]
-        },
-        {
-        	"title": "Searching with Session",
-        	"path": "session",
-        	"items": [
-        		{
-        			"title": "Fast search",
-        			"description": "[Read more](#/search.fast)",
-        			"path": "session_fast",
-        			"code": "with HdRezkaSession('https://rezka_mirror.com/') as session:\n    results = session.search('film name')",
-        			"lang": "python"
-        		},
-        		{
-        			"title": "Advanced search",
-        			"description": "[Read more](#/search.advanced)",
-        			"path": "session_advanced",
-        			"code": "with HdRezkaSession('https://rezka_mirror.com/') as session:\n    session.login('email@gmail.com', 'password')\n    results = session.search('film name', find_all=True)\n    for page in results:\n        for result in page:\n            print(result)",
-        			"lang": "python"
-        		}
-        	]
-        }
+			"title": "Advanced search",
+			"path": "advanced",
+			"type": "SearchResult",
+			"description": "An iterable object with multiple pages.",
+			"items": [
+				{
+					"title": "SearchResult",
+					"type": "HdRezkaCategory",
+					"path": "result",
+					"code": "{'title': 'Film name','url': 'https://hdrezka.ag/FILM_URL.html','image': 'https://hdrezka.ag/image.jpg','category': HdRezkaCategory()}",
+					"lang": "javascript"
+				},
+				{
+					"title": "Iteration",
+					"path": "iter",
+					"code": "from HdRezkaApi import HdRezkaSearch\n\nresults = HdRezkaSearch('https://hdrezka.ag/')('Шерлок', find_all=True)\nfor page in results:\n    for result in page:\n        print(result)",
+					"lang": "python",
+					"output": "{'title': 'Шерлок', 'url': 'https://hdrezka.ag/series/thriller/47-sherlok-2010.html', 'image': 'https://static.hdrezka.ac/i/2020/9/16/i36f220b638a6zm59s76x.jpeg', 'category': category.series}{'title': 'Шерлок: Дело зла', 'url': 'https://hdrezka.ag/films/detective/77881-sherlok-delo-zla-2002.html', 'image': 'https://static.hdrezka.ac/i/2025/6/17/t079a4738c5c9lf21v93b.jpg', 'category': category.film}{'title': 'Шерлок Холмс: Игра теней', 'url': 'https://hdrezka.ag/films/action/257-sherlok-holms-igra-teney-2011-latest.html', 'image': 'https://static.hdrezka.ac/i/2025/5/30/t4924688d40ccgf68y84w.jpeg', 'category': category.film}{'title': 'Шерлок Холмс и секретное оружие', 'url': 'https://hdrezka.ag/films/drama/39594-sherlok-holms-i-sekretnoe-oruzhie-1942.html', 'image': 'https://static.hdrezka.ac/i/2025/6/26/d65d67cee7555tc62e73o.jpg', 'category': category.film}{'title': 'Шерлок младший', 'url': 'https://hdrezka.ag/films/comedy/39927-sherlok-mladshiy-1924.html', 'image': 'https://static.hdrezka.ac/i/2021/6/12/efded9ca8d30fes23t34s.jpg', 'category': category.film}{'title': 'Шерлок Холмс перед лицом смерти', 'url': 'https://hdrezka.ag/films/drama/39948-sherlok-holms-pered-licom-smerti-1943.html', 'image': 'https://static.hdrezka.ac/i/2021/6/14/nee45003c4243hd89g46m.jpg', 'category': category.film}{'title': 'Шерлок Холмс: Прелюдия к убийству', 'url': 'https://hdrezka.ag/films/crime/41081-sherlok-holms-prelyudiya-k-ubiystvu-1946.html', 'image': 'https://static.hdrezka.ac/i/2021/8/4/t7557a50d61dexc46h17z.jpg', 'category': category.film}{'title': 'Шерлок Холмс в Нью-Йорке', 'url': 'https://hdrezka.ag/films/detective/65868-sherlok-holms-v-nyu-yorke-1976.html', 'image': 'https://static.hdrezka.ac/i/2025/6/26/mca48a8da9a75fj83s51g.jpg', 'category': category.film}{'title': 'Шерлок Холмс и смертоносное ожерелье', 'url': 'https://hdrezka.ag/films/thriller/66474-sherlok-holms-i-smertonosnoe-ozherele-1962.html', 'image': 'https://static.hdrezka.ac/i/2024/1/24/d003f1ad7295dpw81v35w.jpg', 'category': category.film}{'title': 'Шерлок Холмс: Происшествие у водопада Виктория', 'url': 'https://hdrezka.ag/films/detective/66497-sherlok-holms-proisshestvie-u-vodopada-viktoriya-1992.html', 'image': 'https://static.hdrezka.ac/i/2024/1/25/o253eca92fe66dz73c61u.jpg', 'category': category.film}"
+				},
+				{
+					"title": "All pages",
+					"path": "all_pages",
+					"code": "from HdRezkaApi import HdRezkaSearch\n\nresults = HdRezkaSearch('https://hdrezka.ag/')('Шерлок', find_all=True)\nprint(results.all_pages)",
+					"lang": "python",
+					"output": "[[{'title': 'Шерлок', 'url': 'https://hdrezka.ag/series/thriller/47-sherlok-2010.html', 'image': 'https://static.hdrezka.ac/i/2020/9/16/i36f220b638a6zm59s76x.jpeg', 'category': category.series}, {'title': 'Шерлок: Дело зла', 'url': 'https://hdrezka.ag/films/detective/77881-sherlok-delo-zla-2002.html', 'image': 'https://static.hdrezka.ac/i/2025/6/17/t079a4738c5c9lf21v93b.jpg', 'category': category.film}, ...],[{'title': 'Шерлок Холмс: Игра теней', 'url': 'https://hdrezka.ag/films/action/257-sherlok-holms-igra-teney-2011-latest.html', 'image': 'https://static.hdrezka.ac/i/2025/5/30/t4924688d40ccgf68y84w.jpeg', 'category': category.film}, {'title': 'Шерлок Холмс и секретное оружие', 'url': 'https://hdrezka.ag/films/drama/39594-sherlok-holms-i-sekretnoe-oruzhie-1942.html', 'image': 'https://static.hdrezka.ac/i/2025/6/26/d65d67cee7555tc62e73o.jpg', 'category': category.film}, ...], ...]"
+				},
+				{
+					"title": "All pages format:",
+					"code": "[\n    [ {'title', 'url', 'image', 'category'}, ...],\n    [ {'title', 'url', 'image', 'category'}, ...],\n    ...\n]"
+				},
+				{
+					"title": "Flatten results",
+					"path": "flatten",
+					"code": "from HdRezkaApi import HdRezkaSearch\n\nresults = HdRezkaSearch('https://hdrezka.ag/')('Шерлок', find_all=True)\nprint(results.all)",
+					"lang": "python",
+					"output": "[{'title': 'Шерлок', 'url': 'https://hdrezka.ag/series/thriller/47-sherlok-2010.html', 'image': 'https://static.hdrezka.ac/i/2020/9/16/i36f220b638a6zm59s76x.jpeg', 'category': category.series}, {'title': 'Шерлок: Дело зла', 'url': 'https://hdrezka.ag/films/detective/77881-sherlok-delo-zla-2002.html', 'image': 'https://static.hdrezka.ac/i/2025/6/17/t079a4738c5c9lf21v93b.jpg', 'category': category.film}, {'title': 'Шерлок Холмс: Игра теней', 'url': 'https://hdrezka.ag/films/action/257-sherlok-holms-igra-teney-2011-latest.html', 'image': 'https://static.hdrezka.ac/i/2025/5/30/t4924688d40ccgf68y84w.jpeg', 'category': category.film}, {'title': 'Шерлок Холмс и секретное оружие', 'url': 'https://hdrezka.ag/films/drama/39594-sherlok-holms-i-sekretnoe-oruzhie-1942.html', 'image': 'https://static.hdrezka.ac/i/2025/6/26/d65d67cee7555tc62e73o.jpg', 'category': category.film}, {'title': 'Шерлок младший', 'url': 'https://hdrezka.ag/films/comedy/39927-sherlok-mladshiy-1924.html', 'image': 'https://static.hdrezka.ac/i/2021/6/12/efded9ca8d30fes23t34s.jpg', 'category': category.film}, {'title': 'Шерлок Холмс перед лицом смерти', 'url': 'https://hdrezka.ag/films/drama/39948-sherlok-holms-pered-licom-smerti-1943.html', 'image': 'https://static.hdrezka.ac/i/2021/6/14/nee45003c4243hd89g46m.jpg', 'category': category.film}, {'title': 'Шерлок Холмс: Прелюдия к убийству', 'url': 'https://hdrezka.ag/films/crime/41081-sherlok-holms-prelyudiya-k-ubiystvu-1946.html', 'image': 'https://static.hdrezka.ac/i/2021/8/4/t7557a50d61dexc46h17z.jpg', 'category': category.film}, {'title': 'Шерлок Холмс и дело о шелковом чулке', 'url': 'https://hdrezka.ag/films/detective/52868-sherlok-holms-i-delo-o-shelkovom-chulke-2004.html', 'image': 'https://static.hdrezka.ac/i/2025/6/26/t322d636eec00sv75b12t.jpg', 'category': category.film}, {'title': 'Шерлок Холмс: Занятия в алом', 'url': 'https://hdrezka.ag/films/thriller/64870-sherlok-holms-zanyatiya-v-alom-1933.html', 'image': 'https://static.hdrezka.ac/i/2023/12/6/sb6c8d2676419sb22l91a.jpg', 'category': category.film}, {'title': 'Шерлок Холмс в Нью-Йорке', 'url': 'https://hdrezka.ag/films/detective/65868-sherlok-holms-v-nyu-yorke-1976.html', 'image': 'https://static.hdrezka.ac/i/2025/6/26/mca48a8da9a75fj83s51g.jpg', 'category': category.film}, {'title': 'Шерлок Холмс и смертоносное ожерелье', 'url': 'https://hdrezka.ag/films/thriller/66474-sherlok-holms-i-smertonosnoe-ozherele-1962.html', 'image': 'https://static.hdrezka.ac/i/2024/1/24/d003f1ad7295dpw81v35w.jpg', 'category': category.film}, {'title': 'Шерлок Холмс: Происшествие у водопада Виктория', 'url': 'https://hdrezka.ag/films/detective/66497-sherlok-holms-proisshestvie-u-vodopada-viktoriya-1992.html', 'image': 'https://static.hdrezka.ac/i/2024/1/25/o253eca92fe66dz73c61u.jpg', 'category': category.film}, ...]"
+				},
+				{
+					"title": "Flatten format:",
+					"code": "[\n    {'title', 'url', 'image', 'category'},\n    {'title', 'url', 'image', 'category'},\n    ...\n]"
+				},
+				{
+					"title": "Specific page",
+					"path": "specific_page",
+					"code": "from HdRezkaApi import HdRezkaSearch\n\nresults = HdRezkaSearch('https://hdrezka.ag/')('Шерлок', find_all=True)\nprint(results.get_page(2)) # page number\n# or\nprint(results[1]) # index",
+					"lang": "python",
+					"output": "[{'title': 'Частная жизнь Шерлока Холмса', 'url': 'https://hdrezka.ag/films/adventures/66499-chastnaya-zhizn-sherloka-holmsa-1970.html', 'image': 'https://static.hdrezka.ac/i/2024/1/25/udfee37f47678jw22q90m.jpg', 'category': category.film}, {'title': 'Соперники Шерлока Холмса', 'url': 'https://hdrezka.ag/series/detective/66626-soperniki-sherloka-holmsa-1971.html', 'image': 'https://static.hdrezka.ac/i/2024/1/30/q97c51e789a04qf21g96r.jpg', 'category': category.series}, {'title': 'Шерлок', 'url': 'https://hdrezka.ag/series/detective/72782-sherlok-2019.html', 'image': 'https://static.hdrezka.ac/i/2024/8/4/f232ea0467a8cyb61m41i.jpg', 'category': category.series}, {'title': 'Шерлок Холмс', 'url': 'https://hdrezka.ag/films/action/256-sherlok-holms-2009-latest.html', 'image': 'https://static.hdrezka.ac/i/2025/5/30/a45a034185dc0vm55z42b.jpeg', 'category': category.film}, {'title': 'Шерлок Холмс', 'url': 'https://hdrezka.ag/series/thriller/14830-sherlok-holms-2013.html', 'image': 'https://static.hdrezka.ac/i/2016/6/1/z5da64fba1bdagp78k54y.jpg', 'category': category.series}, {'title': 'Шерлок Гномс', 'url': 'https://hdrezka.ag/cartoons/fantasy/27439-sherlok-gnoms-2018.html', 'image': 'https://static.hdrezka.ac/i/2020/12/26/n1cb181837cacgo29o30c.jpg', 'category': category.cartoon}]"
+				}
+			]
+		},
+		{
+			"title": "Searching with Session",
+			"path": "session",
+			"items": [
+				{
+					"title": "Fast search",
+					"description": "[Read more](#/search.fast)",
+					"path": "session_fast",
+					"code": "with HdRezkaSession('https://rezka_mirror.com/') as session:\n    results = session.search('film name')",
+					"lang": "python"
+				},
+				{
+					"title": "Advanced search",
+					"description": "[Read more](#/search.advanced)",
+					"path": "session_advanced",
+					"code": "with HdRezkaSession('https://rezka_mirror.com/') as session:\n    session.login('email@gmail.com', 'password')\n    results = session.search('film name', find_all=True)\n    for page in results:\n        for result in page:\n            print(result)",
+					"lang": "python"
+				}
+			]
+		}
 	]
 }

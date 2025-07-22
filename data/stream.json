@@ -1,5 +1,5 @@
 {
-	"title": "HdRezkaStream",
+	"title": "Stream",
 	"description": "Stream object returned by `getStream()` and `getSeasonStreams()`.",
 	"icon": "fa-film",
 	"sections": [

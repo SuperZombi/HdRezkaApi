@@ -1,5 +1,5 @@
 {
-	"title": "HdRezka Types",
+	"title": "Types",
 	"description": "Various internal types used by `HdRezkaApi` to represent content formats, categories, and ratings.",
 	"icon": "fa-tags",
 	"sections": [
