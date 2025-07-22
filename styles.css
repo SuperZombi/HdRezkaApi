@@ -7,7 +7,7 @@
 	position: absolute;
 	inset: 0;
 	background-color: rgba(255, 255, 0, 0.6);
-	animation: highlight-fade 1s ease-in-out forwards;
+	animation: highlight-fade 1.5s ease-in-out forwards;
 	pointer-events: none;
 	z-index: 0;
 }
