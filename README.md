@@ -1,6 +1,8 @@
 # HdRezkaApi
 
-<img src="https://shields.io/badge/version-v11.0.0-blue"> <a href="#donate"><img src="https://shields.io/badge/💲-Support_Project-2ea043"></a>
+<a href="https://pypi.org/project/HdRezkaApi/"><img src="https://img.shields.io/pypi/v/HdRezkaApi"></a>
+<a href="https://superzombi.github.io/HdRezkaApi/"><img src="https://shields.io/badge/📖-Documentation-ffbc5c"></a>
+<a href="#donate"><img src="https://shields.io/badge/💲-Support_Project-2ea043"></a>
 
 ## Install:
 ```
