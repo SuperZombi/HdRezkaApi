@@ -7,6 +7,7 @@
     "username": "Super_Zombi",
     "email": "super.zombi.yt@gmail.com",
     "github": "https://github.com/SuperZombi/HdRezkaApi",
+    "docs": "https://superzombi.github.io/HdRezkaApi/",
     "python_ver": "3.9",
     "dependencies": [
         "requests",
