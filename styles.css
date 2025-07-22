@@ -1,12 +1,17 @@
 .highlight {
-	animation: highlight-fade 1s ease-in-out;
+	position: relative;
+	overflow: hidden;
 }
-
+.highlight::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background-color: rgba(255, 255, 0, 0.6);
+	animation: highlight-fade 1s ease-in-out forwards;
+	pointer-events: none;
+	z-index: 0;
+}
 @keyframes highlight-fade {
-	from {
-		background-color: rgba(255, 255, 0, 0.6);
-	}
-	to {
-		background-color: transparent;
-	}
+	from { opacity: 1; }
+	to { opacity: 0; }
 }

@@ -20,7 +20,7 @@
 					"description": "Represents standalone film content."
 				},
 				{
-					"code": "from HdRezkaApi import HdRezkaApi\nfrom HdRezkaApi.types import TVSeries, Movie\n\nurl = 'https://hdrezka.ag/series/thriller/47-sherlok-2010.html'\nrezka = HdRezkaApi(url)\n\nprint(rezka.type)\nrezka.type == TVSeries == TVSeries() == 'tv_series'",
+					"code": "from HdRezkaApi import HdRezkaApi\nfrom HdRezkaApi import TVSeries, Movie\n\nurl = 'https://hdrezka.ag/series/thriller/47-sherlok-2010.html'\nrezka = HdRezkaApi(url)\n\nprint(rezka.type)\nrezka.type == TVSeries == TVSeries() == 'tv_series'",
 					"lang": "python",
 					"output": "format.tv_series"
 				}
@@ -55,7 +55,7 @@
 					"description": "Japanese-style animated content."
 				},
 				{
-					"code": "from HdRezkaApi import HdRezkaApi\nfrom HdRezkaApi.types import Film, Series, Cartoon, Anime\n\nurl = 'https://hdrezka.ag/animation/drama/24892-forma-golosa-2016.html'\nrezka = HdRezkaApi(url)\n\nprint(rezka.category)\nrezka.category == Anime == Anime() == 'anime'",
+					"code": "from HdRezkaApi import HdRezkaApi\nfrom HdRezkaApi import Film, Series, Cartoon, Anime\n\nurl = 'https://hdrezka.ag/animation/drama/24892-forma-golosa-2016.html'\nrezka = HdRezkaApi(url)\n\nprint(rezka.category)\nrezka.category == Anime == Anime() == 'anime'",
 					"lang": "python",
 					"output": "category.anime"
 				}

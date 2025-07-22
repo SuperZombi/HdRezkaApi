@@ -43,12 +43,15 @@ const Section = ({data, basepath, anchor}) => {
 			const el = document.querySelector(`[href="#/${basepath}.${anchor}"]:not(.badge)`)
 			if (el) {
 				const target = el.closest(".card") || el.closest("h3") || el
-				target.scrollIntoView({ behavior: "smooth" })
+
+				let elementPosition = target.getBoundingClientRect().top;
+				let offsetPosition = elementPosition - target.offsetHeight / 2
+				document.documentElement.scrollBy({top: offsetPosition});
+
 				target.classList.add("highlight")
-				const timeout = setTimeout(_=>{
+				setTimeout(_=>{
 					target.classList.remove("highlight")
-				}, 2000)
-				return () => clearTimeout(timeout)
+				}, 1000)
 			}
 		}
 	}, [anchor])
@@ -56,7 +59,7 @@ const Section = ({data, basepath, anchor}) => {
 	return (
 		<div>
 			<hr/>
-			<h3 className="my-3">
+			<h3 className="my-2 pb-2 position-sticky z-1 top-0 bg-body">
 				{data.path ? (
 					<a href={link} className="text-decoration-none text-reset d-inline-flex align-items-center">
 						<i className="fa-solid fa-link me-1" style={{fontSize: "0.75em"}}></i>

@@ -4,10 +4,24 @@
 	"icon": "fa-home",
 	"sections": [
 		{
+			"description": "Unofficial Python library for parsing content from HDRezka."
+		},
+		{
 			"title": "Install",
+			"path": "Install",
 			"items": [
 				{
 					"code": "pip install HdRezkaApi",
+					"lang": "python"
+				}
+			]
+		},
+		{
+			"title": "Quick Start",
+			"path": "start",
+			"items": [
+				{
+					"code": "from HdRezkaApi import HdRezkaApi\nfrom HdRezkaApi import TVSeries, Movie\n\nurl = 'https://hdrezka.ag/__YOUR_URL__.html'\nrezka = HdRezkaApi(url)\n\nif rezka.ok:\n    print(rezka.name)\n\n    if rezka.type == Movie:\n        urls = rezka.getStream()(720)\n    elif rezka.type == TVSeries:\n        urls = rezka.getStream(season=1, episode=1)(720)\n\n    print(urls[0])",
 					"lang": "python"
 				}
 			]
