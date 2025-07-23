@@ -84,37 +84,37 @@
 		{ "title": "Methods" },
 		{
 			"title": "getStream",
-			"path": "getStream",
+			"path": "get_stream",
 			"type": "HdRezkaStream",
 			"description": "Fetch a single stream object for a given season/episode (series) or for the entire movie.",
 			"items": [
 				{
 					"title": "season",
-					"path": "season",
+					"path": "get_stream_season",
 					"type": "int",
 					"description": "Season number (for TVSeries only)."
 				},
 				{
 					"title": "episode",
-					"path": "episode",
+					"path": "get_stream_episode",
 					"type": "int",
 					"description": "Episode number (for TVSeries only)."
 				},
 				{
 					"title": "translation",
-					"path": "translation",
+					"path": "get_stream_translation",
 					"type": "str|int",
 					"description": "Translator name or ID (optional)."
 				},
 				{
 					"title": "priority",
-					"path": "priority",
+					"path": "get_stream_priority",
 					"type": "list[int]",
 					"description": "Override the default priority list (optional)."
 				},
 				{
 					"title": "non_priority",
-					"path": "non_priority",
+					"path": "get_stream_non_priority",
 					"type": "list[int]",
 					"description": "Override the non-priority list (optional)."
 				},
@@ -136,31 +136,31 @@
 		},
 		{
 			"title": "getSeasonStreams",
-			"path": "getSeasonStreams",
+			"path": "get_season_streams",
 			"type": "generator",
 			"description": "Yield all episodes in a season with progress and error handling (for TVSeries only).",
 			"items": [
 				{
 					"title": "season",
-					"path": "season",
+					"path": "get_season_streams_season",
 					"type": "int",
 					"description": "Season number."
 				},
 				{
 					"title": "translation",
-					"path": "translation",
+					"path": "get_season_streams_translation",
 					"type": "str|int",
 					"description": "Translator name or ID (optional)."
 				},
 				{
 					"title": "priority",
-					"path": "priority",
+					"path": "get_season_streams_priority",
 					"type": "list[int]",
 					"description": "Override the default priority list (optional)."
 				},
 				{
 					"title": "non_priority",
-					"path": "non_priority",
+					"path": "get_season_streams_non_priority",
 					"type": "list[int]",
 					"description": "Override the non-priority list (optional)."
 				},
@@ -176,7 +176,7 @@
 				},
 				{
 					"title": "Example",
-					"path": "getSeasonStreams_example",
+					"path": "get_season_streams_example",
 					"code": "from HdRezkaApi import HdRezkaApi\nrezka = HdRezkaApi('https://hdrezka.ag/series/thriller/47-sherlok-2010.html')\n\ndef progress(current, total):\n    percent = round(current * 100 / total)\n    print(f'{percent}%: {current}/{total}')\n\nprint(\n    dict(\n        rezka.getSeasonStreams(season=1, ignore=True, progress=progress)\n    )\n)",
 					"lang": "python",
 					"output": "'0% 0/3'\n'33% 1/3'\n'67% 2/3'\n'100% 3/3' ''\n{1: <HdRezkaStream(season:1, episode:1)>, 2: <HdRezkaStream(season:1, episode:2)>, 3: <HdRezkaStream(season:1, episode:3)>}"

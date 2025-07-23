@@ -6,7 +6,7 @@
 	"sections": [
 		{
 			"title": "Install",
-			"path": "Install",
+			"path": "install",
 			"items": [
 				{
 					"code": "pip install HdRezkaApi",

@@ -32,7 +32,7 @@
 				},
 				{
 					"title": "thumbnailHQ",
-					"path": "thumbnailHQ",
+					"path": "thumbnailhq",
 					"type": "str",
 					"description": "High quality thumbnail (URL)"
 				},
@@ -72,7 +72,7 @@
 				},
 				{
 					"title": "seriesInfo",
-					"path": "seriesInfo",
+					"path": "series_info",
 					"type": "dict",
 					"description": "Series episodes and seasons",
 					"code": "{translator_id: {translator_name, seasons: {1, 2}, episodes: {1: {1, 2, 3}, 2: {1, 2, 3}}}}",
@@ -80,7 +80,7 @@
 				},
 				{
 					"title": "episodesInfo",
-					"path": "episodesInfo",
+					"path": "episodes_info",
 					"type": "list",
 					"description": "Full episode map",
 					"code": "[{season: 1, season_text, episodes: [{episode: 1, episode_text,translations: [{translator_id, translator_name, premium}]}]}]",
@@ -88,7 +88,7 @@
 				},
 				{
 					"title": "otherParts",
-					"path": "otherParts",
+					"path": "other_parts",
 					"type": "list",
 					"description": "Other parts of the movie",
 					"code": "[{film_name: url}]",

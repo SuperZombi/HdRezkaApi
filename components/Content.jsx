@@ -41,29 +41,23 @@ const Content = ({ page, anchor }) => {
 
 const Section = ({data, basepath, anchor}) => {
 	const link = `#/${basepath}.${data.path}`
+	const anchorRef = React.useRef(null);
 
 	React.useEffect(()=>{
-		if (anchor) {
-			const el = document.querySelector(`[href="#/${basepath}.${anchor}"]:not(.badge)`)
-			if (el) {
-				const target = el.closest(".card") || el.closest("h3") || el
-
-				let elementPosition = target.getBoundingClientRect().top;
-				let offsetPosition = elementPosition - target.offsetHeight / 2
-				document.documentElement.scrollBy({top: offsetPosition - 16});
-
-				target.classList.add("highlight")
-				setTimeout(_=>{
-					target.classList.remove("highlight")
-				}, 1500)
-			}
+		if (
+			anchor && data.path && anchorRef.current &&
+			anchor === data.path
+		){
+			const timer = scrollToElement(anchorRef.current)
+			return _=>{ clearTimeout(timer) }
 		}
-	}, [anchor])
+	}, [anchor, data.path])
 
 	return (
 		<div>
 			<hr/>
 			<h3 className="pt-2 pb-3 position-sticky z-2 top-0"
+				ref={anchorRef}
 				style={{
 					backgroundColor: "rgba(var(--bs-body-bg-rgb), 0.6)",
 					backdropFilter: "blur(1px)"
@@ -80,20 +74,31 @@ const Section = ({data, basepath, anchor}) => {
 			</h3>
 			<Text className="mb-3">{data.description}</Text>
 			{data.items?.map((item, i) => (
-				<Attribute key={i} data={item} basepath={basepath} />
+				<Attribute key={i} data={item} basepath={basepath} anchor={anchor} />
 			))}
 		</div>
 	)
 }
 
-const Attribute = ({data, basepath}) => {
+const Attribute = ({data, basepath, anchor}) => {
 	const link = `#/${basepath}.${data.path}`
+	const anchorRef = React.useRef(null);
+
+	React.useEffect(()=>{
+		if (
+			anchor && data.path && anchorRef.current &&
+			anchor === data.path
+		){
+			const timer = scrollToElement(anchorRef.current)
+			return _=>{ clearTimeout(timer) }
+		}
+	}, [anchor, data.path])
 
 	function copyLink(){
 		copyText(new URL(link, window.location.href).href)
 	}
 	return (
-		<div className="card mb-3">
+		<div className="card mb-3" ref={anchorRef}>
 			<div className="card-body">
 				<h5 className="card-title">
 					{data.path ? (
@@ -159,6 +164,19 @@ const TypeBadge = ({children}) => {
 			{children}
 		</a>
 	)
+}
+
+function scrollToElement(target){
+	let elementPosition = target.getBoundingClientRect().top;
+	let extraDiff = target.classList.contains("card") ? 64 : 16
+	document.documentElement.scrollBy({
+		top: elementPosition - extraDiff,
+		behavior: 'smooth'
+	});
+	target.classList.add("highlight")
+	return setTimeout(_=>{
+		target.classList.remove("highlight")
+	}, 1500)
 }
 
 function copyText(text) {
