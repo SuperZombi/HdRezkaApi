@@ -1,6 +1,8 @@
 const Loading = () => {
 	return (
-		<h1 className="h-100 d-flex justify-content-center align-items-center">
+		<h1 className="h-100 d-flex justify-content-center align-items-center"
+			style={{minHeight: "100px"}}
+		>
 			<i className="fa-solid fa-circle-notch fa-spin"></i>
 		</h1>
 	)
