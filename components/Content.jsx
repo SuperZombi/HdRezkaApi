@@ -48,8 +48,7 @@ const Section = ({data, basepath, anchor}) => {
 			anchor && data.path && anchorRef.current &&
 			anchor === data.path
 		){
-			const timer = scrollToElement(anchorRef.current)
-			return _=>{ clearTimeout(timer) }
+			scrollToElement(anchorRef.current)
 		}
 	}, [anchor, data.path])
 
@@ -89,8 +88,7 @@ const Attribute = ({data, basepath, anchor}) => {
 			anchor && data.path && anchorRef.current &&
 			anchor === data.path
 		){
-			const timer = scrollToElement(anchorRef.current)
-			return _=>{ clearTimeout(timer) }
+			scrollToElement(anchorRef.current)
 		}
 	}, [anchor, data.path])
 
@@ -174,7 +172,7 @@ function scrollToElement(target){
 		behavior: 'smooth'
 	});
 	target.classList.add("highlight")
-	return setTimeout(_=>{
+	setTimeout(_=>{
 		target.classList.remove("highlight")
 	}, 1500)
 }
