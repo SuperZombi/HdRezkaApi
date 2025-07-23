@@ -9,7 +9,7 @@ const Loading = () => {
 }
 const NotFound = () => {
 	return (
-		<div className="text-center">
+		<div className="text-center mt-2">
 			<h1 style={{fontSize: "40pt"}}>
 				<i className="fa-regular fa-face-frown"></i>
 			</h1>
