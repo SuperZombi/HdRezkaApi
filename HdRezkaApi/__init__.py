@@ -5,6 +5,7 @@ from itertools import product
 from functools import cached_property
 from urllib.parse import urlparse
 import time
+import re
 
 from .stream import HdRezkaStream
 from .search import HdRezkaSearch
@@ -101,8 +102,28 @@ class HdRezkaApi():
 		)
 
 	@cached_property
-	def name(self):
-		return self.soup.find(class_="b-post__title").get_text().strip()
+	def name(self): return self.names[0]
+
+	@cached_property
+	def names(self):
+		return list(map(
+			lambda s: s.strip(),
+			self.soup.find(class_="b-post__title").get_text().split("/")
+		))
+
+	@cached_property
+	def origName(self):
+		return self.origNames[-1] if self.origNames else None
+
+	@cached_property
+	def origNames(self):
+		el = self.soup.find(class_="b-post__origtitle")
+		if el:
+			return list(map(
+				lambda s: s.strip(),
+				el.get_text().split("/")
+			))
+		return []
 
 	@cached_property
 	def description(self):
@@ -115,6 +136,14 @@ class HdRezkaApi():
 	@cached_property
 	def thumbnailHQ(self):
 		return self.soup.find(class_="b-sidecover").find('a').attrs['href']
+
+	@cached_property
+	def releaseYear(self):
+		el = self.soup.select_one('.b-content__main .b-post__info a[href*="/year/"]')
+		if el:
+			match = re.search(r'\d{4}', el.get('href', ''))
+			if match: return int(match.group(0))
+		return None
 
 	@cached_property
 	def type(self):
@@ -475,7 +504,7 @@ class HdRezkaSession:
 			uri = urlparse(origin)
 			self.origin = f'{uri.scheme}://{uri.netloc}'
 		self.proxy = proxy
-		self.cookies = cookies
+		self.cookies = {"hdmbbs": "1", **cookies}
 		self.HEADERS = {
 			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36',
 			**headers
