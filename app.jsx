@@ -1,11 +1,9 @@
-const { useState, useEffect } = React
-
 const App = () => {
-	const [menu, setMenu] = useState([])
-	const [page, setPage] = useState("index")
-	const [anchor, setAnchor] = useState()
+	const [menu, setMenu] = React.useState([])
+	const [page, setPage] = React.useState("index")
+	const [anchor, setAnchor] = React.useState()
 
-	useEffect(() => {
+	React.useEffect(() => {
 		fetch("data/menu.json")
 			.then((res) => res.json())
 			.then(setMenu);
