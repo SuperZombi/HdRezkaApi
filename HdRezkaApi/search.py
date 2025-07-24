@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from functools import lru_cache, cached_property
 from urllib.parse import urlparse
+from .types import default_cookies, default_headers
 from .types import (HdRezkaCategory, Film, Series, Cartoon, Anime)
 from .errors import HTTP, LoginRequiredError, CaptchaError
 
@@ -11,11 +12,8 @@ class HdRezkaSearch:
 		uri = urlparse(origin)
 		self.origin = f'{uri.scheme}://{uri.netloc}'
 		self.proxy = proxy
-		self.cookies = cookies
-		self.HEADERS = {
-			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36',
-			**headers
-		}
+		self.cookies = {**default_cookies, **cookies}
+		self.HEADERS = {**default_headers, **headers}
 
 	def __call__(self, query, find_all=False):
 		return self.advanced_search(query) if find_all else self.fast_search(query)
