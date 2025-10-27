@@ -367,6 +367,7 @@ class HdRezkaApi():
 			return makeRequest({
 				"id": self.id,
 				"translator_id": translation_id,
+				"is_director": 1,
 				"action": "get_movie"
 			})
 
