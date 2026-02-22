@@ -238,8 +238,11 @@ class HdRezkaApi():
 			temp = i.decode("utf-8")
 			trashString = trashString.replace(temp, '')
 
-		finalString = base64.b64decode(trashString+"==")
-		return finalString.decode("utf-8")
+		try:
+			finalString = base64.b64decode(trashString+"==")
+			return finalString.decode("utf-8")
+		except:
+			return trashString
 
 	@cached_property
 	def otherParts(self):
