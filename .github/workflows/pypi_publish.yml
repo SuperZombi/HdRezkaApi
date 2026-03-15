@@ -1,0 +1,68 @@
+name: Publish Python Package
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+
+      - name: Install build tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install build
+
+      - name: Get version from release
+        id: version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Generate pyproject.toml
+        run: |
+          cat <<EOF > pyproject.toml
+          [build-system]
+          requires = ["setuptools>=61"]
+          build-backend = "setuptools.build_meta"
+
+          [project]
+          name = "HdRezkaApi"
+          version = "${VERSION}"
+          description = "HDRezka Python API"
+          readme = "README.md"
+          requires-python = ">=3.9"
+
+          authors = [
+            {name="Super_Zombi", email="super.zombi.yt@gmail.com"}
+          ]
+
+          dependencies = [
+            "requests",
+            "beautifulsoup4"
+          ]
+
+          [project.urls]
+          Homepage = "https://github.com/SuperZombi/HdRezkaApi"
+          Documentation = "https://superzombi.github.io/HdRezkaApi/"
+          EOF
+
+      - name: Build package
+        run: python -m build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
