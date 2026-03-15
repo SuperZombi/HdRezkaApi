@@ -37,7 +37,8 @@ classifiers = [
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
   "Topic :: Internet :: WWW/HTTP",
-  "Topic :: Multimedia :: Video"
+  "Topic :: Multimedia :: Video",
+  "Topic :: Software Development :: Libraries :: Python Modules"
 ]
 
 [project.urls]
