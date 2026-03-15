@@ -17,9 +17,33 @@ dependencies = [
   "beautifulsoup4"
 ]
 
+license = {text = "MIT"}
+
+keywords = [
+  "hdrezka",
+  "api",
+  "parser",
+  "movies",
+  "films",
+  "anime",
+  "cartoons",
+  "video",
+  "streaming"
+]
+
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Topic :: Internet :: WWW/HTTP",
+  "Topic :: Multimedia :: Video"
+]
+
 [project.urls]
 Homepage = "https://github.com/SuperZombi/HdRezkaApi"
 Documentation = "https://superzombi.github.io/HdRezkaApi/"
+Issues = "https://github.com/SuperZombi/HdRezkaApi/issues"
 
 [build-system]
 requires = ["setuptools>=61"]
