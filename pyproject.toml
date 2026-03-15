@@ -1,0 +1,26 @@
+[tool.setuptools]
+packages = ["HdRezkaApi"]
+
+[project]
+name = "HdRezkaApi"
+version = "${VERSION}"
+description = "HDRezka Python API"
+readme = "README.md"
+requires-python = ">=3.9"
+
+authors = [
+  {name="Super_Zombi", email="super.zombi.yt@gmail.com"}
+]
+
+dependencies = [
+  "requests",
+  "beautifulsoup4"
+]
+
+[project.urls]
+Homepage = "https://github.com/SuperZombi/HdRezkaApi"
+Documentation = "https://superzombi.github.io/HdRezkaApi/"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"

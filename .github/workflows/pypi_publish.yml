@@ -25,39 +25,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install build
 
-      - name: Get version from release
-        id: version
+      - name: Set version
         run: |
           VERSION=${GITHUB_REF#refs/tags/}
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-
-      - name: Generate pyproject.toml
-        run: |
-          cat <<EOF > pyproject.toml
-          [build-system]
-          requires = ["setuptools>=61"]
-          build-backend = "setuptools.build_meta"
-
-          [project]
-          name = "HdRezkaApi"
-          version = "${VERSION}"
-          description = "HDRezka Python API"
-          readme = "README.md"
-          requires-python = ">=3.9"
-
-          authors = [
-            {name="Super_Zombi", email="super.zombi.yt@gmail.com"}
-          ]
-
-          dependencies = [
-            "requests",
-            "beautifulsoup4"
-          ]
-
-          [project.urls]
-          Homepage = "https://github.com/SuperZombi/HdRezkaApi"
-          Documentation = "https://superzombi.github.io/HdRezkaApi/"
-          EOF
+          sed -i "s/\${VERSION}/$VERSION/" pyproject.toml
 
       - name: Build package
         run: python -m build
