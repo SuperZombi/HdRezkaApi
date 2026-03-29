@@ -189,10 +189,10 @@ class HdRezkaApi():
 			#auto-detect
 			def getTranslationName(s):
 				table = s.find(class_="b-post__info")
-				for i in table.findAll("tr"):
-					tmp = i.get_text()
-					if tmp.find("переводе") > 0:
-						return tmp.split("В переводе:")[-1].strip()
+				for tr in table.findAll("tr"):
+					if "переводе" in tr.get_text():
+						td = tr.find_all("td")[-1]
+						return td.get_text().strip()
 			def getTranslationID(s):
 				initCDNEvents = {'video.tv_series': 'initCDNSeriesEvents',
 								 'video.movie'    : 'initCDNMoviesEvents'}
