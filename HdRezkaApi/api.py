@@ -338,6 +338,7 @@ class HdRezkaApi():
 	def getStream(self, season=None, episode=None, translation=None,
 		priority=None, non_priority=None
 	):
+		def strip_html(html): return re.sub(r'<[^>]*>', '', html)
 		def makeRequest(data):
 			r = requests.post(f"{self.origin}/ajax/get_cdn_series/", data=data, headers=self.HEADERS, proxies=self.proxy, cookies=self.cookies)
 			r = r.json()
@@ -349,7 +350,7 @@ class HdRezkaApi():
 									)
 				for i in arr:
 					temp = i.split("[")[1].split("]")
-					quality = str(temp[0])
+					quality = strip_html(temp[0])
 					links = filter(lambda x: x.endswith(".mp4"), temp[1].split(" or "))
 					for video in links:
 						stream.append(quality, video)

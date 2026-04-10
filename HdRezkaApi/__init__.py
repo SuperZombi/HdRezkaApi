@@ -1,4 +1,4 @@
-__version__ = "11.2.2"
+__version__ = "11.2.3"
 
 from .api import HdRezkaApi
 from .search import HdRezkaSearch
